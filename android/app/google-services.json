@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "90323946057",
+    "project_id": "daemon-ca106",
+    "storage_bucket": "daemon-ca106.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90323946057:android:9666d0cf795bbce0b40d98",
+        "android_client_info": {
+          "package_name": "com.example.iot_monito_dashboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWbv0eQu5viP-hOayOZmLlCmLZaReqDCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
