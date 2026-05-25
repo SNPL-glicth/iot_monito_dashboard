@@ -41,6 +41,13 @@ class PredictionCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (p.sensorId != 0) ...[
+              const SizedBox(height: 2),
+              Text(
+                'Sensor ID: ${p.sensorId}',
+                style: DashboardTextStyles.smallLabel,
+              ),
+            ],
             const SizedBox(height: 4),
             Text(
               p.deviceName,

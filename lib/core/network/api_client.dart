@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
+import 'api_error_interceptor.dart';
 
 // FIX FREEZE: Timeout más agresivo para evitar que la app se cuelgue
 // 5 segundos es suficiente para la mayoría de operaciones
@@ -50,6 +51,11 @@ class ApiClient {
   // Constructor privado interno
   ApiClient._internal();
 
+  static Never _throwIntercepted(dynamic error) {
+    ApiErrorInterceptor().handle(error);
+    throw error;
+  }
+
   http.Client get _client {
     _sharedClient ??= http.Client();
     return _sharedClient!;
@@ -87,15 +93,15 @@ class ApiClient {
         }
         throw Exception('La respuesta no es una lista JSON.');
       } else {
-        throw ApiException(
+        _throwIntercepted(ApiException(
           statusCode: response.statusCode,
           method: 'GET',
           path: path,
           body: response.body,
-        );
+        ));
       }
     } on TimeoutException {
-      throw ApiTimeoutException(path);
+      _throwIntercepted(ApiTimeoutException(path));
     }
   }
 
@@ -116,15 +122,15 @@ class ApiClient {
         }
         return decoded;
       } else {
-        throw ApiException(
+        _throwIntercepted(ApiException(
           statusCode: response.statusCode,
           method: 'GET',
           path: path,
           body: response.body,
-        );
+        ));
       }
     } on TimeoutException {
-      throw ApiTimeoutException(path);
+      _throwIntercepted(ApiTimeoutException(path));
     }
   }
 
@@ -141,15 +147,15 @@ class ApiClient {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return jsonDecode(response.body);
       } else {
-        throw ApiException(
+        _throwIntercepted(ApiException(
           statusCode: response.statusCode,
           method: 'GET',
           path: path,
           body: response.body,
-        );
+        ));
       }
     } on TimeoutException {
-      throw ApiTimeoutException(path);
+      _throwIntercepted(ApiTimeoutException(path));
     }
   }
 
@@ -162,12 +168,12 @@ class ApiClient {
     ).timeout(_kHttpTimeout);
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(
+      _throwIntercepted(ApiException(
         statusCode: response.statusCode,
         method: 'POST',
         path: path,
         body: response.body,
-      );
+      ));
     }
   }
 
@@ -185,12 +191,12 @@ class ApiClient {
       ).timeout(_kHttpTimeout);
 
       if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw ApiException(
+        _throwIntercepted(ApiException(
           statusCode: response.statusCode,
           method: 'POST',
           path: path,
           body: response.body,
-        );
+        ));
       }
 
       final decoded = jsonDecode(response.body);
@@ -199,7 +205,7 @@ class ApiClient {
       }
       return decoded;
     } on TimeoutException {
-      throw ApiTimeoutException(path);
+      _throwIntercepted(ApiTimeoutException(path));
     }
   }
 
@@ -215,12 +221,12 @@ class ApiClient {
     ).timeout(_kHttpTimeout);
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(
+      _throwIntercepted(ApiException(
         statusCode: response.statusCode,
         method: 'PUT',
         path: path,
         body: response.body,
-      );
+      ));
     }
 
     final decoded = jsonDecode(response.body);
@@ -238,12 +244,12 @@ class ApiClient {
     ).timeout(_kHttpTimeout);
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(
+      _throwIntercepted(ApiException(
         statusCode: response.statusCode,
         method: 'DELETE',
         path: path,
         body: response.body,
-      );
+      ));
     }
   }
 
@@ -255,12 +261,12 @@ class ApiClient {
     ).timeout(_kHttpTimeout);
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(
+      _throwIntercepted(ApiException(
         statusCode: response.statusCode,
         method: 'DELETE',
         path: path,
         body: response.body,
-      );
+      ));
     }
 
     if (response.body.isEmpty) {
@@ -286,12 +292,12 @@ class ApiClient {
     ).timeout(_kHttpTimeout);
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(
+      _throwIntercepted(ApiException(
         statusCode: response.statusCode,
         method: 'PATCH',
         path: path,
         body: response.body,
-      );
+      ));
     }
 
     if (response.body.isEmpty) {

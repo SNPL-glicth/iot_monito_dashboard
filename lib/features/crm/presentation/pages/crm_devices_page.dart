@@ -70,6 +70,68 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
     });
   }
 
+  Widget _buildEmptyState() {
+    final isAdmin = widget.role == UserRole.admin;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.devices_other_outlined,
+              size: 64,
+              color: DashboardColors.white54,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'No hay dispositivos registrados',
+              style: DashboardTextStyles.deviceTitle,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              isAdmin
+                  ? 'Agrega tu primer dispositivo para comenzar a monitorear.'
+                  : 'No tienes dispositivos asignados actualmente.',
+              style: DashboardTextStyles.sensorMeta,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            if (isAdmin)
+              ElevatedButton.icon(
+                onPressed: () => showAddDeviceDialog(
+                  context: context,
+                  role: widget.role,
+                ),
+                icon: const Icon(Icons.add),
+                label: const Text('Agregar dispositivo'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: DashboardColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              )
+            else
+              OutlinedButton.icon(
+                onPressed: _reload,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Refrescar'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: DashboardColors.primaryLight,
+                  side: BorderSide(color: DashboardColors.primary.withValues(alpha: 0.5)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +196,7 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
           final page = snapshot.data;
           final items = page?.items ?? [];
           if (items.isEmpty) {
-            return const Center(child: Text('No hay dispositivos.'));
+            return _buildEmptyState();
           }
 
           return ListView(

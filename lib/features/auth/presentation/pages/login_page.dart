@@ -8,7 +8,14 @@ import '../../data/auth_repository.dart';
 import '../widgets/login_form_widgets.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({
+    super.key,
+    this.initialErrorMessage,
+  });
+
+  /// Mensaje de error inicial mostrado cuando la sesión expiró
+  /// o el bootstrap falló (ej. token inválido).
+  final String? initialErrorMessage;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -31,6 +38,31 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _authRepository = AuthRepository();
     _authStorage = AuthStorage();
+
+    // Mostrar mensaje de sesión expirada si viene del bootstrap
+    if (widget.initialErrorMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.info_outline, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(widget.initialErrorMessage!)),
+                ],
+              ),
+              backgroundColor: DashboardColors.warning,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -76,11 +108,21 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => nextPage),
       );
-    } catch (e) {
+    } on AuthTimeoutException catch (e) {
+      if (!mounted) return;
       setState(() {
-        // Evita mostrar detalles técnicos tipo "Exception: ...".
-        final raw = e.toString();
-        _errorMessage = raw.replaceFirst('Exception: ', '');
+        _errorMessage = e.message;
+      });
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = e.message;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage =
+            'Ocurrió un error inesperado. Intenta de nuevo más tarde.';
       });
     } finally {
       if (mounted) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/admin_users_repository.dart';
+import '../../data/models/admin_user.dart';
 import 'dialog_text_field.dart';
 
 /// Muestra diálogo para crear o editar un usuario.
@@ -121,24 +122,32 @@ Future<bool> showUserDialog({
     return false;
   }
 
-  if (isEdit) {
-    await repository.updateUser(
-      id: user.id,
-      username: username,
-      email: email,
-      password: password.isNotEmpty ? password : null,
-      role: role,
-      isActive: isActive,
-    );
-  } else {
-    await repository.createUser(
-      username: username,
-      email: email,
-      password: password,
-      role: role,
-      isActive: isActive,
-    );
+  try {
+    if (isEdit) {
+      await repository.updateUser(
+        id: user.id,
+        username: username,
+        email: email,
+        password: password.isNotEmpty ? password : null,
+        role: role,
+        isActive: isActive,
+      );
+    } else {
+      await repository.createUser(
+        username: username,
+        email: email,
+        password: password,
+        role: role,
+        isActive: isActive,
+      );
+    }
+    return true;
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: DashboardColors.error),
+      );
+    }
+    return false;
   }
-
-  return true;
 }

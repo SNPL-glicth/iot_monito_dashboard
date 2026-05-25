@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../data/monitoring_repository.dart';
 import '../../data/models/device_with_sensor_view_model.dart';
 import '../../data/models/reading/latest_reading_models.dart';
@@ -22,11 +23,19 @@ class DashboardCubit extends Cubit<DashboardState> {
         _pollingInterval = pollingInterval,
         super(const DashboardInitial()) {
     _pollTimer = null;
+    _lifecyclePauseSub = AppLifecycleService().onAppPaused.listen((_) {
+      stopPolling();
+    });
+    _lifecycleResumeSub = AppLifecycleService().onAppResumed.listen((_) {
+      startPolling();
+    });
   }
 
   final MonitoringRepository _repository;
   final Duration _pollingInterval;
   Timer? _pollTimer;
+  StreamSubscription<void>? _lifecyclePauseSub;
+  StreamSubscription<void>? _lifecycleResumeSub;
 
   /// Carga inicial de dispositivos
   Future<void> loadDevices() async {
@@ -78,6 +87,8 @@ class DashboardCubit extends Cubit<DashboardState> {
   @override
   Future<void> close() {
     stopPolling();
+    _lifecyclePauseSub?.cancel();
+    _lifecycleResumeSub?.cancel();
     return super.close();
   }
 }

@@ -95,43 +95,38 @@ class TokenManager {
     }
   }
   
-  /// Realiza el refresh del token usando /auth/refresh-token (Bearer flow)
-  Future<void> _performRefresh() async {
+  /// Realiza el refresh del token de forma sincrónica y retorna true si tuvo éxito.
+  /// Útil para el AppBootstrapper que debe validar la sesión antes de enrutar.
+  Future<bool> refreshTokenNow() async {
     try {
       final currentToken = ApiClient.authToken;
       final currentRefreshToken = _refreshToken;
-      
+
       if (currentToken == null || currentToken.isEmpty) {
-        return;
+        return false;
       }
-      
+
       if (currentRefreshToken == null || currentRefreshToken.isEmpty) {
-        // Sin refresh token, no podemos refrescar
-        return;
+        return false;
       }
-      
+
       final apiClient = ApiClient();
-      // FIX AUTH: Usar nuevo endpoint /auth/refresh-token con refresh_token en body
       final response = await apiClient.postJsonAndDecode('/auth/refresh-token', {
         'refresh_token': currentRefreshToken,
       });
-      
+
       final ok = response['ok'] as bool? ?? false;
       if (!ok) {
-        // Refresh falló, reintentar más tarde
-        _refreshTimer = Timer(const Duration(minutes: 5), _performRefresh);
-        return;
+        return false;
       }
-      
+
       final newToken = response['access_token'] as String?;
       final newRefreshToken = response['refresh_token'] as String?;
-      
+
       if (newToken != null && newToken.isNotEmpty) {
-        // Actualizar tokens en memoria
         ApiClient.authToken = newToken;
         _refreshToken = newRefreshToken;
-        
-        // Actualizar tokens en storage
+
         final session = await _storage.loadSession();
         if (session != null) {
           await _storage.saveSession(
@@ -141,12 +136,20 @@ class TokenManager {
             refreshToken: newRefreshToken,
           );
         }
-        
-        // Reprogramar siguiente refresh
+
         startMonitoring(newToken);
+        return true;
       }
+      return false;
     } catch (e) {
-      // Si falla, reintentar en 5 minutos
+      return false;
+    }
+  }
+
+  /// Realiza el refresh del token usando /auth/refresh-token (Bearer flow)
+  Future<void> _performRefresh() async {
+    final success = await refreshTokenNow();
+    if (!success) {
       _refreshTimer = Timer(const Duration(minutes: 5), _performRefresh);
     }
   }

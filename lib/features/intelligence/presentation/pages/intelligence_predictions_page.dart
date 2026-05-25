@@ -6,6 +6,7 @@ import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/intelligence_models.dart';
 import '../../data/intelligence_repository.dart';
 import '../widgets/predictions/prediction_card.dart';
+import '../widgets/predictions/prediction_skeleton.dart';
 
 class IntelligencePredictionsPage extends StatefulWidget {
   const IntelligencePredictionsPage({super.key});
@@ -49,7 +50,7 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
           future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const PredictionsSkeletonList();
             }
             if (snapshot.hasError) {
               return Center(

@@ -60,7 +60,13 @@ class SensorReadingsPage extends StatelessWidget {
     final unit = (unitHint ?? '').trim();
 
     final repo = MonitoringRepository();
-    final future = repo.fetchSensorReadings(sensorId, limit: limit);
+    final range = filterRange;
+    final future = repo.fetchSensorReadings(
+      sensorId,
+      limit: limit,
+      from: range?.start,
+      to: range?.end,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -89,18 +95,7 @@ class SensorReadingsPage extends StatelessWidget {
               );
             }
 
-            final all = snapshot.data ?? const <SensorReadingViewModel>[];
-            final range = filterRange;
-
-            final items = (range == null)
-                ? all
-                : all.where((r) {
-                    final ts = _parseBogota(r.timestamp);
-                    if (ts == null) return false;
-                    final okStart = !ts.isBefore(range.start);
-                    final okEnd = ts.isBefore(range.end);
-                    return okStart && okEnd;
-                  }).toList();
+            final items = snapshot.data ?? const <SensorReadingViewModel>[];
 
             if (items.isEmpty) {
               return const Center(

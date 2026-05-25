@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/alerts/alert_snapshot_service.dart';
 import '../../../../core/auth/user_role.dart';
+import '../../data/alert_detail_cache.dart';
 import '../../../crm/data/crm_repository.dart';
+import '../../../crm/data/models/crm_alerts_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
 import '../widgets/alert_detail_widgets.dart';
 import '../widgets/alert_detail_body.dart';
@@ -40,11 +42,15 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
   final AlertSnapshotService _snapshotService = AlertSnapshotService();
   final CrmRepository _crmRepo = CrmRepository();
 
+  final _alertCache = AlertDetailCache();
   AlertSnapshot? _snapshot;
+  CrmAlertHistoryItem? _alertHistory;
   bool _loading = true;
   String? _error;
-  final bool _isAcknowledged = false;
+  bool _isAcknowledged = false;
   bool _acknowledging = false;
+  bool _isResolved = false;
+  bool _resolving = false;
 
   @override
   void initState() {
@@ -90,17 +96,27 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
     try {
       debugPrint('[AlertDetail] Loading data for alertId=${widget.alertId}');
       
-      // PASO 1: Obtener datos de la alerta del historial (siempre disponible)
-      final alertHistory = await _crmRepo.getAlertById(widget.alertId);
-      
+      // PASO 1: Obtener datos de la alerta (cache o endpoint lazy)
+      var alertHistory = _alertCache.get(widget.alertId);
+      if (alertHistory == null) {
+        alertHistory = await _crmRepo.getAlertById(widget.alertId);
+        if (alertHistory != null) _alertCache.set(widget.alertId, alertHistory);
+      }
+
       if (alertHistory == null) {
         setState(() {
-          _error = 'No se encontró la alerta en el historial.\nID: ${widget.alertId}';
+          _error = 'No se encontró la alerta.\nID: ${widget.alertId}';
           _loading = false;
         });
         return;
       }
-      
+
+      setState(() {
+        _alertHistory = alertHistory;
+        _isAcknowledged = alertHistory!.status.toLowerCase() == 'acknowledged';
+        _isResolved = alertHistory.status.toLowerCase() == 'resolved';
+      });
+
       debugPrint('[AlertDetail] Alert found: severity=${alertHistory.severity}, triggeredAt=${alertHistory.triggeredAt}');
       
       // PASO 2: Usar triggeredAt como FUENTE DE VERDAD
@@ -284,6 +300,13 @@ class _AlertDetailPageState extends State<AlertDetailPage> {
       acknowledging: _acknowledging,
       isAcknowledged: _isAcknowledged,
       onAcknowledgeChanged: (loading) => setState(() => _acknowledging = loading),
+      resolving: _resolving,
+      isResolved: _isResolved,
+      onResolveChanged: (loading) => setState(() => _resolving = loading),
+      onOptimisticAck: () => setState(() => _isAcknowledged = true),
+      onRevertAck: () => setState(() => _isAcknowledged = _alertHistory?.status.toLowerCase() == 'acknowledged'),
+      onOptimisticResolve: () => setState(() => _isResolved = true),
+      onRevertResolve: () => setState(() => _isResolved = _alertHistory?.status.toLowerCase() == 'resolved'),
     );
   }
 }

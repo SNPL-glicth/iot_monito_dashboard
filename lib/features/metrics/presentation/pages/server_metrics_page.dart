@@ -1,5 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import '../../../../core/lifecycle/app_lifecycle_service.dart';
+import '../../../../core/presentation/widgets/app_loading_widget.dart';
 import '../../data/metrics_repository.dart';
 
 /// Página de métricas del servidor - Solo lectura
@@ -16,13 +20,28 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
   AllMetrics? _metrics;
   bool _loading = true;
   String? _error;
+  DateTime? _lastUpdatedAt;
   Timer? _refreshTimer;
+  StreamSubscription<void>? _lifecyclePauseSub;
+  StreamSubscription<void>? _lifecycleResumeSub;
 
   @override
   void initState() {
     super.initState();
     _loadMetrics();
-    // Auto-refresh cada 10 segundos
+    _startPolling();
+
+    _lifecyclePauseSub = AppLifecycleService().onAppPaused.listen((_) {
+      _refreshTimer?.cancel();
+    });
+    _lifecycleResumeSub = AppLifecycleService().onAppResumed.listen((_) {
+      _startPolling();
+      _loadMetrics();
+    });
+  }
+
+  void _startPolling() {
+    _refreshTimer?.cancel();
     _refreshTimer = Timer.periodic(const Duration(seconds: 10), (_) {
       if (mounted) _loadMetrics();
     });
@@ -31,6 +50,8 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
   @override
   void dispose() {
     _refreshTimer?.cancel();
+    _lifecyclePauseSub?.cancel();
+    _lifecycleResumeSub?.cancel();
     super.dispose();
   }
 
@@ -42,6 +63,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
         _metrics = metrics;
         _loading = false;
         _error = null;
+        _lastUpdatedAt = DateTime.now();
       });
     } catch (e) {
       if (!mounted) return;
@@ -72,7 +94,17 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Métricas del Servidor'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Métricas del Servidor'),
+            if (_lastUpdatedAt != null)
+              Text(
+                'Actualizado: ${_lastUpdatedAt!.hour.toString().padLeft(2, '0')}:${_lastUpdatedAt!.minute.toString().padLeft(2, '0')}:${_lastUpdatedAt!.second.toString().padLeft(2, '0')}',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
+              ),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -87,7 +119,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
 
   Widget _buildBody() {
     if (_loading && _metrics == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppLoadingWidget();
     }
 
     if (_error != null && _metrics == null) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
+import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
 import '../../../monitoring/presentation/styles/dashboard_styles.dart';
@@ -44,6 +45,8 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
   late final MonitoringRepository _monitoringRepo;
   late final SensorDetailActions _actions;
   Timer? _poller;
+  StreamSubscription<void>? _lifecyclePauseSub;
+  StreamSubscription<void>? _lifecycleResumeSub;
 
   @override
   void initState() {
@@ -65,13 +68,27 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
     if (sensorId != null && sensorId.isNotEmpty) {
       _loadInitial();
       if (widget.viewMode == SensorDetailViewMode.realtime) {
-        _poller = Timer.periodic(const Duration(seconds: 15), (_) {
-          if (!mounted) return;
+        _startPolling();
+
+        _lifecyclePauseSub = AppLifecycleService().onAppPaused.listen((_) {
+          _poller?.cancel();
+        });
+        _lifecycleResumeSub = AppLifecycleService().onAppResumed.listen((_) {
+          _startPolling();
           _viewModel.refresh(silent: true);
-          setState(() {});
+          if (mounted) setState(() {});
         });
       }
     }
+  }
+
+  void _startPolling() {
+    _poller?.cancel();
+    _poller = Timer.periodic(const Duration(seconds: 15), (_) {
+      if (!mounted) return;
+      _viewModel.refresh(silent: true);
+      setState(() {});
+    });
   }
 
   Future<void> _loadInitial() async {
@@ -82,6 +99,8 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
   @override
   void dispose() {
     _poller?.cancel();
+    _lifecyclePauseSub?.cancel();
+    _lifecycleResumeSub?.cancel();
     _viewModel.dispose();
     super.dispose();
   }

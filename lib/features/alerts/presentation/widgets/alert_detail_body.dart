@@ -9,7 +9,7 @@ import 'alert_header_card.dart';
 import 'alert_chart_card.dart';
 import 'alert_message_card.dart';
 
-/// Body de la página de detalle de alerta.
+/// Body de la página de detalle de alerta con acciones ack/resolve.
 class AlertDetailBody extends StatelessWidget {
   const AlertDetailBody({
     super.key,
@@ -20,6 +20,13 @@ class AlertDetailBody extends StatelessWidget {
     required this.acknowledging,
     required this.isAcknowledged,
     required this.onAcknowledgeChanged,
+    required this.resolving,
+    required this.isResolved,
+    required this.onResolveChanged,
+    required this.onOptimisticAck,
+    required this.onRevertAck,
+    required this.onOptimisticResolve,
+    required this.onRevertResolve,
   });
 
   final AlertSnapshot snapshot;
@@ -29,9 +36,18 @@ class AlertDetailBody extends StatelessWidget {
   final bool acknowledging;
   final bool isAcknowledged;
   final ValueChanged<bool> onAcknowledgeChanged;
+  final bool resolving;
+  final bool isResolved;
+  final ValueChanged<bool> onResolveChanged;
+  final VoidCallback onOptimisticAck;
+  final VoidCallback onRevertAck;
+  final VoidCallback onOptimisticResolve;
+  final VoidCallback onRevertResolve;
 
   @override
   Widget build(BuildContext context) {
+    final canAct = AlertDetailActions.canAcknowledge(role);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -43,54 +59,94 @@ class AlertDetailBody extends StatelessWidget {
           const SizedBox(height: 16),
           if (snapshot.message != null && snapshot.message!.isNotEmpty)
             AlertMessageCard(message: snapshot.message!),
-          if (AlertDetailActions.canAcknowledge(role))
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: acknowledging
-                      ? null
-                      : () => AlertDetailActions.showAcknowledgeConfirmation(
-                          context,
-                          () => AlertDetailActions.acknowledgeAlert(
-                            alertId,
-                            crmRepo,
-                            context,
-                            onStateChanged: onAcknowledgeChanged,
-                          ),
-                        ),
-                  icon: acknowledging
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Icon(
-                          isAcknowledged ? Icons.check_circle : Icons.check_circle_outline,
-                        ),
-                  label: Text(isAcknowledged ? 'ALERTA ATENDIDA' : 'MARCAR COMO ATENDIDA'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isAcknowledged
-                        ? Colors.green.withValues(alpha: 0.3)
-                        : Colors.tealAccent.withValues(alpha: 0.2),
-                    foregroundColor: isAcknowledged ? Colors.green : Colors.tealAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(
-                        color: isAcknowledged
-                            ? Colors.green.withValues(alpha: 0.5)
-                            : Colors.tealAccent.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ),
+          if (canAct) ...[
+            const SizedBox(height: 16),
+            _ActionButton(
+              active: isAcknowledged,
+              loading: acknowledging,
+              activeLabel: 'ALERTA ATENDIDA',
+              inactiveLabel: 'MARCAR COMO ATENDIDA',
+              activeColor: Colors.green,
+              inactiveColor: Colors.tealAccent,
+              onPressed: () => AlertDetailActions.showAcknowledgeConfirmation(
+                context,
+                () => AlertDetailActions.acknowledgeAlert(
+                  alertId,
+                  crmRepo,
+                  context,
+                  onOptimistic: onOptimisticAck,
+                  onRevert: onRevertAck,
+                  onLoading: onAcknowledgeChanged,
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+            _ActionButton(
+              active: isResolved,
+              loading: resolving,
+              activeLabel: 'ALERTA RESUELTA',
+              inactiveLabel: 'MARCAR COMO RESUELTA',
+              activeColor: Colors.blue,
+              inactiveColor: Colors.greenAccent,
+              onPressed: () => AlertDetailActions.showResolveConfirmation(
+                context,
+                () => AlertDetailActions.resolveAlert(
+                  alertId,
+                  crmRepo,
+                  context,
+                  onOptimistic: onOptimisticResolve,
+                  onRevert: onRevertResolve,
+                  onLoading: onResolveChanged,
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
           AlertDetailWidgets.frozenNote(),
         ],
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.active,
+    required this.loading,
+    required this.activeLabel,
+    required this.inactiveLabel,
+    required this.activeColor,
+    required this.inactiveColor,
+    required this.onPressed,
+  });
+
+  final bool active;
+  final bool loading;
+  final String activeLabel;
+  final String inactiveLabel;
+  final Color activeColor;
+  final Color inactiveColor;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: loading ? null : onPressed,
+        icon: loading
+            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+            : Icon(active ? Icons.check_circle : Icons.check_circle_outline),
+        label: Text(active ? activeLabel : inactiveLabel),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: active ? activeColor.withValues(alpha: 0.3) : inactiveColor.withValues(alpha: 0.2),
+          foregroundColor: active ? activeColor : inactiveColor,
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: (active ? activeColor : inactiveColor).withValues(alpha: 0.5)),
+          ),
+        ),
       ),
     );
   }

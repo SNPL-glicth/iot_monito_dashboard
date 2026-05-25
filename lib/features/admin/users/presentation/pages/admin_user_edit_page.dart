@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/auth/user_role.dart';
 import '../../data/admin_users_repository.dart';
+import '../../data/models/admin_user.dart';
 
 class AdminUserEditPage extends StatefulWidget {
   const AdminUserEditPage({
@@ -77,6 +78,9 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
       );
 
       if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cambios guardados')),
+      );
       Navigator.pop(context, updated);
     } catch (e) {
       if (!mounted) return;

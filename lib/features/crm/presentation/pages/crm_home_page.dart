@@ -45,15 +45,12 @@ class _CrmHomePageState extends State<CrmHomePage> {
   @override
   void initState() {
     super.initState();
-    // FIX FREEZE: Esperar 500ms después del primer frame para cargar widgets pesados
-    // Priority.idle causaba esperas de 2+ minutos, usar delay fijo es más predecible
+    // Mostrar el dashboard inmediatamente; el skeleton interno de
+    // CrmDashboardContent se encarga del estado de carga.
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (!mounted) return;
-        setState(() {
-          _uiReady = true;
-        });
+      setState(() {
+        _uiReady = true;
       });
     });
   }

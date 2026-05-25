@@ -1,30 +1,6 @@
 import '../../../../core/network/api_client.dart';
-
-class AdminUser {
-  AdminUser({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.role,
-    required this.isActive,
-  });
-
-  final String id;
-  final String username;
-  final String email;
-  final String role; // 'admin' | 'operator' | 'viewer'
-  final bool isActive;
-
-  factory AdminUser.fromJson(Map<String, dynamic> json) {
-    return AdminUser(
-      id: json['id'].toString(),
-      username: json['username'] as String? ?? '',
-      email: json['email'] as String? ?? '',
-      role: json['role'] as String? ?? 'viewer',
-      isActive: (json['isActive'] as bool?) ?? true,
-    );
-  }
-}
+import 'models/admin_user.dart';
+import 'models/paged_users_response.dart';
 
 class AdminUsersRepository {
   AdminUsersRepository({ApiClient? apiClient})
@@ -32,9 +8,12 @@ class AdminUsersRepository {
 
   final ApiClient _apiClient;
 
-  Future<List<AdminUser>> fetchUsers() async {
-    final list = await _apiClient.getList('/admin/users');
-    return list.map((e) => AdminUser.fromJson(e as Map<String, dynamic>)).toList();
+  Future<PagedUsersResponse> fetchUsers({int page = 1, int pageSize = 20, String? q}) async {
+    String url = '/admin/users?page=$page&pageSize=$pageSize';
+    if (q != null && q.isNotEmpty) url += '&q=$q';
+    final list = await _apiClient.getList(url);
+    final items = list.map((e) => AdminUser.fromJson(e as Map<String, dynamic>)).toList();
+    return PagedUsersResponse(items: items, hasMore: items.length >= pageSize);
   }
 
   Future<AdminUser> createUser({

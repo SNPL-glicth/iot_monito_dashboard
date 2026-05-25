@@ -11,6 +11,7 @@ import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../intelligence/presentation/pages/intelligence_predictions_page.dart';
 import '../../../intelligence/presentation/pages/intelligence_health_page.dart';
 import '../../../intelligence/presentation/pages/intelligence_decisions_page.dart';
+import '../../../intelligence/data/intelligence_prefetch_service.dart';
 import '../pages/crm_devices_page.dart';
 import '../pages/crm_account_page.dart';
 
@@ -37,8 +38,29 @@ class CrmDrawer extends StatelessWidget {
     }
   }
 
+  /// Navega a una pantalla de inteligencia iniciando prefetch de decisiones.
+  void _navigateToIntelligence(BuildContext context, Widget page, String routeName) {
+    final prefetch = IntelligencePrefetchService();
+    prefetch.initialize();
+    prefetch.prefetchDecisions(); // carga en background sin await
+    Navigator.pop(context);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => page,
+        settings: RouteSettings(name: routeName),
+      ),
+    );
+  }
+
+  /// Determina la ruta activa para resaltar el ítem correspondiente.
+  String _currentRoute(BuildContext context) {
+    return ModalRoute.of(context)?.settings.name ?? '/';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentRoute = _currentRoute(context);
+
     return Drawer(
       backgroundColor: DashboardColors.background,
       child: SafeArea(
@@ -52,7 +74,7 @@ class CrmDrawer extends StatelessWidget {
                   _modernDrawerItem(
                     icon: Icons.dashboard_rounded,
                     title: 'Dashboard',
-                    isSelected: true,
+                    isSelected: currentRoute == '/' || currentRoute.isEmpty,
                     onTap: () => Navigator.pop(context),
                   ),
                   _modernDrawerItem(
@@ -61,12 +83,14 @@ class CrmDrawer extends StatelessWidget {
                     subtitle: role == UserRole.admin
                         ? 'Gestión y configuración'
                         : 'Lista y perfiles',
+                    isSelected: currentRoute == '/crm/devices',
                     onTap: () {
                       Navigator.pop(context);
                       if (role == UserRole.admin) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => DevicesHubPage(role: role),
+                            settings: const RouteSettings(name: '/crm/devices'),
                           ),
                         );
                         return;
@@ -74,6 +98,7 @@ class CrmDrawer extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => CrmDevicesPage(role: role),
+                          settings: const RouteSettings(name: '/crm/devices'),
                         ),
                       );
                     },
@@ -83,11 +108,13 @@ class CrmDrawer extends StatelessWidget {
                       icon: Icons.tune_rounded,
                       title: 'Configuraciones',
                       subtitle: 'Ajustes del sistema',
+                      isSelected: currentRoute == '/admin/settings',
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => AdminPanelPage(currentRole: role),
+                            settings: const RouteSettings(name: '/admin/settings'),
                           ),
                         );
                       },
@@ -99,42 +126,24 @@ class CrmDrawer extends StatelessWidget {
                     title: 'Análisis ML',
                     subtitle: 'Tendencias y proyecciones',
                     iconColor: DashboardColors.secondary,
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const IntelligencePredictionsPage(),
-                        ),
-                      );
-                    },
+                    isSelected: currentRoute == '/intelligence/predictions',
+                    onTap: () => _navigateToIntelligence(context, const IntelligencePredictionsPage(), '/intelligence/predictions'),
                   ),
                   _modernDrawerItem(
                     icon: Icons.insights_rounded,
                     title: 'Estado del modelo',
                     subtitle: 'Salud y actualizaciones',
                     iconColor: DashboardColors.accent,
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const IntelligenceHealthPage(),
-                        ),
-                      );
-                    },
+                    isSelected: currentRoute == '/intelligence/health',
+                    onTap: () => _navigateToIntelligence(context, const IntelligenceHealthPage(), '/intelligence/health'),
                   ),
                   _modernDrawerItem(
                     icon: Icons.task_alt_rounded,
                     title: 'Decisiones',
                     subtitle: 'Acciones recomendadas',
                     iconColor: Colors.teal,
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const IntelligenceDecisionsPage(),
-                        ),
-                      );
-                    },
+                    isSelected: currentRoute == '/intelligence/decisions',
+                    onTap: () => _navigateToIntelligence(context, const IntelligenceDecisionsPage(), '/intelligence/decisions'),
                   ),
                 ],
               ),
@@ -152,11 +161,13 @@ class CrmDrawer extends StatelessWidget {
                     icon: Icons.account_circle_rounded,
                     title: 'Mi cuenta',
                     subtitle: roleLabel,
+                    isSelected: currentRoute == '/account',
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => CrmAccountPage(role: role),
+                          settings: const RouteSettings(name: '/account'),
                         ),
                       );
                     },

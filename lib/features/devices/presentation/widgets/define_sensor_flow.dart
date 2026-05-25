@@ -119,15 +119,30 @@ class _DefineSensorFlowState extends State<DefineSensorFlow> {
     _activateSensorWithCode(sensorCode);
   }
 
-  /// Publicar y reservar sensor (flujo definitivo)
-  Future<void> _publishAndReserveSensor() async {
-    await _controller.publishAndReserveSensor();
+  /// PASO 2a: Publicar sensor (DRAFT → PENDING_CLAIM)
+  Future<void> _publishSensorStep() async {
+    await _controller.publishSensorStep();
+  }
+
+  /// PASO 2b: Reservar sensor (PENDING_CLAIM → PENDING_CONFIRMATION)
+  Future<void> _reserveSensorStep() async {
+    await _controller.reserveSensorStep();
+  }
+
+  /// Reintentar reserva si falló (sin repetir publish)
+  Future<void> _retryReserve() async {
+    await _controller.retryReserve();
   }
 
   /// Confirmar activación del sensor (flujo definitivo)
   Future<void> _confirmSensor() async {
     await _controller.confirmSensor();
     widget.onSensorCreated?.call();
+  }
+
+  /// Reintentar confirmación si falló (sin repetir publish/reserve)
+  Future<void> _retryConfirm() async {
+    await _controller.retryConfirm();
   }
 
   @override
@@ -151,8 +166,11 @@ class _DefineSensorFlowState extends State<DefineSensorFlow> {
             alertMaxController: _alertMaxController,
             onDefineSensor: _defineSensor,
             onActivateSensorWithCode: _activateSensorWithCode,
-            onPublishAndReserveSensor: _publishAndReserveSensor,
+            onPublishSensorStep: _publishSensorStep,
+            onReserveSensorStep: _reserveSensorStep,
+            onRetryReserve: _retryReserve,
             onConfirmSensor: _confirmSensor,
+            onRetryConfirm: _retryConfirm,
             onShowManualCodeDialog: _showManualCodeDialog,
             onOpenScanner: _openScanner,
             onHandleScannedQR: _handleScannedQR,

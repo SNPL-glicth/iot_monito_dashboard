@@ -14,7 +14,7 @@ class PredictionViewModel {
   });
 
   final String id;
-  final String sensorId;
+  final int sensorId;
   final String predictedValue;
   final String confidence;
   final String predictedAt;
@@ -30,14 +30,11 @@ class PredictionViewModel {
     final model = json['model'] as Map<String, dynamic>?;
     final device = sensor != null ? sensor['device'] as Map<String, dynamic>? : null;
 
+    final rawSensorId = json['sensorId'] ?? json['sensor_id'] ?? sensor?['id'] ?? sensor?['sensorId'] ?? sensor?['sensor_id'];
+
     return PredictionViewModel(
       id: json['id']?.toString() ?? '',
-      sensorId: json['sensorId']?.toString() ??
-          json['sensor_id']?.toString() ??
-          sensor?['id']?.toString() ??
-          sensor?['sensorId']?.toString() ??
-          sensor?['sensor_id']?.toString() ??
-          '',
+      sensorId: rawSensorId is int ? rawSensorId : int.tryParse(rawSensorId?.toString() ?? '') ?? 0,
       predictedValue:
           json['predictedValue']?.toString() ?? json['predicted_value']?.toString() ?? '',
       confidence: json['confidence']?.toString() ?? '',

@@ -3,23 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../../core/auth/user_role.dart';
 import '../../../crm/data/crm_repository.dart';
 import '../../../crm/data/models/crm_alerts_models.dart';
-import '../../../crm/data/models/crm_devices_models.dart';
-import '../widgets/alert_future_builder.dart';
+import '../widgets/alert_list_view.dart';
+import '../widgets/alerts_hub_helpers.dart';
+import '../widgets/alerts_hub_widgets.dart';
 import 'alert_detail_page.dart';
 
-/// Página de alertas con prioridad correcta.
-/// 
+/// Página de alertas con paginación e infinite scroll.
+///
 /// REGLAS DE PRIORIDAD:
 /// 1. Alertas críticas (rojo) - siempre primero
 /// 2. Alertas warning (naranja) - segundo
 /// 3. Alertas info (azul) - tercero
-/// 
-/// Las alertas se ordenan por severidad y luego por fecha (más reciente primero).
 class AlertsHubPage extends StatefulWidget {
-  const AlertsHubPage({
-    super.key,
-    required this.role,
-  });
+  const AlertsHubPage({super.key, required this.role});
 
   final UserRole role;
 
@@ -29,9 +25,16 @@ class AlertsHubPage extends StatefulWidget {
 
 class _AlertsHubPageState extends State<AlertsHubPage> {
   late final CrmRepository _repo;
-  late Future<CrmPagedResponse<CrmAlertHistoryItem>> _future;
-  
-  // Filtro por sensor (null = todos los sensores)
+  final _scrollController = ScrollController();
+
+  final List<CrmAlertHistoryItem> _items = [];
+  bool _loading = true;
+  bool _loadingMore = false;
+  bool _hasMore = true;
+  String? _error;
+  int _currentPage = 1;
+  static const _pageSize = 20;
+
   String? _selectedSensorId;
   String? _selectedSensorName;
 
@@ -39,83 +42,197 @@ class _AlertsHubPageState extends State<AlertsHubPage> {
   void initState() {
     super.initState();
     _repo = CrmRepository();
-    _loadAlerts();
+    _scrollController.addListener(_onScroll);
+    _loadAlerts(reset: true);
   }
 
-  void _loadAlerts() {
-    // FIX BUG 7: Cargar alertas activas Y acknowledged (no solo active)
-    // Las alertas acknowledged siguen siendo relevantes hasta que se resuelvan
-    _future = _repo.listAlerts(
-      // Sin filtro de status para obtener active + acknowledged
-      sensorId: _selectedSensorId,
-      pageSize: 200,
-    );
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
-  
+
+  void _onScroll() {
+    if (_loadingMore || !_hasMore) return;
+    final pos = _scrollController.position;
+    final threshold = pos.maxScrollExtent * 0.8;
+    if (pos.pixels >= threshold) {
+      _loadMore();
+    }
+  }
+
+  Future<void> _loadAlerts({bool reset = false}) async {
+    if (reset) {
+      setState(() {
+        _loading = true;
+        _error = null;
+        _items.clear();
+        _currentPage = 1;
+        _hasMore = true;
+      });
+    }
+
+    try {
+      final response = await _repo.listAlerts(
+        sensorId: _selectedSensorId,
+        page: 1,
+        pageSize: _pageSize,
+      );
+      final sorted = _sortItems(response.items);
+      setState(() {
+        _items.addAll(sorted);
+        _hasMore = _items.length < response.total;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_loadingMore || !_hasMore) return;
+    setState(() => _loadingMore = true);
+
+    try {
+      final nextPage = _currentPage + 1;
+      final response = await _repo.listAlerts(
+        sensorId: _selectedSensorId,
+        page: nextPage,
+        pageSize: _pageSize,
+      );
+      final sorted = _sortItems(response.items);
+      setState(() {
+        _items.addAll(sorted);
+        _currentPage = nextPage;
+        _hasMore = _items.length < response.total;
+        _loadingMore = false;
+      });
+    } catch (e) {
+      setState(() => _loadingMore = false);
+    }
+  }
+
+  List<CrmAlertHistoryItem> _sortItems(List<CrmAlertHistoryItem> items) {
+    return List.from(items)..sort((a, b) {
+      final sa = AlertsHubHelpers.severityRank(a.severity);
+      final sb = AlertsHubHelpers.severityRank(b.severity);
+      if (sa != sb) return sa.compareTo(sb);
+      return b.triggeredAt.compareTo(a.triggeredAt);
+    });
+  }
+
   void _filterBySensor(String? sensorId, String? sensorName) {
     setState(() {
       _selectedSensorId = sensorId;
       _selectedSensorName = sensorName;
-      _loadAlerts();
     });
+    _loadAlerts(reset: true);
   }
-  
+
   void _clearFilter() {
     setState(() {
       _selectedSensorId = null;
       _selectedSensorName = null;
-      _loadAlerts();
     });
+    _loadAlerts(reset: true);
   }
 
-  void _refresh() {
-    setState(() {
-      _loadAlerts();
-    });
-  }
+  void _refresh() => _loadAlerts(reset: true);
 
   @override
   Widget build(BuildContext context) {
+    final criticalCount = _items.where((a) => a.severity.toLowerCase() == 'critical').length;
+    final warningCount = _items.where((a) => a.severity.toLowerCase() == 'warning').length;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Alertas'),
-        // FIX OBJETIVO 3: Eliminado botón de refresh manual
-        // El historial es estable, no requiere refresh constante
-      ),
-      body: AlertFutureBuilder(
-        future: _future,
-        selectedSensorId: _selectedSensorId,
-        selectedSensorName: _selectedSensorName,
-        onFilterBySensor: _filterBySensor,
-        onClearFilter: _clearFilter,
-        onRefresh: _refresh,
-        onAlertTap: (a) async {
-          // FASE 4: Navegar a la gráfica del sensor congelada en el timestamp exacto
-          final sensorId = a.sensorId;
-          if (sensorId == null || sensorId.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Alerta sin sensor asociado'),
-                backgroundColor: Colors.orangeAccent,
-              ),
-            );
-            return;
-          }
-          
-          // FIX: Refresh on return to reflect status changes
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => AlertDetailPage(
-                alertId: a.alertId,
-                sensorId: sensorId,
-                role: widget.role,
-              ),
+      appBar: AppBar(title: const Text('Alertas')),
+      body: _buildBody(criticalCount, warningCount),
+    );
+  }
+
+  Widget _buildBody(int criticalCount, int warningCount) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null && _items.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Error cargando alertas: $_error', textAlign: TextAlign.center),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _refresh,
+              icon: const Icon(Icons.refresh),
+              label: const Text('Reintentar'),
             ),
-          );
-          // Refresh after returning from detail page
-          if (mounted) _refresh();
-        },
-      ),
+          ],
+        ),
       );
+    }
+    if (_items.isEmpty) {
+      return const AlertEmptyState();
+    }
+
+    return Column(
+      children: [
+        if (_selectedSensorId != null)
+          AlertSensorFilter(
+            sensorName: _selectedSensorName ?? 'Sensor',
+            onClear: _clearFilter,
+          ),
+        if (criticalCount > 0 || warningCount > 0)
+          AlertSummary(
+            criticalCount: criticalCount,
+            warningCount: warningCount,
+            totalCount: _items.length,
+          ),
+        Expanded(
+          child: AlertListView(
+            items: _items,
+            selectedSensorId: _selectedSensorId,
+            onFilterBySensor: _filterBySensor,
+            onAlertTap: (a) async {
+              final sensorId = a.sensorId;
+              if (sensorId == null || sensorId.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Alerta sin sensor asociado'), backgroundColor: Colors.orangeAccent),
+                );
+                return;
+              }
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => AlertDetailPage(alertId: a.alertId, sensorId: sensorId, role: widget.role),
+                ),
+              );
+              if (mounted) _refresh();
+            },
+            scrollController: _scrollController,
+            footer: _buildFooter(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooter() {
+    if (_loadingMore) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: LinearProgressIndicator(minHeight: 2),
+      );
+    }
+    if (!_hasMore) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Center(
+          child: Text('Sin más alertas', style: TextStyle(color: Colors.white54, fontSize: 12)),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
   }
 }

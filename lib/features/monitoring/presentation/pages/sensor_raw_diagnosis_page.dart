@@ -1,23 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/auth/user_role.dart';
+import '../../../../core/lifecycle/app_lifecycle_service.dart';
+import '../../../../core/network/api_client.dart';
+import '../../../../core/presentation/widgets/app_loading_widget.dart';
 import '../../data/models/monitoring_view_models.dart';
 import '../../data/monitoring_repository.dart';
 import '../styles/dashboard_styles.dart';
-import '../widgets/raw_diagnosis/raw_sensor_chart.dart';
-import '../widgets/raw_diagnosis/raw_readings_list.dart';
+import '../widgets/raw_diagnosis/raw_diagnosis_empty_state.dart';
+import '../widgets/raw_diagnosis/raw_diagnosis_error_widget.dart';
+import '../widgets/raw_diagnosis/raw_diagnosis_success_body.dart';
 
-/// FIX PROBLEMA 5 & 8: Página de diagnóstico con datos CRUDOS.
-/// 
-/// Características:
-/// - Muestra TODAS las lecturas sin agregación ni compresión
-/// - Se actualiza automáticamente cada 10 segundos
-/// - Gráfica crece en el tiempo (scroll horizontal)
-/// - NO muestra alertas ni advertencias, SOLO lecturas reales
-/// - Selector de sensor
+/// Página de diagnóstico con datos crudos sin agregación.
 class SensorRawDiagnosisPage extends StatefulWidget {
   const SensorRawDiagnosisPage({
     super.key,
@@ -38,27 +34,36 @@ class SensorRawDiagnosisPage extends StatefulWidget {
 
 class _SensorRawDiagnosisPageState extends State<SensorRawDiagnosisPage> {
   late final MonitoringRepository _repo;
-  
+
   RawSensorReadingsViewModel? _data;
   bool _loading = true;
-  String? _error;
-  
+  int? _errorStatusCode;
+  String? _errorMessage;
   Timer? _poller;
   DateTime? _lastFetchedAt;
-  
-  // Límite de lecturas a mostrar
   int _limit = 200;
-  
-  // Scroll controller para la gráfica
   final ScrollController _scrollController = ScrollController();
+  StreamSubscription<void>? _lifecyclePauseSub;
+  StreamSubscription<void>? _lifecycleResumeSub;
 
   @override
   void initState() {
     super.initState();
     _repo = MonitoringRepository();
     _loadData();
-    
-    // Polling cada 10 segundos para datos en tiempo real
+    _startPolling();
+
+    _lifecyclePauseSub = AppLifecycleService().onAppPaused.listen((_) {
+      _poller?.cancel();
+    });
+    _lifecycleResumeSub = AppLifecycleService().onAppResumed.listen((_) {
+      _startPolling();
+      _loadData(silent: true);
+    });
+  }
+
+  void _startPolling() {
+    _poller?.cancel();
     _poller = Timer.periodic(const Duration(seconds: 10), (_) {
       if (mounted) _loadData(silent: true);
     });
@@ -67,34 +72,30 @@ class _SensorRawDiagnosisPageState extends State<SensorRawDiagnosisPage> {
   @override
   void dispose() {
     _poller?.cancel();
+    _lifecyclePauseSub?.cancel();
+    _lifecycleResumeSub?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
-
   Future<void> _loadData({bool silent = false}) async {
     if (!silent) {
       setState(() {
         _loading = true;
-        _error = null;
+        _errorStatusCode = null;
+        _errorMessage = null;
       });
     }
 
     try {
-      final data = await _repo.fetchRawSensorReadings(
-        widget.sensorId,
-        limit: _limit,
-      );
-      
+      final data = await _repo.fetchRawSensorReadings(widget.sensorId, limit: _limit);
       if (!mounted) return;
-      
+
       setState(() {
         _data = data;
         _loading = false;
-        _error = null;
         _lastFetchedAt = DateTime.now();
       });
-      
-      // Scroll al final para mostrar datos más recientes
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_scrollController.hasClients) {
           _scrollController.animateTo(
@@ -104,15 +105,29 @@ class _SensorRawDiagnosisPageState extends State<SensorRawDiagnosisPage> {
           );
         }
       });
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _errorStatusCode = e.statusCode;
+        _errorMessage = e.body.isNotEmpty ? e.body : e.toString();
+      });
+    } on ApiTimeoutException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _errorStatusCode = 408;
+        _errorMessage = e.toString();
+      });
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        _error = e.toString();
+        _errorStatusCode = null;
+        _errorMessage = e.toString();
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,28 +137,21 @@ class _SensorRawDiagnosisPageState extends State<SensorRawDiagnosisPage> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Diagnóstico: ${widget.sensorName}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Datos crudos en tiempo real',
-              style: TextStyle(fontSize: 12, color: Colors.white70),
-            ),
+            Text('Diagnóstico: ${widget.sensorName}',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('Datos crudos en tiempo real',
+                style: TextStyle(fontSize: 12, color: Colors.white70)),
           ],
         ),
         actions: [
-          // Selector de límite
           PopupMenuButton<int>(
             icon: const Icon(Icons.filter_list),
             tooltip: 'Límite de lecturas',
             onSelected: (value) {
-              setState(() {
-                _limit = value;
-              });
+              setState(() => _limit = value);
               _loadData();
             },
-            itemBuilder: (_) => [
+            itemBuilder: (_) => const [
               PopupMenuItem(value: 100, child: Text('Últimas 100')),
               PopupMenuItem(value: 200, child: Text('Últimas 200')),
               PopupMenuItem(value: 500, child: Text('Últimas 500')),
@@ -157,130 +165,33 @@ class _SensorRawDiagnosisPageState extends State<SensorRawDiagnosisPage> {
           ),
         ],
       ),
-      body: _buildBody()
+      body: _buildBody(),
     );
   }
 
   Widget _buildBody() {
     if (_loading && _data == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppLoadingWidget();
     }
 
-    if (_error != null && _data == null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
-            const SizedBox(height: 16),
-            Text('Error al cargar datos', style: DashboardTextStyles.deviceTitle),
-            const SizedBox(height: 8),
-            Text(_error!, style: DashboardTextStyles.sensorMeta),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadData,
-              child: const Text('Reintentar'),
-            ),
-          ],
-        ),
+    if (_errorMessage != null && _data == null) {
+      return RawDiagnosisErrorWidget(
+        statusCode: _errorStatusCode,
+        message: _errorMessage!,
+        onRetry: _loadData,
       );
     }
 
-    final data = _data!;
-    final readings = data.readings;
+    final readings = _data!.readings;
 
-    if (readings.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text('Sin lecturas', style: DashboardTextStyles.deviceTitle),
-            const SizedBox(height: 8),
-            Text(
-              'No hay datos para este sensor aún.',
-              style: DashboardTextStyles.sensorMeta,
-            ),
-          ],
-        ),
-      );
-    }
+    if (readings.isEmpty) return const RawDiagnosisEmptyState();
 
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          color: DashboardColors.cardBackground,
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${readings.length} lecturas',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (_lastFetchedAt != null)
-                      Text(
-                        'Actualizado: ${DateFormat('HH:mm:ss').format(_lastFetchedAt!)}',
-                        style: TextStyle(color: Colors.white70, fontSize: 12),
-                      ),
-                  ],
-                ),
-              ),
-              if (_loading)
-                const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-            ],
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Card(
-            margin: const EdgeInsets.all(8),
-            color: DashboardColors.cardBackground,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: RawSensorChart(readings: readings, unit: widget.unit),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Card(
-            margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-            color: DashboardColors.cardBackground,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    'Historial de lecturas',
-                    style: DashboardTextStyles.deviceTitle,
-                  ),
-                ),
-                Expanded(
-                  child: RawReadingsList(
-                    readings: readings,
-                    unit: widget.unit,
-                    scrollController: _scrollController,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+    return RawDiagnosisSuccessBody(
+      readings: readings,
+      unit: widget.unit,
+      lastFetchedAt: _lastFetchedAt,
+      isLoading: _loading,
+      scrollController: _scrollController,
     );
   }
 }

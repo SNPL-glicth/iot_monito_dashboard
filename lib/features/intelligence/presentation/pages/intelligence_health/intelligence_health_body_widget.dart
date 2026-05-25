@@ -36,6 +36,11 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           healthLabel: data.healthLabel,
           healthScore: data.healthScore,
           modelHealth: data.modelHealth,
+          accuracyPct: data.accuracyMetrics.withinThreshold5pct,
+          driftRate: data.predictionQuality.lowConfidenceRate,
+          hoursSinceUpdate: DateTime.tryParse(data.timestamp) != null
+              ? DateTime.now().difference(DateTime.parse(data.timestamp)).inHours
+              : null,
         ),
         const SizedBox(height: 16),
 

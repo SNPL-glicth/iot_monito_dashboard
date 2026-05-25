@@ -59,7 +59,41 @@ class _DevicesCleanReadingsPageState extends State<DevicesCleanReadingsPage> {
     }
   }
 
-  Future<void> _deleteBySensor() async {
+  Future<void> _confirmAndDeleteBySensor() async {
+    final sensorId = _selectedSensorId;
+    if (sensorId == null || sensorId.trim().isEmpty) {
+      setState(() {
+        _message = 'Selecciona un sensor válido.';
+      });
+      return;
+    }
+
+    // Resolver etiqueta del sensor para mostrar en el diálogo
+    String sensorLabel = sensorId;
+    try {
+      final sensors = await _sensorsFuture;
+      final match = sensors.firstWhere(
+        (s) => s.sensorId == sensorId,
+        orElse: () => throw Exception('not found'),
+      );
+      final sensorName = (match.sensorName ?? match.sensorType ?? '-').trim();
+      final unit = (match.unit ?? '').trim();
+      final unitSuffix = unit.isEmpty ? '' : ' · $unit';
+      sensorLabel = '${match.deviceName} · $sensorName$unitSuffix';
+    } catch (_) {
+      // Fallback al sensorId
+    }
+
+    if (!mounted) return;
+
+    final confirmed = await showConfirmDeleteBySensorDialog(
+      context,
+      sensorLabel: sensorLabel,
+    );
+    if (confirmed) await _deleteBySensor(sensorLabel: sensorLabel);
+  }
+
+  Future<void> _deleteBySensor({String? sensorLabel}) async {
     final sensorId = _selectedSensorId;
     if (sensorId == null || sensorId.trim().isEmpty) {
       setState(() {
@@ -78,11 +112,11 @@ class _DevicesCleanReadingsPageState extends State<DevicesCleanReadingsPage> {
       // Backend: DELETE /monitoring/dev-tools/sensor-readings/sensor/:sensorId
       await client.delete('/monitoring/dev-tools/sensor-readings/sensor/$sensorId');
       setState(() {
-        _message = 'Se eliminaron las lecturas del sensor $sensorId.';
+        _message = 'Se eliminaron las lecturas del sensor ${sensorLabel ?? sensorId}.';
       });
     } catch (e) {
       setState(() {
-        _message = 'Error al eliminar lecturas del sensor $sensorId: $e';
+        _message = 'Error al eliminar lecturas del sensor ${sensorLabel ?? sensorId}: $e';
       });
     } finally {
       if (mounted) {
@@ -141,7 +175,7 @@ class _DevicesCleanReadingsPageState extends State<DevicesCleanReadingsPage> {
               selectedSensorId: _selectedSensorId,
               isBusy: _isBusy,
               onSensorChanged: (value) => setState(() => _selectedSensorId = value),
-              onDelete: _deleteBySensor,
+              onDelete: _confirmAndDeleteBySensor,
             ),
             
             if (_message != null) ...[

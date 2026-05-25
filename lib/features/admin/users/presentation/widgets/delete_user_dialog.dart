@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
-import '../../data/admin_users_repository.dart';
+import '../../data/models/admin_user.dart';
 
 /// Muestra diálogo de confirmación para eliminar un usuario.
 Future<bool> showDeleteUserDialog({

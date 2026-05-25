@@ -20,6 +20,10 @@ class MonitoringCache {
   static DateTime? _activeAlertsCacheTimestamp;
   static const Duration _activeAlertsCacheTtl = Duration(seconds: 5);
 
+  // Cache de perfiles de umbrales (prefetch desde DeviceDetailPage)
+  static final Map<String, ({DateTime at, SensorThresholdProfileViewModel data})> _thresholdProfileCache = {};
+  static const Duration _thresholdProfileTtl = Duration(minutes: 2);
+
   /// Obtiene cache de dashboard si es válido
   static ({DateTime at, SensorDashboardViewModel data})? getDashboardCache(String key) {
     final cached = _dashboardCache[key];
@@ -116,5 +120,27 @@ class MonitoringCache {
   static void invalidateActiveAlertsCache() {
     _activeAlertsCache = null;
     _activeAlertsCacheTimestamp = null;
+  }
+
+  /// Obtiene cache de perfil de umbrales si es válido
+  static ({DateTime at, SensorThresholdProfileViewModel data})? getThresholdProfileCache(String sensorId) {
+    final cached = _thresholdProfileCache[sensorId];
+    final now = DateTime.now();
+    if (cached != null && now.difference(cached.at) <= _thresholdProfileTtl) {
+      return cached;
+    }
+    return null;
+  }
+
+  /// Guarda en cache el perfil de umbrales de un sensor
+  static void setThresholdProfileCache(String sensorId, SensorThresholdProfileViewModel data) {
+    final now = DateTime.now();
+    _thresholdProfileCache[sensorId] = (at: now, data: data);
+  }
+
+  /// Invalida cache de umbral para un sensor específico
+  static void invalidateThresholdProfileCache(String sensorId) {
+    _thresholdProfileCache.remove(sensorId);
+    debugPrint('🗑️ [MonitoringCache] Threshold profile cache invalidated for sensor $sensorId');
   }
 }

@@ -4,6 +4,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/intelligence_models.dart';
 import '../../data/intelligence_repository.dart';
+import '../../data/intelligence_prefetch_service.dart';
 import '../widgets/intelligence_decisions_helpers.dart';
 import '../widgets/decisions/decisions_filters_header.dart';
 import '../widgets/decisions/decisions_content.dart';
@@ -37,12 +38,29 @@ class _IntelligenceDecisionsPageState extends State<IntelligenceDecisionsPage> {
       _isLoading = true;
       _error = null;
     });
-    
+
     try {
-      final decisions = await _repo.fetchDecisions(
-        status: _statusFilter.isEmpty ? null : _statusFilter,
-        severity: _severityFilter.isEmpty ? null : _severityFilter,
-      );
+      List<DecisionActionViewModel> decisions;
+
+      // Tarea 3: Intentar consumir prefetch de decisiones
+      final prefetchFuture = IntelligencePrefetchService().consumeDecisions();
+      if (prefetchFuture != null) {
+        decisions = await prefetchFuture;
+        // Invalidar cache si cambiaron filtros
+        if (_statusFilter.isNotEmpty || _severityFilter.isNotEmpty) {
+          decisions = decisions.where((d) {
+            final statusMatch = _statusFilter.isEmpty || d.status == _statusFilter;
+            final severityMatch = _severityFilter.isEmpty || d.severity == _severityFilter;
+            return statusMatch && severityMatch;
+          }).toList();
+        }
+      } else {
+        decisions = await _repo.fetchDecisions(
+          status: _statusFilter.isEmpty ? null : _statusFilter,
+          severity: _severityFilter.isEmpty ? null : _severityFilter,
+        );
+      }
+
       if (mounted) {
         setState(() {
           _decisions = decisions;

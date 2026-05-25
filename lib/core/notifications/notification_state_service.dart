@@ -16,6 +16,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../lifecycle/app_lifecycle_service.dart';
 import '../network/api_client.dart';
 import '../realtime/realtime_service.dart';
 import 'models/app_notification.dart';
@@ -65,6 +66,18 @@ class NotificationStateService {
   NotificationStateService._internal() {
     _log('Service initialized');
     _setupWebSocketAwareness();
+    _setupLifecycleAwareness();
+  }
+
+  void _setupLifecycleAwareness() {
+    AppLifecycleService().onAppPaused.listen((_) {
+      _log('App paused - stopping notification polling');
+      stopPolling();
+    });
+    AppLifecycleService().onAppResumed.listen((_) {
+      _log('App resumed - starting notification polling');
+      startPolling();
+    });
   }
 
   /// Configura awareness de WebSocket para detener/iniciar polling automáticamente

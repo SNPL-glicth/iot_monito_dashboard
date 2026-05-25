@@ -50,8 +50,8 @@ class MonitoringRepository {
   // Delegados a MonitoringReadingsOps
   Future<List<LatestSensorReadingViewModel>> fetchLatestSensorReadings() => 
       _readingsOps.fetchLatestSensorReadings();
-  Future<List<SensorReadingViewModel>> fetchSensorReadings(String sensorId, {int limit = 50}) => 
-      _readingsOps.fetchSensorReadings(sensorId, limit: limit);
+  Future<List<SensorReadingViewModel>> fetchSensorReadings(String sensorId, {int limit = 50, DateTime? from, DateTime? to}) => 
+      _readingsOps.fetchSensorReadings(sensorId, limit: limit, from: from, to: to);
   Future<RawSensorReadingsViewModel> fetchRawSensorReadings(String sensorId, {int limit = 500, DateTime? since}) => 
       _readingsOps.fetchRawSensorReadings(sensorId, limit: limit, since: since);
   Future<AggregatedSensorReadingsViewModel> fetchAggregatedSensorReadings(String sensorId, {String range = '6h'}) => 

@@ -118,11 +118,16 @@ class CrmRepository {
     );
   }
 
-  /// Obtiene una alerta específica por ID
-  /// Usa listAlerts con filtro para obtener la alerta del historial
+  /// Obtiene una alerta específica por ID.
+  /// Intenta endpoint directo; si falla, fallback a listAlerts paginado.
   Future<CrmAlertHistoryItem?> getAlertById(String alertId) async {
-    // Buscar en el historial de alertas
-    final response = await listAlerts(pageSize: 200);
+    try {
+      final json = await _apiClient.getJson('/crm/alerts/$alertId');
+      return CrmAlertHistoryItem.fromJson(json);
+    } catch (_) {
+      // Fallback: buscar en primera página paginada
+    }
+    final response = await listAlerts(page: 1, pageSize: 20);
     return response.items.where((a) => a.alertId == alertId).firstOrNull;
   }
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/auth/user_role.dart';
 import '../../data/admin_users_repository.dart';
+import '../../data/models/admin_user.dart';
+import '../widgets/delete_user_dialog.dart';
 import 'admin_user_edit_page.dart';
 
 class AdminUserDetailsPage extends StatefulWidget {
@@ -53,32 +55,18 @@ class _AdminUserDetailsPageState extends State<AdminUserDetailsPage> {
   }
 
   Future<void> _confirmDelete() async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Eliminar usuario'),
-          content: Text('¿Seguro que deseas eliminar a ${_user.username}?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Eliminar'),
-            ),
-          ],
-        );
-      },
-    );
-
+    final ok = await showDeleteUserDialog(context: context, user: _user);
     if (ok != true) return;
 
-    await _repository.deleteUser(_user.id);
-
-    if (mounted) {
-      Navigator.pop(context, true);
+    try {
+      await _repository.deleteUser(_user.id);
+      if (mounted) Navigator.pop(context, true);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error eliminando usuario: $e')),
+        );
+      }
     }
   }
 

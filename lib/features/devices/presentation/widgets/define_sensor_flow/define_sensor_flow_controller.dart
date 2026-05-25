@@ -19,11 +19,15 @@ class DefineSensorFlowController {
   // Datos del sensor definido
   dynamic _definedSensor;
   String? scannedCode;
-  
+
   // Reserve/Confirm (flujo definitivo)
   dynamic _reserveData;
   dynamic _confirmResult;
   String _activationMethod = '';
+
+  // Estado por paso para feedback granular y retry parcial
+  bool _publishDone = false;
+  bool _reserveDone = false;
 
   int get currentStep => _currentStep;
   String get selectedType => _selectedType;
@@ -33,6 +37,8 @@ class DefineSensorFlowController {
   dynamic get reserveData => _reserveData;
   dynamic get confirmResult => _confirmResult;
   String get activationMethod => _activationMethod;
+  bool get publishDone => _publishDone;
+  bool get reserveDone => _reserveDone;
 
   void setSelectedType(String type) {
     _selectedType = type;
@@ -110,7 +116,7 @@ class DefineSensorFlowController {
     }
   }
 
-  Future<void> publishAndReserveSensor() async {
+  Future<void> publishSensorStep() async {
     if (_definedSensor == null) return;
 
     setLoading(true);
@@ -118,12 +124,28 @@ class DefineSensorFlowController {
 
     try {
       await _service.publishSensor(sensorUuid: _definedSensor!.sensorUuid);
-      
+      _publishDone = true;
+      setLoading(false);
+      onStateChanged();
+    } catch (e) {
+      setError(e.toString().replaceAll('Exception: ', ''));
+      setLoading(false);
+    }
+  }
+
+  Future<void> reserveSensorStep() async {
+    if (_definedSensor == null) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
       final result = await _service.reserveSensor(
         sensorUuid: _definedSensor!.sensorUuid,
       );
 
       _reserveData = result;
+      _reserveDone = true;
       _activationMethod = 'reserve';
       setStep(2);
       setLoading(false);
@@ -131,6 +153,12 @@ class DefineSensorFlowController {
       setError(e.toString().replaceAll('Exception: ', ''));
       setLoading(false);
     }
+  }
+
+  /// Reintenta solo el paso reserve sin repetir publish.
+  Future<void> retryReserve() async {
+    setError(null);
+    await reserveSensorStep();
   }
 
   Future<void> confirmSensor() async {
@@ -151,6 +179,12 @@ class DefineSensorFlowController {
       setError(e.toString().replaceAll('Exception: ', ''));
       setLoading(false);
     }
+  }
+
+  /// Reintenta solo el paso confirm sin repetir publish/reserve.
+  Future<void> retryConfirm() async {
+    setError(null);
+    await confirmSensor();
   }
 
   String parseQRCode(String qrData) {

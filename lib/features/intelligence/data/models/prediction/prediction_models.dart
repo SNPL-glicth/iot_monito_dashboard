@@ -30,7 +30,7 @@ class PredictionSummaryViewModel {
 
   final String deviceId;
   final String deviceName;
-  final String sensorId;
+  final int sensorId;
   final String sensorName;
   final String sensorType;
   final String unit;
@@ -105,7 +105,9 @@ class PredictionSummaryViewModel {
     return PredictionSummaryViewModel(
       deviceId: '${json['deviceId'] ?? ''}',
       deviceName: '${json['deviceName'] ?? ''}',
-      sensorId: '${json['sensorId'] ?? ''}',
+      sensorId: json['sensorId'] is int
+          ? json['sensorId'] as int
+          : int.tryParse('${json['sensorId'] ?? ''}') ?? 0,
       sensorName: '${json['sensorName'] ?? ''}',
       sensorType: '${json['sensorType'] ?? ''}',
       unit: '${json['unit'] ?? ''}',

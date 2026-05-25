@@ -4,7 +4,7 @@ import '../../../crm/data/models/crm_alerts_models.dart';
 import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'alerts_hub_helpers.dart';
 
-/// Lista de alertas historial con filtrado por sensor.
+/// Lista de alertas historial con filtrado por sensor e infinite scroll.
 class AlertListView extends StatelessWidget {
   const AlertListView({
     super.key,
@@ -12,19 +12,27 @@ class AlertListView extends StatelessWidget {
     required this.selectedSensorId,
     required this.onFilterBySensor,
     required this.onAlertTap,
+    this.scrollController,
+    this.footer,
   });
 
   final List<CrmAlertHistoryItem> items;
   final String? selectedSensorId;
   final void Function(String? sensorId, String? sensorName) onFilterBySensor;
   final void Function(CrmAlertHistoryItem alert) onAlertTap;
+  final ScrollController? scrollController;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      controller: scrollController,
       padding: const EdgeInsets.all(16),
-      itemCount: items.length,
+      itemCount: items.length + (footer != null ? 1 : 0),
       itemBuilder: (context, index) {
+        if (footer != null && index == items.length) {
+          return footer!;
+        }
         final a = items[index];
         final color = AlertsHubHelpers.severityColor(a.severity);
         final icon = AlertsHubHelpers.severityIcon(a.severity);

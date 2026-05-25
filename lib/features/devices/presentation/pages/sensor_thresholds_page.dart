@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/auth/user_role.dart';
 import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
+import '../../../monitoring/data/repositories/monitoring_cache.dart';
 import '../widgets/thresholds/threshold_profile_dialog.dart';
 import '../widgets/thresholds/threshold_edit_dialog.dart';
 import '../widgets/thresholds/threshold_history_sheet.dart';
@@ -40,11 +41,15 @@ class _SensorThresholdsPageState extends State<SensorThresholdsPage> {
   void initState() {
     super.initState();
     _repo = MonitoringRepository();
-    _profileFuture = _repo.fetchSensorThresholdProfile(widget.sensorId);
+    final cached = MonitoringCache.getThresholdProfileCache(widget.sensorId);
+    _profileFuture = cached != null
+        ? Future.value(cached.data)
+        : _repo.fetchSensorThresholdProfile(widget.sensorId);
     _legacyFuture = _repo.fetchSensorThresholds(widget.sensorId);
   }
 
   void _refresh() {
+    MonitoringCache.invalidateThresholdProfileCache(widget.sensorId);
     setState(() {
       _profileFuture = _repo.fetchSensorThresholdProfile(widget.sensorId);
       _legacyFuture = _repo.fetchSensorThresholds(widget.sensorId);

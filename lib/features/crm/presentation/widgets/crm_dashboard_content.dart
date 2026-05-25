@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/cache/dashboard_cache_service.dart';
+import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../monitoring/data/models/prediction_view_model.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
@@ -38,9 +39,6 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
   late final MonitoringRepository _monitoringRepo;
   late final AlertsRepository _alertsRepo;
 
-  // FIX FREEZE: Flag para diferir construcción de secciones pesadas
-  bool _initialRenderComplete = false;
-
   // Estado reactivo por sección (sin setState global en el Timer)
   // FIX MEMORY LEAK: Estos ValueNotifiers se liberan en dispose()
   final ValueNotifier<SectionSnapshot<CrmDashboardResponse>> _dashboardSnapshot =
@@ -66,6 +64,9 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
   Timer? _pollTimer;
   bool _isFetchingDashboard = false;
   bool _isFetchingMl = false;
+  bool _pollingPaused = false;
+  StreamSubscription<void>? _lifecyclePauseSub;
+  StreamSubscription<void>? _lifecycleResumeSub;
 
   @override
   void initState() {
@@ -74,41 +75,31 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
     _monitoringRepo = MonitoringRepository();
     _alertsRepo = AlertsRepository();
 
-    // FIX FREEZE: Carga inicial muy diferida para no bloquear el primer frame
-    // Dar tiempo a que la UI se renderice completamente antes de hacer requests
+    _lifecyclePauseSub = AppLifecycleService().onAppPaused.listen((_) {
+      if (!_pollingPaused) {
+        _pollingPaused = true;
+        _pollTimer?.cancel();
+        debugPrint('[CrmDashboard] polling PAUSED (lifecycle service)');
+      }
+    });
+    _lifecycleResumeSub = AppLifecycleService().onAppResumed.listen((_) {
+      if (_pollingPaused) {
+        _pollingPaused = false;
+        debugPrint('[CrmDashboard] polling RESUMED');
+        _refreshDashboard();
+        _refreshMlSections();
+        _startPolling();
+      }
+    });
+
+    // Carga inmediata: skeleton se muestra en el primer frame,
+    // datos se piden justo después sin delays artificiales.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      debugPrint('[CrmDashboard] initState - scheduling initial load');
-      
-      // FIX FREEZE: Marcar render inicial completo después de 2 frames
-      // Esto permite que el skeleton se muestre antes de cargar datos
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (!mounted) return;
-        setState(() {
-          _initialRenderComplete = true;
-        });
-      });
-      
-      // Delay inicial más largo para permitir que la UI se renderice primero
-      Future.delayed(const Duration(milliseconds: 1200), () {
-        if (!mounted) return;
-        debugPrint('[CrmDashboard] starting dashboard fetch');
-        _refreshDashboard();
-        
-        // Cargar ML sections después del dashboard (secuencial, no paralelo)
-        Future.delayed(const Duration(seconds: 3), () {
-          if (!mounted) return;
-          debugPrint('[CrmDashboard] starting ML sections fetch');
-          _refreshMlSections();
-          
-          // Iniciar polling DESPUÉS de las cargas iniciales
-          Future.delayed(const Duration(seconds: 2), () {
-            if (!mounted) return;
-            debugPrint('[CrmDashboard] starting polling');
-            _startPolling();
-          });
-        });
-      });
+      debugPrint('[CrmDashboard] initState - starting immediate load');
+      _refreshDashboard();
+      _refreshMlSections();
+      _startPolling();
     });
   }
 
@@ -242,6 +233,8 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
   @override
   void dispose() {
     _pollTimer?.cancel();
+    _lifecyclePauseSub?.cancel();
+    _lifecycleResumeSub?.cancel();
     // FIX MEMORY LEAK: Liberar ValueNotifiers
     _dashboardSnapshot.dispose();
     _predictionsSnapshot.dispose();
@@ -261,23 +254,6 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
 
   @override
   Widget build(BuildContext context) {
-    // FIX FREEZE: Mostrar skeleton mínimo hasta que el render inicial complete
-    if (!_initialRenderComplete) {
-      return const Padding(
-        padding: EdgeInsets.all(16),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Cargando dashboard...', style: TextStyle(color: Colors.white54)),
-            ],
-          ),
-        ),
-      );
-    }
-    
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
@@ -285,10 +261,7 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
         valueListenable: _dashboardSnapshot,
         builder: (context, snapshot, _) {
           if (snapshot.loading && snapshot.data == null) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Center(child: CircularProgressIndicator()),
-            );
+            return _buildSkeleton();
           }
 
           if (snapshot.error != null && snapshot.data == null) {
@@ -372,4 +345,108 @@ class CrmDashboardContentState extends State<CrmDashboardContent> {
     );
   }
 
+  /// Skeleton loader que replica exactamente el layout del dashboard real:
+  /// header, KPIs (4 cards), ML panel, alertas y actividad reciente.
+  Widget _buildSkeleton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header skeleton
+        _SkeletonLine(width: 220, height: 24),
+        const SizedBox(height: 8),
+        _SkeletonLine(width: 160, height: 14),
+        const SizedBox(height: 20),
+
+        // KPIs skeleton (2x2 grid)
+        Row(
+          children: [
+            Expanded(child: _SkeletonCard(height: 90)),
+            const SizedBox(width: 12),
+            Expanded(child: _SkeletonCard(height: 90)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(child: _SkeletonCard(height: 90)),
+            const SizedBox(width: 12),
+            Expanded(child: _SkeletonCard(height: 90)),
+          ],
+        ),
+        const SizedBox(height: 24),
+
+        // ML section header skeleton
+        _SkeletonLine(width: 180, height: 18),
+        const SizedBox(height: 12),
+        _SkeletonCard(height: 140),
+        const SizedBox(height: 24),
+
+        // Alertas header skeleton
+        _SkeletonLine(width: 140, height: 18),
+        const SizedBox(height: 12),
+        _SkeletonCard(height: 80),
+        const SizedBox(height: 24),
+
+        // Actividad reciente header skeleton
+        _SkeletonLine(width: 160, height: 18),
+        const SizedBox(height: 12),
+        _SkeletonCard(height: 80),
+        const SizedBox(height: 32),
+      ],
+    );
+  }
+
+}
+
+/// Placeholder de línea para textos del skeleton.
+class _SkeletonLine extends StatelessWidget {
+  const _SkeletonLine({required this.width, required this.height});
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: DashboardColors.surfaceElevated,
+        borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+}
+
+/// Placeholder de card para secciones del skeleton.
+class _SkeletonCard extends StatelessWidget {
+  const _SkeletonCard({required this.height});
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: DashboardColors.cardBackground,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.05),
+          width: 1,
+        ),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SkeletonLine(width: 80, height: 12),
+            SizedBox(height: 12),
+            _SkeletonLine(width: double.infinity, height: 10),
+            SizedBox(height: 8),
+            _SkeletonLine(width: 140, height: 10),
+          ],
+        ),
+      ),
+    );
+  }
 }

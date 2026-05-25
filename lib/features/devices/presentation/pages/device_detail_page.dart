@@ -7,7 +7,8 @@ import '../../../monitoring/data/models/sensor_consolidated_status_view_model.da
 import '../../../monitoring/data/monitoring_repository.dart';
 import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/provisioning_repository.dart';
-import '../widgets/define_sensor_flow.dart';
+import '../../../monitoring/data/repositories/monitoring_cache.dart';
+import '../widgets/sensor_onboarding_flow.dart';
 import '../widgets/device_detail/activation_dialog.dart';
 import '../widgets/device_detail/delete_device_dialog.dart';
 import '../widgets/device_detail/device_header_card.dart';
@@ -69,7 +70,7 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
 
   Future<void> _showAddSensorModal(String deviceUuid, String deviceName) async {
     // Usar el nuevo flujo paso a paso
-    final result = await DefineSensorFlow.show(
+    final result = await SensorOnboardingFlow.show(
       context,
       deviceUuid: deviceUuid,
       deviceName: deviceName,
@@ -78,7 +79,7 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
     if (result != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Sensor ${result.sensorType} agregado exitosamente'),
+          content: Text('Sensor registrado exitosamente'),
           backgroundColor: Colors.green,
         ),
       );
@@ -183,6 +184,19 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
             return true;
           }).toList();
           final sensorIds = sensorRows.map((r) => r.sensorId!).toList();
+
+          // Prefetch umbrales en segundo plano para los primeros 5 sensores visibles
+          for (var i = 0; i < sensorRows.length && i < 5; i++) {
+            final sid = sensorRows[i].sensorId;
+            if (sid == null) continue;
+            if (MonitoringCache.getThresholdProfileCache(sid) != null) continue;
+            _repo.fetchSensorThresholdProfile(sid).then((profile) {
+              MonitoringCache.setThresholdProfileCache(sid, profile);
+              debugPrint('[Prefetch] Threshold profile cached for sensor $sid');
+            }).catchError((e) {
+              debugPrint('[Prefetch] Failed to load thresholds for $sid: $e');
+            });
+          }
 
           return FutureBuilder<Map<String, SensorConsolidatedStatusViewModel>>(
             future: sensorIds.isEmpty

@@ -9,12 +9,14 @@ class ConfirmStepWidget extends StatelessWidget {
     super.key,
     required this.reserveData,
     required this.onConfirm,
+    required this.onRetry,
     required this.isLoading,
     required this.error,
   });
 
   final dynamic reserveData;
   final VoidCallback onConfirm;
+  final VoidCallback onRetry;
   final bool isLoading;
   final String? error;
 
@@ -93,8 +95,23 @@ class ConfirmStepWidget extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        if (error != null)
+        if (error != null) ...[
           DefineSensorWidgets.errorWidget(error!),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: isLoading ? null : onRetry,
+              icon: const Icon(Icons.refresh, size: 18),
+              label: const Text('Reintentar confirmación'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.tealAccent,
+                side: const BorderSide(color: Colors.tealAccent),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ),
+        ],
 
         // Confirmar activación
         SizedBox(

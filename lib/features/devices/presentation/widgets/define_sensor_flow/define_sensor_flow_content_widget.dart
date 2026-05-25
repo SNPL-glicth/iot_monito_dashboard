@@ -19,8 +19,11 @@ class DefineSensorFlowContentWidget extends StatelessWidget {
     required this.alertMaxController,
     required this.onDefineSensor,
     required this.onActivateSensorWithCode,
-    required this.onPublishAndReserveSensor,
+    required this.onPublishSensorStep,
+    required this.onReserveSensorStep,
+    required this.onRetryReserve,
     required this.onConfirmSensor,
+    required this.onRetryConfirm,
     required this.onShowManualCodeDialog,
     required this.onOpenScanner,
     required this.onHandleScannedQR,
@@ -35,8 +38,11 @@ class DefineSensorFlowContentWidget extends StatelessWidget {
   final TextEditingController alertMaxController;
   final VoidCallback onDefineSensor;
   final Function(String) onActivateSensorWithCode;
-  final VoidCallback onPublishAndReserveSensor;
+  final VoidCallback onPublishSensorStep;
+  final VoidCallback onReserveSensorStep;
+  final VoidCallback onRetryReserve;
   final VoidCallback onConfirmSensor;
+  final VoidCallback onRetryConfirm;
   final VoidCallback onShowManualCodeDialog;
   final VoidCallback onOpenScanner;
   final Function(String) onHandleScannedQR;
@@ -79,11 +85,15 @@ class DefineSensorFlowContentWidget extends StatelessWidget {
       case 1:
         return ChooseMethodStepWidget(
           selectedType: controller.selectedType,
+          publishDone: controller.publishDone,
+          reserveDone: controller.reserveDone,
           onQRSelected: () {
             controller.setActivationMethod('qr');
             controller.setStep(2);
           },
-          onReserveSelected: onPublishAndReserveSensor,
+          onPublishSelected: onPublishSensorStep,
+          onReserveSelected: onReserveSensorStep,
+          onRetryReserve: onRetryReserve,
           isLoading: controller.isLoading,
           error: controller.error,
         );
@@ -99,6 +109,7 @@ class DefineSensorFlowContentWidget extends StatelessWidget {
             : ConfirmStepWidget(
                 reserveData: controller.reserveData,
                 onConfirm: onConfirmSensor,
+                onRetry: onRetryConfirm,
                 isLoading: controller.isLoading,
                 error: controller.error,
               );

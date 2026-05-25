@@ -4,6 +4,16 @@ import '../../../core/auth/token_manager.dart';
 import '../../../core/auth/user_role.dart';
 import '../../../core/network/api_client.dart';
 
+/// Excepción específica para timeouts de red, para poder
+/// distinguirla visualmente en la UI.
+class AuthTimeoutException implements Exception {
+  AuthTimeoutException(this.message);
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
 //la cclase que define
 class LoginResult {
   LoginResult({
@@ -54,13 +64,22 @@ class AuthRepository {
         'username': username,
         'password': password,
       });
+    } on ApiTimeoutException catch (_) {
+      throw AuthTimeoutException(
+        'El servidor tardó demasiado en responder. Verifica tu conexión e intenta de nuevo.',
+      );
     } on ApiException catch (e) {
-      // Mensajes amigables para el login
+      // Mensajes amigables y específicos para el login
       if (e.statusCode == 401) {
         throw AuthException('Usuario o contraseña incorrectos.');
       }
       if (e.statusCode == 403) {
         throw AuthException('Acceso denegado.');
+      }
+      if (e.statusCode == 422) {
+        throw AuthException(
+          'Los datos ingresados no son válidos. Revisa usuario y contraseña.',
+        );
       }
       if (e.statusCode >= 500) {
         throw AuthException('Servidor no disponible. Intenta más tarde.');

@@ -9,15 +9,23 @@ class ChooseMethodStepWidget extends StatelessWidget {
   const ChooseMethodStepWidget({
     super.key,
     required this.selectedType,
+    required this.publishDone,
+    required this.reserveDone,
     required this.onQRSelected,
+    required this.onPublishSelected,
     required this.onReserveSelected,
+    required this.onRetryReserve,
     required this.isLoading,
     required this.error,
   });
 
   final String selectedType;
+  final bool publishDone;
+  final bool reserveDone;
   final VoidCallback onQRSelected;
+  final VoidCallback onPublishSelected;
   final VoidCallback onReserveSelected;
+  final VoidCallback onRetryReserve;
   final bool isLoading;
   final String? error;
 
@@ -74,20 +82,91 @@ class ChooseMethodStepWidget extends StatelessWidget {
         ),
         const SizedBox(height: 12),
 
-        // Opción 2: Generar Claim Code
-        DefineSensorWidgets.methodCard(
-          icon: Icons.link,
-          title: 'Reservar y Confirmar',
-          description: 'Reserva el sensor y confirma la activación directamente desde la app.',
-          color: Colors.tealAccent,
-          onTap: onReserveSelected,
-          isLoading: isLoading,
-        ),
+        // Opción 2: Flujo publish → reserve → confirm
+        if (!publishDone) ...[
+          DefineSensorWidgets.methodCard(
+            icon: Icons.cloud_upload,
+            title: '1. Publicar sensor',
+            description: 'Hace el sensor disponible para ser reclamado (PENDING_CLAIM).',
+            color: Colors.tealAccent,
+            onTap: onPublishSelected,
+            isLoading: isLoading,
+          ),
+        ] else ...[
+          _successTile(
+            icon: Icons.check_circle,
+            title: 'Publicado correctamente',
+            subtitle: 'El sensor está en estado PENDING_CLAIM.',
+          ),
+          const SizedBox(height: 12),
+          if (!reserveDone) ...[
+            DefineSensorWidgets.methodCard(
+              icon: Icons.link,
+              title: '2. Reservar sensor',
+              description: 'Reserva el sensor y genera el claim token.',
+              color: Colors.tealAccent,
+              onTap: onReserveSelected,
+              isLoading: isLoading,
+            ),
+          ] else ...[
+            _successTile(
+              icon: Icons.check_circle,
+              title: 'Reservado correctamente',
+              subtitle: 'Claim token generado.',
+            ),
+          ],
+        ],
         const SizedBox(height: 16),
 
-        if (error != null)
+        if (error != null) ...[
           DefineSensorWidgets.errorWidget(error!),
+          const SizedBox(height: 12),
+          if (publishDone && !reserveDone)
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: isLoading ? null : onRetryReserve,
+                icon: const Icon(Icons.refresh, size: 18),
+                label: const Text('Reintentar reserva'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.tealAccent,
+                  side: const BorderSide(color: Colors.tealAccent),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ),
+        ],
       ],
+    );
+  }
+
+  Widget _successTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: DashboardColors.greenAccent10,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: DashboardColors.greenAccent30),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.greenAccent, size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                Text(subtitle, style: const TextStyle(color: DashboardColors.white70, fontSize: 13)),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

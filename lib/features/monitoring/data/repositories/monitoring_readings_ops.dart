@@ -7,6 +7,15 @@ class MonitoringReadingsOps {
 
   MonitoringReadingsOps(this._apiClient);
 
+  // Cache en memoria para lecturas históricas: clave = sensorId|from|to
+  final Map<String, List<SensorReadingViewModel>> _readingsCache = {};
+
+  String _cacheKey(String sensorId, DateTime? from, DateTime? to) {
+    final fromStr = from?.toUtc().toIso8601String() ?? 'null';
+    final toStr = to?.toUtc().toIso8601String() ?? 'null';
+    return '$sensorId|$fromStr|$toStr';
+  }
+
   Future<List<LatestSensorReadingViewModel>> fetchLatestSensorReadings() async {
     final data = await _apiClient.getList('/monitoring/readings/latest');
     return data
@@ -17,14 +26,30 @@ class MonitoringReadingsOps {
   Future<List<SensorReadingViewModel>> fetchSensorReadings(
     String sensorId, {
     int limit = 50,
+    DateTime? from,
+    DateTime? to,
   }) async {
-    final data = await _apiClient.getList(
-      '/monitoring/sensors/$sensorId/readings?limit=$limit',
-    );
+    final key = _cacheKey(sensorId, from, to);
+    final cached = _readingsCache[key];
+    if (cached != null) {
+      return cached;
+    }
 
-    return data
+    var url = '/monitoring/sensors/$sensorId/readings?limit=$limit';
+    if (from != null) {
+      url += '&date_from=${from.toUtc().toIso8601String()}';
+    }
+    if (to != null) {
+      url += '&date_to=${to.toUtc().toIso8601String()}';
+    }
+
+    final data = await _apiClient.getList(url);
+    final results = data
         .map((e) => SensorReadingViewModel.fromJson(e as Map<String, dynamic>))
         .toList();
+
+    _readingsCache[key] = results;
+    return results;
   }
 
   /// Obtener datos CRUDOS del sensor sin agregación
