@@ -254,10 +254,11 @@ class _NotificationsSheet extends StatelessWidget {
                         trailing: const Icon(Icons.chevron_right, color: Colors.white54),
                         onTap: () {
                           final sensorId = (n.sensorId ?? '').trim();
+                          final nav = Navigator.of(context, rootNavigator: true);
                           Navigator.of(context).pop();
                           Future.microtask(() {
                             if (sensorId.isNotEmpty) {
-                              Navigator.of(context, rootNavigator: true).pushNamed(
+                              nav.pushNamed(
                                 '/sensor/$sensorId',
                                 arguments: SensorDetailsArgs(sensorId: sensorId),
                               );

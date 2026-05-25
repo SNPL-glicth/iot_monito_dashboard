@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/auth/auth_storage.dart';
+import '../../../../core/realtime/realtime_service.dart';
 import '../../../crm/presentation/pages/crm_home_page.dart';
 import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/auth_repository.dart';
@@ -65,7 +66,8 @@ class _LoginPageState extends State<LoginPage> {
         if (!mounted) return;
       }
 
-      // si quisieras guardar info extra del usuario actual, este es el lugar
+      // FIX REALTIME: Conectar WebSocket para notificaciones en tiempo real
+      RealtimeService().connect(authToken: result.token);
 
       // Nuevo flujo CRM: todos los roles entran al mismo shell con Drawer (offcanvas)
       // y el backend ya hace scoping por user_devices para operator/viewer.

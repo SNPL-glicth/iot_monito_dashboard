@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/monitoring_repository.dart';
+import '../../data/models/device_with_sensor_view_model.dart';
+import '../../data/models/reading/latest_reading_models.dart';
 import '../../data/models/sensor_consolidated_status_view_model.dart';
 import 'dashboard_state.dart';
 
@@ -31,8 +33,12 @@ class DashboardCubit extends Cubit<DashboardState> {
     emit(const DashboardLoading());
 
     try {
-      final devices = await _repository.fetchDevicesWithSensors();
-      final latest = await _repository.fetchLatestSensorReadings();
+      final results = await Future.wait([
+        _repository.fetchDevicesWithSensors(),
+        _repository.fetchLatestSensorReadings(),
+      ]);
+      final devices = results[0] as List<DeviceWithSensorViewModel>;
+      final latest = results[1] as List<LatestSensorReadingViewModel>;
 
       final sensorIds = devices
           .map((d) => d.sensorId ?? '')

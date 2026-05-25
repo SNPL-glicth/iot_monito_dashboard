@@ -24,14 +24,14 @@ class DashboardViewModel {
   Timer? _pollTimer;
 
   // State
-  final ValueNotifier<_SectionSnapshot<_DevicesSectionData>> devicesSection =
-      ValueNotifier<_SectionSnapshot<_DevicesSectionData>>(
-    const _SectionSnapshot<_DevicesSectionData>(loading: true),
+  final ValueNotifier<SectionSnapshot<DevicesSectionData>> devicesSection =
+      ValueNotifier<SectionSnapshot<DevicesSectionData>>(
+    const SectionSnapshot<DevicesSectionData>(loading: true),
   );
 
   List<NotificationItem> backendNotifications = [];
 
-  ValueNotifier<_SectionSnapshot<_DevicesSectionData>> get devicesSectionNotifier => devicesSection;
+  ValueNotifier<SectionSnapshot<DevicesSectionData>> get devicesSectionNotifier => devicesSection;
   List<NotificationItem> get notifications => backendNotifications;
 
   void dispose() {
@@ -76,8 +76,8 @@ class DashboardViewModel {
           ? await _repository.fetchSensorStatusBatch(sensorIds)
           : <String, SensorConsolidatedStatusViewModel>{};
 
-      devicesSection.value = _SectionSnapshot<_DevicesSectionData>(
-        data: _DevicesSectionData(
+      devicesSection.value = SectionSnapshot<DevicesSectionData>(
+        data: DevicesSectionData(
           devices: devices,
           latestReadings: latest,
           statusBySensorId: statusBySensorId,
@@ -108,8 +108,8 @@ class DashboardViewModel {
   }
 }
 
-class _SectionSnapshot<T> {
-  const _SectionSnapshot({
+class SectionSnapshot<T> {
+  const SectionSnapshot({
     this.data,
     this.loading = false,
     this.error,
@@ -119,12 +119,12 @@ class _SectionSnapshot<T> {
   final bool loading;
   final String? error;
 
-  _SectionSnapshot<T> copyWith({
+  SectionSnapshot<T> copyWith({
     T? data,
     bool? loading,
     String? error,
   }) {
-    return _SectionSnapshot<T>(
+    return SectionSnapshot<T>(
       data: data ?? this.data,
       loading: loading ?? this.loading,
       error: error ?? this.error,
@@ -132,8 +132,8 @@ class _SectionSnapshot<T> {
   }
 }
 
-class _DevicesSectionData {
-  const _DevicesSectionData({
+class DevicesSectionData {
+  const DevicesSectionData({
     required this.devices,
     required this.latestReadings,
     required this.statusBySensorId,

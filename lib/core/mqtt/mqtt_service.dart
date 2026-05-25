@@ -77,6 +77,8 @@ class MqttService {
   int _reconnectAttempts = 0;
   static const int _maxReconnectAttempts = 5;
 
+  StreamSubscription? _updatesSubscription;
+
   final List<String> _subscribedTopics = [];
   final List<MqttMessageCallback> _alertCallbacks = [];
   final List<MqttMessageCallback> _telemetryCallbacks = [];
@@ -116,6 +118,9 @@ class MqttService {
     }
 
     _setState(MqttConnectionState.connecting);
+
+    await _updatesSubscription?.cancel();
+    _updatesSubscription = null;
 
     try {
       final clientId = '${_config.clientIdPrefix}-${DateTime.now().millisecondsSinceEpoch}';
@@ -177,6 +182,8 @@ class MqttService {
   Future<void> disconnect() async {
     _reconnectTimer?.cancel();
     _reconnectTimer = null;
+    await _updatesSubscription?.cancel();
+    _updatesSubscription = null;
 
     if (_client != null) {
       _client!.disconnect();
@@ -259,7 +266,7 @@ class MqttService {
   }
 
   void _setupMessageListener() {
-    _client!.updates?.listen((messages) {
+    _updatesSubscription = _client!.updates?.listen((messages) {
       for (final msg in messages) {
         final topic = msg.topic;
         final pubMsg = msg.payload as MqttPublishMessage;
@@ -374,5 +381,7 @@ class MqttService {
     _stateController.close();
     _messageController.close();
     removeCallbacks();
+    _updatesSubscription?.cancel();
+    _updatesSubscription = null;
   }
 }

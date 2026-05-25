@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../network/api_client.dart';
+import '../realtime/realtime_service.dart';
 import 'auth_storage.dart';
 
 /// Gestiona el ciclo de vida del token JWT con refresh automático.
@@ -57,9 +58,10 @@ class TokenManager {
     }
   }
   
-  /// Detiene el monitoreo
+  /// Detiene el monitoreo y desconecta WebSocket
   void stopMonitoring() {
     _cancelTimer();
+    RealtimeService().disconnect();
   }
   
   void _cancelTimer() {

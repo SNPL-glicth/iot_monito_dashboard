@@ -6,6 +6,7 @@ import '../../../../core/auth/auth_storage.dart';
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/notifications/notification_state_service.dart';
+import '../../../../core/realtime/realtime_service.dart';
 import '../../../auth/presentation/pages/login_page.dart';
 import '../../../devices/presentation/pages/sensor_details_route_page.dart';
 import '../../../notifications/data/notifications_repository.dart';
@@ -213,6 +214,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     final navigator = Navigator.of(context);
                     ApiClient.authToken = null;
                     await AuthStorage().clearSession();
+                    // FIX REALTIME: Desconectar WebSocket al cerrar sesión
+                    RealtimeService().disconnect();
                     navigator.pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => const LoginPage()),
                       (route) => false,

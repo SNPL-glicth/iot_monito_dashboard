@@ -54,6 +54,7 @@ class RealtimeChartController {
   final _stateController = StreamController<DataSourceState>.broadcast();
   
   Timer? _httpPollingTimer;
+  Timer? _mqttMonitorTimer;
   bool _started = false;
   DataSourceState _state = DataSourceState.disconnected;
   
@@ -104,6 +105,8 @@ class RealtimeChartController {
     _started = false;
     _httpPollingTimer?.cancel();
     _httpPollingTimer = null;
+    _mqttMonitorTimer?.cancel();
+    _mqttMonitorTimer = null;
     _mqttService.unsubscribeSensor(sensorId);
     _setState(DataSourceState.disconnected);
     debugPrint('[RealtimeChart] Stopped for sensor $sensorId');
@@ -236,8 +239,9 @@ class RealtimeChartController {
   }
 
   void _monitorMqttConnection() {
+    if (_mqttMonitorTimer != null) return;
     // Verificar conexión cada 10 segundos
-    Timer.periodic(const Duration(seconds: 10), (timer) {
+    _mqttMonitorTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
       if (!_started) {
         timer.cancel();
         return;

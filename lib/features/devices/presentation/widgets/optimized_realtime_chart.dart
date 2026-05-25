@@ -1,4 +1,6 @@
 import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +11,113 @@ import 'optimized_realtime_chart/optimized_realtime_chart_legend.dart';
 import 'optimized_realtime_chart/optimized_realtime_chart_status.dart';
 import 'optimized_realtime_chart_models.dart';
 import 'optimized_realtime_chart_helpers.dart';
+
+/// Parámetros para procesamiento de ventana deslizante en isolate.
+class _SlidingWindowParams {
+  const _SlidingWindowParams({
+    required this.points,
+    required this.maxPoints,
+  });
+
+  final List<OptimizedDataPoint> points;
+  final int maxPoints;
+}
+
+int _severityRank(String state) {
+  switch (state.toUpperCase()) {
+    case 'ALERT':
+      return 3;
+    case 'WARNING':
+      return 2;
+    case 'PREDICTION':
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+List<OptimizedDataPoint> _deduplicateByTimestamp(List<OptimizedDataPoint> sorted) {
+  if (sorted.isEmpty) return sorted;
+
+  final result = <OptimizedDataPoint>[];
+  OptimizedDataPoint? current = sorted.first;
+
+  for (int i = 1; i < sorted.length; i++) {
+    final next = sorted[i];
+    final timeDiff = (next.x - current!.x).abs();
+
+    if (timeDiff < 1000) {
+      if (_severityRank(next.state) > _severityRank(current.state)) {
+        current = next;
+      } else if (_severityRank(next.state) == _severityRank(current.state)) {
+        if (next.value.abs() > current.value.abs()) {
+          current = next;
+        }
+      }
+    } else {
+      result.add(current);
+      current = next;
+    }
+  }
+
+  if (current != null) {
+    result.add(current);
+  }
+
+  return result;
+}
+
+List<OptimizedDataPoint> _applySlidingWindowIsolate(_SlidingWindowParams params) {
+  final points = params.points;
+  final maxPoints = params.maxPoints;
+
+  if (points.isEmpty) return points;
+
+  // PASO 1: Ordenar por timestamp
+  final sorted = List<OptimizedDataPoint>.from(points)
+    ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+  // PASO 2: DEDUPLICAR timestamps cercanos (< 1 segundo)
+  final deduplicated = _deduplicateByTimestamp(sorted);
+
+  if (deduplicated.length <= maxPoints) return deduplicated;
+
+  // PASO 3: Preservar TODOS los puntos especiales (alertas/warnings)
+  final specialPoints = deduplicated.where((p) => p.isSpecial).toList();
+
+  // Calcular cuántos puntos normales podemos incluir
+  final normalSlots = maxPoints - specialPoints.length;
+
+  if (normalSlots <= 0) {
+    return specialPoints.take(maxPoints).toList()
+      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+  }
+
+  // PASO 4: Downsampling de puntos normales
+  final normalPoints = deduplicated.where((p) => !p.isSpecial).toList();
+  final step = normalPoints.length / normalSlots;
+  final sampledNormal = <OptimizedDataPoint>[];
+
+  for (int i = 0; i < normalSlots && i * step < normalPoints.length; i++) {
+    final idx = (i * step).floor().clamp(0, normalPoints.length - 1);
+    sampledNormal.add(normalPoints[idx]);
+  }
+
+  // Combinar y ordenar
+  final result = [...sampledNormal, ...specialPoints]
+    ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+  // Asegurar que el último punto esté incluido
+  if (result.isNotEmpty && deduplicated.isNotEmpty && result.last != deduplicated.last) {
+    if (result.length >= maxPoints) {
+      result[result.length - 1] = deduplicated.last;
+    } else {
+      result.add(deduplicated.last);
+    }
+  }
+
+  return result;
+}
 
 /// Gráfica en tiempo real OPTIMIZADA - 60 FPS sin parpadeo
 /// 
@@ -69,12 +178,13 @@ class _OptimizedRealtimeChartState extends State<OptimizedRealtimeChart> {
   int _rebuildCount = 0;
   
   // Pre-calculados para evitar recálculos en build
-  List<FlSpot>? _cachedSpots;
+  List<FlSpot> _cachedSpots = [];
   double _cachedMinX = 0;
   double _cachedMaxX = 0;
   double _cachedMinY = 0;
   double _cachedMaxY = 0;
   int _lastPointsHash = 0;
+  Color? _cachedLineColor;
 
   @override
   void initState() {
@@ -131,14 +241,17 @@ class _OptimizedRealtimeChartState extends State<OptimizedRealtimeChart> {
     });
   }
 
-  void _processPoints(List<OptimizedDataPoint> points, {bool immediate = false}) {
+  Future<void> _processPoints(List<OptimizedDataPoint> points, {bool immediate = false}) async {
     final newHash = _computePointsHash(points);
     if (newHash == _lastPointsHash && !immediate) return;
-    
+
     _lastPointsHash = newHash;
-    
-    // Aplicar ventana deslizante
-    final limited = _applySlidingWindow(points, widget.maxPoints);
+
+    // Aplicar ventana deslizante en isolate
+    final limited = await compute(
+      _applySlidingWindowIsolate,
+      _SlidingWindowParams(points: points, maxPoints: widget.maxPoints),
+    );
     
     // Pre-calcular spots y bounds
     final spots = <FlSpot>[];
@@ -173,110 +286,9 @@ class _OptimizedRealtimeChartState extends State<OptimizedRealtimeChart> {
         _cachedMaxX = maxX;
         _cachedMinY = bounds.min;
         _cachedMaxY = bounds.max;
+        _cachedLineColor = _computeLineColor();
         _rebuildCount++;
       });
-    }
-  }
-
-  List<OptimizedDataPoint> _applySlidingWindow(
-    List<OptimizedDataPoint> points,
-    int maxPoints,
-  ) {
-    if (points.isEmpty) return points;
-    
-    // PASO 1: Ordenar por timestamp
-    final sorted = List<OptimizedDataPoint>.from(points)
-      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    
-    // PASO 2: DEDUPLICAR timestamps cercanos (< 1 segundo)
-    // Esto evita puntos apilados verticalmente
-    final deduplicated = _deduplicateByTimestamp(sorted);
-    
-    if (deduplicated.length <= maxPoints) return deduplicated;
-    
-    // PASO 3: Preservar TODOS los puntos especiales (alertas/warnings)
-    final specialPoints = deduplicated.where((p) => p.isSpecial).toList();
-    
-    // Calcular cuántos puntos normales podemos incluir
-    final normalSlots = maxPoints - specialPoints.length;
-    
-    if (normalSlots <= 0) {
-      // Demasiadas alertas, solo mostrar las más recientes
-      return specialPoints.take(maxPoints).toList()
-        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    }
-    
-    // PASO 4: Downsampling de puntos normales
-    final normalPoints = deduplicated.where((p) => !p.isSpecial).toList();
-    final step = normalPoints.length / normalSlots;
-    final sampledNormal = <OptimizedDataPoint>[];
-    
-    for (int i = 0; i < normalSlots && i * step < normalPoints.length; i++) {
-      final idx = (i * step).floor().clamp(0, normalPoints.length - 1);
-      sampledNormal.add(normalPoints[idx]);
-    }
-    
-    // Combinar y ordenar
-    final result = [...sampledNormal, ...specialPoints]
-      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    
-    // Asegurar que el último punto esté incluido
-    if (result.isNotEmpty && deduplicated.isNotEmpty && result.last != deduplicated.last) {
-      if (result.length >= maxPoints) {
-        result[result.length - 1] = deduplicated.last;
-      } else {
-        result.add(deduplicated.last);
-      }
-    }
-    
-    return result;
-  }
-  
-  /// DEDUPLICACIÓN: Combina puntos con timestamps muy cercanos (< 1 segundo)
-  /// Preserva el punto con estado más severo (ALERT > WARNING > NORMAL)
-  List<OptimizedDataPoint> _deduplicateByTimestamp(List<OptimizedDataPoint> sorted) {
-    if (sorted.isEmpty) return sorted;
-    
-    final result = <OptimizedDataPoint>[];
-    OptimizedDataPoint? current = sorted.first;
-    
-    for (int i = 1; i < sorted.length; i++) {
-      final next = sorted[i];
-      final timeDiff = (next.x - current!.x).abs();
-      
-      // Si están a menos de 1 segundo, combinar
-      if (timeDiff < 1000) {
-        // Preservar el punto más severo
-        if (_severityRank(next.state) > _severityRank(current.state)) {
-          current = next;
-        } else if (_severityRank(next.state) == _severityRank(current.state)) {
-          // Mismo estado: preservar el valor más extremo
-          if (next.value.abs() > current.value.abs()) {
-            current = next;
-          }
-        }
-        // Si el actual es más severo, mantenerlo
-      } else {
-        // Timestamps suficientemente separados, agregar el actual
-        result.add(current);
-        current = next;
-      }
-    }
-    
-    // Agregar el último punto
-    if (current != null) {
-      result.add(current);
-    }
-    
-    return result;
-  }
-  
-  int _severityRank(String state) {
-    switch (state.toUpperCase()) {
-      case 'ALERT': return 3;
-      case 'WARNING': return 2;
-      case 'PREDICTION': return 1;
-      default: return 0;
     }
   }
 
@@ -326,8 +338,7 @@ class _OptimizedRealtimeChartState extends State<OptimizedRealtimeChart> {
 
 
   Widget _buildChart() {
-    final spots = _cachedSpots;
-    if (spots == null || spots.isEmpty) {
+    if (_cachedSpots.isEmpty) {
       return OptimizedRealtimeChartEmpty(height: widget.height);
     }
 
@@ -414,10 +425,10 @@ class _OptimizedRealtimeChartState extends State<OptimizedRealtimeChart> {
           ),
           lineBarsData: [
             LineChartBarData(
-              spots: spots,
+              spots: _cachedSpots,
               isCurved: true,
               curveSmoothness: 0.15,
-              color: _computeLineColor(),
+              color: _cachedLineColor ?? const Color(0xFF00E676),
               barWidth: 2.5,
               isStrokeCapRound: true,
               dotData: FlDotData(
@@ -427,7 +438,7 @@ class _OptimizedRealtimeChartState extends State<OptimizedRealtimeChart> {
                   if (_alertCache.isAlertAt(spot.x) || _alertCache.isWarningAt(spot.x)) {
                     return true;
                   }
-                  return spots.length < 100;
+                  return _cachedSpots.length < 100;
                 },
                 getDotPainter: (spot, percent, barData, index) {
                   // Usar cache para determinar color - O(1) lookup

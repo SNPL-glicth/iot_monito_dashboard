@@ -69,6 +69,7 @@ class NotificationStateService {
 
   /// Configura awareness de WebSocket para detener/iniciar polling automáticamente
   void _setupWebSocketAwareness() {
+    // Escuchar cambios de estado de conexión
     _realtimeStateSubscription = _realtimeService.stateStream.listen((state) {
       if (state == RealtimeConnectionState.connected) {
         _log('WebSocket connected - stopping polling');
@@ -77,6 +78,24 @@ class NotificationStateService {
         _log('WebSocket disconnected - starting polling as fallback');
         startPolling();
       }
+    });
+
+    // Escuchar eventos de realtime y sincronizar notificaciones
+    _realtimeService.eventStream.listen((event) {
+      if (event.type == RealtimeEventType.alertsActive ||
+          event.type == RealtimeEventType.mlEventsActive) {
+        _log('Realtime event received: ${event.type} - syncing notifications');
+        _debouncedFetchNotifications();
+      }
+    });
+  }
+
+  Timer? _debounceTimer;
+
+  void _debouncedFetchNotifications() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(seconds: 2), () {
+      fetchNotifications();
     });
   }
 
@@ -303,6 +322,7 @@ class NotificationStateService {
   /// Limpia recursos
   void dispose() {
     stopPolling();
+    _debounceTimer?.cancel();
     _realtimeStateSubscription?.cancel();
     _stateController.close();
   }

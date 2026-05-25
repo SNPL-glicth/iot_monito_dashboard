@@ -117,7 +117,7 @@ class _DashboardNotificationButtonState
                       await _handleMarkAsRead();
                       if (!mounted) return;
                       await showModalBottomSheet<void>(
-                        context: context,
+                        context: this.context,
                         backgroundColor: DashboardColors.cardBackground,
                         shape: const RoundedRectangleBorder(
                           borderRadius:
