@@ -40,9 +40,13 @@ class CrmDrawer extends StatelessWidget {
 
   /// Navega a una pantalla de inteligencia iniciando prefetch de decisiones.
   void _navigateToIntelligence(BuildContext context, Widget page, String routeName) {
-    final prefetch = IntelligencePrefetchService();
-    prefetch.initialize();
-    prefetch.prefetchDecisions(); // carga en background sin await
+    try {
+      final prefetch = IntelligencePrefetchService();
+      prefetch.initialize();
+      prefetch.prefetchDecisions(); // carga en background sin await
+    } catch (_) {
+      // Ignorar errores de prefetch: la navegación es más importante
+    }
     Navigator.pop(context);
     Navigator.of(context).push(
       MaterialPageRoute(

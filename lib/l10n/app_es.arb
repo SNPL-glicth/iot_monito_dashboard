@@ -1,0 +1,8 @@
+{
+  "retryAction": "Reintentar",
+  "dismissAction": "Ignorar",
+  "networkErrorMessage": "Sin conexión. Mostrando últimos datos.",
+  "serverErrorMessage": "Servicio no disponible. Intenta de nuevo.",
+  "liveDataIndicator": "En vivo",
+  "cachedDataIndicator": "Datos en caché"
+}

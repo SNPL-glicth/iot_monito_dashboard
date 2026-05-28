@@ -14,7 +14,7 @@ class PredictionViewModel {
   });
 
   final String id;
-  final int sensorId;
+  final String sensorId;
   final String predictedValue;
   final String confidence;
   final String predictedAt;
@@ -34,7 +34,7 @@ class PredictionViewModel {
 
     return PredictionViewModel(
       id: json['id']?.toString() ?? '',
-      sensorId: rawSensorId is int ? rawSensorId : int.tryParse(rawSensorId?.toString() ?? '') ?? 0,
+      sensorId: rawSensorId?.toString() ?? '',
       predictedValue:
           json['predictedValue']?.toString() ?? json['predicted_value']?.toString() ?? '',
       confidence: json['confidence']?.toString() ?? '',
@@ -55,3 +55,5 @@ class PredictionViewModel {
     );
   }
 }
+//un objetivo es quitar el problema, claro , pregunta problema, que resultados da
+//

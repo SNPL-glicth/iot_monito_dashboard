@@ -1,0 +1,8 @@
+{
+  "retryAction": "Retry",
+  "dismissAction": "Dismiss",
+  "networkErrorMessage": "No connection. Showing last known data.",
+  "serverErrorMessage": "Service unavailable. Please try again later.",
+  "liveDataIndicator": "Live",
+  "cachedDataIndicator": "Cached data"
+}

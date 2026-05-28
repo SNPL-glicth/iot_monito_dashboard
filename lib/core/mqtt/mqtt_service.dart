@@ -5,62 +5,29 @@
 /// - Suscripción a alertas y telemetría en tiempo real
 /// - Fallback a HTTP si MQTT falla
 /// - Callbacks para eventos
+///
+/// Refactorizado: modelos y política de reconexión extraídos a archivos separados
+/// para mantener cada archivo < 180 líneas (Single Responsibility).
 library;
 
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_client.dart' hide MqttConnectionState;
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 import 'mqtt_config.dart';
-
-/// Estado de conexión MQTT.
-enum MqttConnectionState {
-  disconnected,
-  connecting,
-  connected,
-  reconnecting,
-}
-
-/// Mensaje MQTT recibido.
-class MqttMessage {
-  const MqttMessage({
-    required this.topic,
-    required this.payload,
-    required this.timestamp,
-  });
-
-  final String topic;
-  final Map<String, dynamic> payload;
-  final DateTime timestamp;
-
-  String? get sensorId => payload['sensorId'] as String?;
-  double? get value => (payload['value'] as num?)?.toDouble();
-  String? get type => payload['type'] as String?;
-  Map<String, dynamic>? get metadata =>
-      payload['metadata'] as Map<String, dynamic>?;
-
-  String? get severity => metadata?['severity'] as String?;
-  String? get eventType => metadata?['eventType'] as String?;
-  String? get message => metadata?['message'] as String?;
-
-  bool get isAlert => type == 'alert';
-  bool get isMlEvent => type == 'ml_event';
-  bool get isReading => type == 'reading';
-  bool get isNotification => type == 'notification';
-
-  @override
-  String toString() => 'MqttMessage(topic: $topic, type: $type, sensorId: $sensorId)';
-}
-
-/// Callback para mensajes MQTT.
-typedef MqttMessageCallback = void Function(MqttMessage message);
+import 'mqtt_models.dart';
+import 'mqtt_reconnect_policy.dart';
 
 /// Servicio MQTT singleton para Flutter.
+///
+/// Responsabilidades:
+/// - Gestionar el ciclo de vida del cliente MQTT (connect, disconnect, dispose)
+/// - Suscribirse a topics y despachar mensajes a callbacks
+/// - Delegar el cálculo de delays a [MqttReconnectPolicy]
 class MqttService {
-  // Singleton
   static final MqttService _instance = MqttService._internal();
   factory MqttService() => _instance;
   MqttService._internal();
@@ -69,37 +36,27 @@ class MqttService {
   MqttConfig _config = MqttConfig();
   MqttTopics _topics = MqttTopics();
 
-  final _stateController = StreamController<MqttConnectionState>.broadcast();
-  final _messageController = StreamController<MqttMessage>.broadcast();
+  final _stateController = StreamController<AppMqttConnectionState>.broadcast();
+  final _messageController = StreamController<AppMqttMessage>.broadcast();
 
-  MqttConnectionState _state = MqttConnectionState.disconnected;
+  AppMqttConnectionState _state = AppMqttConnectionState.disconnected;
   Timer? _reconnectTimer;
   int _reconnectAttempts = 0;
-  static const int _maxReconnectAttempts = 5;
 
   StreamSubscription? _updatesSubscription;
-
-  final List<String> _subscribedTopics = [];
+  final Set<String> _subscribedTopics = {};
   final List<MqttMessageCallback> _alertCallbacks = [];
   final List<MqttMessageCallback> _telemetryCallbacks = [];
   final List<MqttMessageCallback> _notificationCallbacks = [];
 
-  /// Stream del estado de conexión.
-  Stream<MqttConnectionState> get stateStream => _stateController.stream;
+  final MqttReconnectPolicy _reconnectPolicy = const MqttReconnectPolicy();
 
-  /// Stream de mensajes recibidos.
-  Stream<MqttMessage> get messageStream => _messageController.stream;
-
-  /// Estado actual de conexión.
-  MqttConnectionState get state => _state;
-
-  /// Indica si está conectado.
-  bool get isConnected => _state == MqttConnectionState.connected;
-
-  /// Indica si MQTT está habilitado.
+  Stream<AppMqttConnectionState> get stateStream => _stateController.stream;
+  Stream<AppMqttMessage> get messageStream => _messageController.stream;
+  AppMqttConnectionState get state => _state;
+  bool get isConnected => _state == AppMqttConnectionState.connected;
   bool get isEnabled => _config.enabled;
 
-  /// Configura el servicio MQTT.
   void configure(MqttConfig config) {
     _config = config;
     _topics = MqttTopics(prefix: config.topicPrefix);
@@ -112,12 +69,12 @@ class MqttService {
       return false;
     }
 
-    if (_state == MqttConnectionState.connecting ||
-        _state == MqttConnectionState.connected) {
-      return _state == MqttConnectionState.connected;
+    if (_state == AppMqttConnectionState.connecting ||
+        _state == AppMqttConnectionState.connected) {
+      return _state == AppMqttConnectionState.connected;
     }
 
-    _setState(MqttConnectionState.connecting);
+    _setState(AppMqttConnectionState.connecting);
 
     await _updatesSubscription?.cancel();
     _updatesSubscription = null;
@@ -160,19 +117,19 @@ class MqttService {
       // ignore: unrelated_type_equality_checks
       if (result != null && result.state.toString().contains('connected')) {
         _setupMessageListener();
-        _setState(MqttConnectionState.connected);
+        _setState(AppMqttConnectionState.connected);
         _reconnectAttempts = 0;
         debugPrint('[MqttService] Connected successfully');
         return true;
       } else {
         debugPrint('[MqttService] Connection failed: ${result?.state}');
-        _setState(MqttConnectionState.disconnected);
+        _setState(AppMqttConnectionState.disconnected);
         _scheduleReconnect();
         return false;
       }
     } catch (e) {
       debugPrint('[MqttService] Connection error: $e');
-      _setState(MqttConnectionState.disconnected);
+      _setState(AppMqttConnectionState.disconnected);
       _scheduleReconnect();
       return false;
     }
@@ -191,18 +148,16 @@ class MqttService {
     }
 
     _subscribedTopics.clear();
-    _setState(MqttConnectionState.disconnected);
+    _setState(AppMqttConnectionState.disconnected);
     debugPrint('[MqttService] Disconnected');
   }
 
   /// Suscribe a alertas de un sensor o todos.
   Future<bool> subscribeAlerts({String? sensorId}) async {
     if (!isConnected) return false;
-
     final topic = sensorId != null
         ? _topics.alertsForSensor(sensorId)
         : _topics.alertsAll;
-
     return _subscribe(topic);
   }
 
@@ -215,11 +170,9 @@ class MqttService {
   /// Suscribe a telemetría de un sensor o todos.
   Future<bool> subscribeTelemetry({String? sensorId}) async {
     if (!isConnected) return false;
-
     final topic = sensorId != null
         ? _topics.telemetryForSensor(sensorId)
         : _topics.telemetryAll;
-
     return _subscribe(topic);
   }
 
@@ -254,6 +207,11 @@ class MqttService {
   bool _subscribe(String topic) {
     if (_client == null || !isConnected) return false;
 
+    if (_subscribedTopics.contains(topic)) {
+      debugPrint('[MqttService] Already subscribed to $topic');
+      return true;
+    }
+
     try {
       _client!.subscribe(topic, MqttQos.atLeastOnce);
       _subscribedTopics.add(topic);
@@ -276,7 +234,7 @@ class MqttService {
 
         try {
           final data = jsonDecode(payloadString) as Map<String, dynamic>;
-          final message = MqttMessage(
+          final message = AppMqttMessage(
             topic: topic,
             payload: data,
             timestamp: DateTime.now(),
@@ -291,7 +249,7 @@ class MqttService {
     });
   }
 
-  void _dispatchMessage(MqttMessage message) {
+  void _dispatchMessage(AppMqttMessage message) {
     if (message.isAlert || message.isMlEvent) {
       for (final callback in _alertCallbacks) {
         try {
@@ -325,22 +283,22 @@ class MqttService {
 
   void _onConnected() {
     debugPrint('[MqttService] onConnected');
-    _setState(MqttConnectionState.connected);
+    _setState(AppMqttConnectionState.connected);
   }
 
   void _onDisconnected() {
     debugPrint('[MqttService] onDisconnected');
-    _setState(MqttConnectionState.disconnected);
+    _setState(AppMqttConnectionState.disconnected);
   }
 
   void _onAutoReconnect() {
     debugPrint('[MqttService] onAutoReconnect');
-    _setState(MqttConnectionState.reconnecting);
+    _setState(AppMqttConnectionState.reconnecting);
   }
 
   void _onAutoReconnected() {
     debugPrint('[MqttService] onAutoReconnected');
-    _setState(MqttConnectionState.connected);
+    _setState(AppMqttConnectionState.connected);
   }
 
   void _onSubscribed(String topic) {
@@ -348,19 +306,17 @@ class MqttService {
   }
 
   void _scheduleReconnect() {
-    if (_reconnectAttempts >= _maxReconnectAttempts) {
+    if (_reconnectTimer?.isActive == true) return;
+
+    final delay = _reconnectPolicy.computeDelay(_reconnectAttempts);
+    if (delay == null) {
       debugPrint('[MqttService] Max reconnect attempts reached');
       return;
     }
 
     _reconnectTimer?.cancel();
-    _setState(MqttConnectionState.reconnecting);
-
-    final delay = Duration(
-      seconds: _config.reconnectDelaySeconds * (_reconnectAttempts + 1),
-    );
-
-    debugPrint('[MqttService] Reconnecting in ${delay.inSeconds}s');
+    _setState(AppMqttConnectionState.reconnecting);
+    _reconnectPolicy.logSchedule(_reconnectAttempts, delay);
 
     _reconnectTimer = Timer(delay, () {
       _reconnectAttempts++;
@@ -368,7 +324,7 @@ class MqttService {
     });
   }
 
-  void _setState(MqttConnectionState newState) {
+  void _setState(AppMqttConnectionState newState) {
     if (_state != newState) {
       _state = newState;
       _stateController.add(newState);

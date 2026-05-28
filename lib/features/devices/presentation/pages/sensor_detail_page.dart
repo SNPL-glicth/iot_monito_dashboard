@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
@@ -86,6 +87,13 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
     _poller?.cancel();
     _poller = Timer.periodic(const Duration(seconds: 15), (_) {
       if (!mounted) return;
+      if (_viewModel.viewMode == SensorDetailViewMode.frozenFromAlert ||
+          _viewModel.viewMode == SensorDetailViewMode.historical) {
+        debugPrint(
+          '[SensorDetail] Skip refresh: viewMode=${_viewModel.viewMode.name}',
+        );
+        return;
+      }
       _viewModel.refresh(silent: true);
       setState(() {});
     });

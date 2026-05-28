@@ -19,6 +19,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
+import '../mqtt/mqtt_models.dart';
 import '../mqtt/mqtt_service.dart';
 
 /// Notificación recibida por MQTT.
@@ -47,7 +48,7 @@ class MqttNotification {
   final String? deviceName;
   final String? alertId;
 
-  factory MqttNotification.fromMqttMessage(MqttMessage message) {
+  factory MqttNotification.fromAppMqttMessage(AppMqttMessage message) {
     final metadata = message.metadata ?? {};
     return MqttNotification(
       id: metadata['notificationId'] as String? ?? 
@@ -198,17 +199,17 @@ class MqttNotificationService {
     _badgeCallbacks.clear();
   }
 
-  void _onNotificationMessage(MqttMessage message) {
+  void _onNotificationMessage(AppMqttMessage message) {
     if (!message.isNotification) return;
     
-    final notification = MqttNotification.fromMqttMessage(message);
+    final notification = MqttNotification.fromAppMqttMessage(message);
     _processNotification(notification);
   }
 
-  void _onAlertMessage(MqttMessage message) {
+  void _onAlertMessage(AppMqttMessage message) {
     if (!message.isAlert && !message.isMlEvent) return;
     
-    final notification = MqttNotification.fromMqttMessage(message);
+    final notification = MqttNotification.fromAppMqttMessage(message);
     _processAlert(notification);
   }
 

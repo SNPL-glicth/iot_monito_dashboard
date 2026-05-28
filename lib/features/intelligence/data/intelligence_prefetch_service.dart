@@ -11,16 +11,17 @@ class IntelligencePrefetchService {
   factory IntelligencePrefetchService() => _instance;
   IntelligencePrefetchService._internal();
 
-  late final IntelligenceRepository _repo;
+  IntelligenceRepository? _repo;
   Future<List<DecisionActionViewModel>>? _decisionsFuture;
 
   void initialize({ApiClient? client}) {
-    _repo = IntelligenceRepository(client ?? ApiClient());
+    _repo ??= IntelligenceRepository(client ?? ApiClient());
   }
 
   /// Prefetch de decisiones recomendadas. Si ya está en vuelo, reutiliza.
   Future<List<DecisionActionViewModel>> prefetchDecisions() {
-    _decisionsFuture ??= _repo.fetchDecisions();
+    _repo ??= IntelligenceRepository(ApiClient());
+    _decisionsFuture ??= _repo!.fetchDecisions();
     return _decisionsFuture!;
   }
 

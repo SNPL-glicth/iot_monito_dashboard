@@ -23,7 +23,16 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
   void initState() {
     super.initState();
     _repo = IntelligenceRepository(ApiClient());
-    _future = _repo.fetchLatestPredictions();
+    _future = _loadPredictions();
+  }
+
+  Future<List<PredictionSummaryViewModel>> _loadPredictions() async {
+    try {
+      return await _repo.fetchLatestPredictions();
+    } catch (e) {
+      // Propagar error al FutureBuilder para que muestre estado de error
+      return Future.error(e);
+    }
   }
 
   String _formatDateTime(String raw) {
@@ -42,7 +51,7 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _future = _repo.fetchLatestPredictions();
+            _future = _loadPredictions();
           });
           await _future;
         },

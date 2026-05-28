@@ -41,7 +41,7 @@ class PredictionCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (p.sensorId != 0) ...[
+            if (p.sensorId.isNotEmpty && p.sensorId != '0') ...[
               const SizedBox(height: 2),
               Text(
                 'Sensor ID: ${p.sensorId}',

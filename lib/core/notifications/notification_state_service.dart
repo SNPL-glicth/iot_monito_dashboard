@@ -18,6 +18,7 @@ import 'package:flutter/foundation.dart';
 
 import '../lifecycle/app_lifecycle_service.dart';
 import '../network/api_client.dart';
+import '../realtime/realtime_models.dart';
 import '../realtime/realtime_service.dart';
 import 'models/app_notification.dart';
 import 'models/notification_state.dart';

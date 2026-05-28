@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../../core/notifications/notification_state_service.dart';
+import '../../../../core/realtime/realtime_models.dart';
+import '../../../../core/realtime/realtime_service.dart';
 import '../../../notifications/data/notifications_repository.dart';
 import '../../data/models/device_with_sensor_view_model.dart';
 import '../../data/models/reading/latest_reading_models.dart';
@@ -41,6 +44,13 @@ class _DashboardPageState extends State<DashboardPage> {
   final _notificationService = NotificationStateService();
   StreamSubscription<void>? _lifecyclePauseSub;
   StreamSubscription<void>? _lifecycleResumeSub;
+  StreamSubscription<RealtimeConnectionState>? _wsStateSubscription;
+
+  // Fallback polling with backoff: 10s -> 15s -> 30s (max)
+  static const List<int> _fallbackIntervalsSec = [10, 15, 30];
+  int _fallbackIntervalIndex = 0;
+
+  final _realtimeService = RealtimeService();
 
   void _navigateToSensor(String sensorId) {
     if (!mounted) return;
@@ -54,14 +64,14 @@ class _DashboardPageState extends State<DashboardPage> {
     _notificationsRepository = NotificationsRepository();
     _refreshDevicesSection();
     _notificationService.startPolling();
-    _startPolling();
+    _setupAdaptivePolling();
 
     _lifecyclePauseSub = AppLifecycleService().onAppPaused.listen((_) {
       _pollTimer?.cancel();
       _notificationService.stopPolling();
     });
     _lifecycleResumeSub = AppLifecycleService().onAppResumed.listen((_) {
-      _startPolling();
+      _setupAdaptivePolling();
       _notificationService.startPolling();
       _refreshDevicesSection();
     });
@@ -73,14 +83,62 @@ class _DashboardPageState extends State<DashboardPage> {
     _notificationService.stopPolling();
     _lifecyclePauseSub?.cancel();
     _lifecycleResumeSub?.cancel();
+    _wsStateSubscription?.cancel();
     super.dispose();
   }
 
-  void _startPolling() {
-    _pollTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+  void _setupAdaptivePolling() {
+    _wsStateSubscription?.cancel();
+    _wsStateSubscription = _realtimeService.stateStream.listen((state) {
+      switch (state) {
+        case RealtimeConnectionState.connected:
+          if (_pollTimer != null) {
+            _pollTimer?.cancel();
+            _pollTimer = null;
+            _fallbackIntervalIndex = 0;
+            debugPrint('[Dashboard] WS connected: polling paused');
+          }
+          break;
+        case RealtimeConnectionState.disconnected:
+        case RealtimeConnectionState.reconnecting:
+          if (_pollTimer == null) {
+            _startFallbackPolling();
+            debugPrint('[Dashboard] WS disconnected: fallback polling started');
+          }
+          break;
+        case RealtimeConnectionState.connecting:
+          break;
+      }
+    });
+
+    // Initial check: if not connected, start polling immediately
+    if (!_realtimeService.isConnected && _pollTimer == null) {
+      _startFallbackPolling();
+    }
+  }
+
+  void _startFallbackPolling() {
+    _pollTimer?.cancel();
+    final intervalSec = _fallbackIntervalsSec[
+        _fallbackIntervalIndex.clamp(0, _fallbackIntervalsSec.length - 1)];
+    _pollTimer = Timer.periodic(Duration(seconds: intervalSec), (_) {
       if (!mounted) return;
       _refreshDevicesSection();
+      _escalateFallbackInterval();
     });
+  }
+
+  void _escalateFallbackInterval() {
+    if (_fallbackIntervalIndex < _fallbackIntervalsSec.length - 1) {
+      _fallbackIntervalIndex++;
+      final newInterval = _fallbackIntervalsSec[_fallbackIntervalIndex];
+      debugPrint('[Dashboard] Polling backoff: ${newInterval}s');
+      _pollTimer?.cancel();
+      _pollTimer = Timer.periodic(Duration(seconds: newInterval), (_) {
+        if (!mounted) return;
+        _refreshDevicesSection();
+      });
+    }
   }
 
   Future<void> _refreshDevicesSection() async {

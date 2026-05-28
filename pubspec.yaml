@@ -57,6 +57,9 @@ dependencies:
   # MQTT para alertas y telemetría en tiempo real (reemplaza polling)
   mqtt_client: ^10.2.0
 
+  # SQLite local para cache offline de lecturas de sensores
+  sqflite: ^2.3.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8

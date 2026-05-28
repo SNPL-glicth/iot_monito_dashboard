@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../network/api_client.dart';
 import '../realtime/realtime_service.dart';
-import 'auth_storage.dart';
+import 'storage/auth_storage_interface.dart';
+import 'storage/secure_token_storage.dart';
 
 /// Gestiona el ciclo de vida del token JWT con refresh automático.
 /// 
@@ -18,8 +21,10 @@ class TokenManager {
   TokenManager._internal();
 
   Timer? _refreshTimer;
-  final AuthStorage _storage = AuthStorage();
-  
+  final IAuthStorage _storage = SecureTokenStorage(
+    storage: const FlutterSecureStorage(),
+  );
+
   /// Refresh token almacenado en memoria (también persistido en storage)
   String? _refreshToken;
   
@@ -127,17 +132,14 @@ class TokenManager {
         ApiClient.authToken = newToken;
         _refreshToken = newRefreshToken;
 
-        final session = await _storage.loadSession();
-        if (session != null) {
-          await _storage.saveSession(
-            token: newToken,
-            role: session.role,
-            username: session.username,
-            refreshToken: newRefreshToken,
-          );
+        await _storage.saveAccessToken(newToken);
+        if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
+          await _storage.saveRefreshToken(newRefreshToken);
         }
 
         startMonitoring(newToken);
+        // FIX SEGURIDAD: Reautenticar WebSocket sin reconectar
+        RealtimeService().reauthenticate(newToken);
         return true;
       }
       return false;
