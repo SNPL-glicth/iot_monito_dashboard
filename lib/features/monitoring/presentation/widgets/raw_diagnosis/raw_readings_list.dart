@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/models/reading/raw_reading_models.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Lista scrollable de lecturas crudas de sensor.
 class RawReadingsList extends StatelessWidget {
@@ -34,11 +35,11 @@ class RawReadingsList extends StatelessWidget {
           ),
           title: Text(
             unit,
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+            style: TextStyle(color: DesignColors.textPrimary, fontSize: 12),
           ),
           trailing: Text(
             r.timestampFormatted,
-            style: TextStyle(color: Colors.white54, fontSize: 11),
+            style: TextStyle(color: DesignColors.textSecondary, fontSize: 11),
           ),
         );
       },

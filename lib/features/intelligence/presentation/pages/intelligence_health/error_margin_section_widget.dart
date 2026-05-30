@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Error margin section widget showing error margin analysis
 class ErrorMarginSectionWidget extends StatelessWidget {
@@ -20,16 +22,16 @@ class ErrorMarginSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reliableColor = isReliable ? DashboardColors.success : DashboardColors.warning;
+    final reliableColor = isReliable ? DesignColors.green : DesignColors.amber;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IntelligenceHealthWidgets.sectionHeader(Icons.straighten_rounded, 'Margen de Error', Colors.deepOrange),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -39,10 +41,10 @@ class ErrorMarginSectionWidget extends StatelessWidget {
                   children: [
                     Text(
                       '±${estimatedMarginPct.toStringAsFixed(1)}%',
-                      style: DashboardTextStyles.kpiValue.copyWith(fontSize: 28),
+                      style: DesignTextStyles.kpiValue.copyWith(fontSize: 28),
                     ),
-                    const SizedBox(height: 4),
-                    const Text('Margen estimado', style: DashboardTextStyles.sensorMeta),
+                    SizedBox(height: DesignSpacing.xs),
+                    Text('Margen estimado', style: DesignTextStyles.bodyText),
                   ],
                 ),
               ),
@@ -50,7 +52,7 @@ class ErrorMarginSectionWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(DesignSpacing.sm),
                       decoration: BoxDecoration(
                         color: reliableColor.withValues(alpha: 0.15),
                         shape: BoxShape.circle,
@@ -61,10 +63,10 @@ class ErrorMarginSectionWidget extends StatelessWidget {
                         size: 24,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: DesignSpacing.xs),
                     Text(
                       isReliable ? 'Confiable' : 'Estimado',
-                      style: DashboardTextStyles.sensorMeta.copyWith(
+                      style: DesignTextStyles.bodyText.copyWith(
                         fontSize: 11,
                         color: reliableColor,
                       ),
@@ -74,18 +76,18 @@ class ErrorMarginSectionWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Confianza del margen', style: DashboardTextStyles.sensorMeta),
-                  Text('${(marginConfidence * 100).toStringAsFixed(0)}%', style: DashboardTextStyles.smallLabel),
+                  Text('Confianza del margen', style: DesignTextStyles.bodyText),
+                  Text('${(marginConfidence * 100).toStringAsFixed(0)}%', style: DesignTextStyles.timestamp),
                 ],
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: LinearProgressIndicator(
@@ -97,14 +99,14 @@ class ErrorMarginSectionWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: reliableColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
-            child: Text(explanation, style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11)),
+            child: Text(explanation, style: DesignTextStyles.bodyText.copyWith(fontSize: 11)),
           ),
         ],
       ),

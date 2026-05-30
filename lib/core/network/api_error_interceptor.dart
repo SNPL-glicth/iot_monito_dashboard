@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../auth/auth_storage.dart';
 import '../auth/token_manager.dart';
 import 'api_client.dart';
+import '../../core/theme/design_colors.dart';
 
 /// Evento emitido cuando el interceptor detecta un error 401/403.
 class UnauthorizedEvent {
@@ -107,7 +108,7 @@ class ApiErrorInterceptor {
             ),
           TextButton(
             onPressed: messenger.hideCurrentMaterialBanner,
-            child: const Text('IGNORAR', style: TextStyle(color: Colors.white70)),
+            child: const Text('IGNORAR', style: TextStyle(color: DesignColors.textPrimary)),
           ),
         ],
       ),

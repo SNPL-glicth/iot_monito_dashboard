@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../data/models/reading/latest_reading_models.dart';
-import '../../styles/dashboard_styles.dart';
 import 'dashboard_devices_section.dart';
 import 'dashboard_page_models.dart';
 import 'dashboard_readings_section.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 class DashboardBody extends StatelessWidget {
   const DashboardBody({
@@ -51,7 +52,7 @@ class DashboardBody extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: DesignSpacing.lg),
                   ValueListenableBuilder<SectionSnapshot<DevicesSectionData>>(
                     valueListenable: devicesSection,
                     builder: (context, snapshot, _) {
@@ -59,13 +60,13 @@ class DashboardBody extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator());
                       }
                       if (snapshot.error != null && snapshot.data == null) {
-                        return Text('Error: ${snapshot.error}', style: DashboardTextStyles.error);
+                        return Text('Error: ${snapshot.error}', style: DesignTextStyles.bodyText);
                       }
                       final readings = snapshot.data?.latestReadings ?? const <LatestSensorReadingViewModel>[];
                       return DashboardReadingsSection(readings: readings);
                     },
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: DesignSpacing.xl),
                 ],
               ),
             ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../features/monitoring/data/models/monitoring_view_models.dart';
 import '../../../../../features/monitoring/data/monitoring_repository.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Diálogo para editar el perfil de umbrales de un sensor.
 Future<void> showThresholdProfileDialog({
@@ -23,16 +24,16 @@ Future<void> showThresholdProfileDialog({
   final ok = await showDialog<bool>(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text('Perfil de umbrales', style: DashboardTextStyles.deviceTitle),
+      title: Text('Perfil de umbrales', style: DesignTextStyles.cardTitle),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Sensor: $sensorName ($unit)', style: DashboardTextStyles.sensorMeta),
-            const SizedBox(height: 12),
-            const Text('WARNING (fuera de rango leve)', style: DashboardTextStyles.smallLabel),
-            const SizedBox(height: 8),
+            Text('Sensor: $sensorName ($unit)', style: DesignTextStyles.bodyText),
+            SizedBox(height: DesignSpacing.md),
+            Text('WARNING (fuera de rango leve)', style: DesignTextStyles.sectionTitle),
+            SizedBox(height: DesignSpacing.sm),
             Row(
               children: [
                 Expanded(
@@ -42,7 +43,7 @@ Future<void> showThresholdProfileDialog({
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: TextField(
                     controller: warningMaxCtrl,
@@ -52,9 +53,9 @@ Future<void> showThresholdProfileDialog({
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            const Text('ALERT (fuera de rango crítico)', style: DashboardTextStyles.smallLabel),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.md),
+            Text('ALERT (fuera de rango crítico)', style: DesignTextStyles.sectionTitle),
+            SizedBox(height: DesignSpacing.sm),
             Row(
               children: [
                 Expanded(
@@ -64,7 +65,7 @@ Future<void> showThresholdProfileDialog({
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: TextField(
                     controller: alertMaxCtrl,
@@ -74,7 +75,7 @@ Future<void> showThresholdProfileDialog({
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             TextField(
               controller: cooldownCtrl,
               decoration: const InputDecoration(
@@ -83,10 +84,10 @@ Future<void> showThresholdProfileDialog({
               ),
               keyboardType: TextInputType.number,
             ),
-            const SizedBox(height: 8),
-            const Text(
+            SizedBox(height: DesignSpacing.sm),
+            Text(
               'Regla: se generan eventos solo al CRUZAR umbral; el cooldown evita repetición.',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
           ],
         ),

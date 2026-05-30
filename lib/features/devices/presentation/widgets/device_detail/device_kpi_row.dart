@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../device_detail_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Fila de KPIs del dispositivo: sensores, alertas, advertencias.
 class DeviceKpiRow extends StatelessWidget {
@@ -24,16 +25,16 @@ class DeviceKpiRow extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: DeviceDetailHelpers.modernKpiCard('Sensores', sensorCount, DashboardColors.primary)),
-            const SizedBox(width: 8),
-            Expanded(child: DeviceDetailHelpers.modernKpiCard('Alertas', alerts, DashboardColors.error)),
-            const SizedBox(width: 8),
-            Expanded(child: DeviceDetailHelpers.modernKpiCard('Advertencias', warnings, DashboardColors.warning)),
+            Expanded(child: DeviceDetailHelpers.modernKpiCard('Sensores', sensorCount, DesignColors.cyan)),
+            SizedBox(width: DesignSpacing.sm),
+            Expanded(child: DeviceDetailHelpers.modernKpiCard('Alertas', alerts, DesignColors.red)),
+            SizedBox(width: DesignSpacing.sm),
+            Expanded(child: DeviceDetailHelpers.modernKpiCard('Advertencias', warnings, DesignColors.amber)),
           ],
         ),
         if (pending != null && pending! > 0) ...[
-          const SizedBox(height: 8),
-          DeviceDetailHelpers.modernKpiCard('Pendientes', pending!, DashboardColors.info, fullWidth: true),
+          SizedBox(height: DesignSpacing.sm),
+          DeviceDetailHelpers.modernKpiCard('Pendientes', pending!, DesignColors.cyan, fullWidth: true),
         ],
       ],
     );

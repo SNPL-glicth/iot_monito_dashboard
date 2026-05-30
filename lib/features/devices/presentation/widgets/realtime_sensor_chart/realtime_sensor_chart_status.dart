@@ -16,7 +16,7 @@ class RealtimeSensorChartStatus extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         const Text(
           'EN VIVO',
           style: TextStyle(

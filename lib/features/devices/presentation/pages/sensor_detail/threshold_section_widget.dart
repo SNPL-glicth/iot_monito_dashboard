@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../monitoring/data/models/monitoring_view_models.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Widget to display configured thresholds for a sensor
 class ThresholdSectionWidget extends StatelessWidget {
@@ -24,33 +26,33 @@ class ThresholdSectionWidget extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(DesignSpacing.md),
       decoration: BoxDecoration(
         color: Colors.blueGrey.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(color: Colors.blueGrey.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           if (hasWarning)
             _buildThresholdRow(
               label: 'WARNING',
               min: thresholds.warning.min,
               max: thresholds.warning.max,
               unit: unit,
-              color: Colors.orangeAccent,
+              color: DesignColors.amber,
             ),
-          if (hasWarning && hasAlert) const SizedBox(height: 6),
+          if (hasWarning && hasAlert) SizedBox(height: 6),
           if (hasAlert)
             _buildThresholdRow(
               label: 'ALERT',
               min: thresholds.alert.min,
               max: thresholds.alert.max,
               unit: unit,
-              color: Colors.redAccent,
+              color: DesignColors.red,
             ),
         ],
       ),
@@ -60,16 +62,16 @@ class ThresholdSectionWidget extends StatelessWidget {
   Widget _emptyThresholds() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
           Icon(Icons.info_outline, color: Colors.grey[400], size: 18),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Text(
             'Sin umbrales configurados',
             style: TextStyle(color: Colors.grey[400], fontSize: 12),
@@ -83,7 +85,7 @@ class ThresholdSectionWidget extends StatelessWidget {
     return Row(
       children: [
         const Icon(Icons.tune, color: Colors.blueGrey, size: 16),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           'Umbrales configurados',
           style: TextStyle(
@@ -116,7 +118,7 @@ class ThresholdSectionWidget extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         SizedBox(
           width: 70,
           child: Text(
@@ -132,7 +134,7 @@ class ThresholdSectionWidget extends StatelessWidget {
           child: Text(
             'Min: $minStr  •  Max: $maxStr',
             style: const TextStyle(
-              color: Colors.white70,
+              color: DesignColors.textPrimary,
               fontSize: 11,
             ),
           ),

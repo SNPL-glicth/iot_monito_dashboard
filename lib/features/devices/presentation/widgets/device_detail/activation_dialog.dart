@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../data/provisioning_repository.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Muestra diálogo de carga y luego el QR de activación del dispositivo.
 Future<void> showActivationDialog({
@@ -39,7 +41,7 @@ Future<void> showActivationDialog({
         title: Row(
           children: [
             const Icon(Icons.qr_code, color: Colors.tealAccent),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Expanded(child: Text('Activar $deviceName', overflow: TextOverflow.ellipsis)),
           ],
         ),
@@ -47,10 +49,10 @@ Future<void> showActivationDialog({
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
               ),
               child: QrImageView(
                 data: result.qrData,
@@ -58,12 +60,12 @@ Future<void> showActivationDialog({
                 size: 200,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'Código: ${result.provisioningCode}',
               style: const TextStyle(fontFamily: 'monospace', fontSize: 16, color: Colors.tealAccent),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               'Escanee este QR con el firmware del dispositivo para activarlo.',
               textAlign: TextAlign.center,
@@ -88,7 +90,7 @@ Future<void> showActivationDialog({
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Error: ${e.toString().replaceAll('Exception: ', '')}'),
-        backgroundColor: Colors.redAccent,
+        backgroundColor: DesignColors.red,
       ),
     );
   }

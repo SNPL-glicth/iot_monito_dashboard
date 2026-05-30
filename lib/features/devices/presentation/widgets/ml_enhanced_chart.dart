@@ -9,6 +9,7 @@ import 'ml_enhanced_chart/ml_enhanced_chart_empty.dart';
 import 'ml_enhanced_chart/ml_enhanced_chart_legend.dart';
 import 'ml_enhanced_chart/ml_enhanced_chart_status.dart';
 import 'ml_enhanced_chart_models.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// ML Enhanced Chart - Shows value, baseline, and confidence band.
 /// 
@@ -244,13 +245,13 @@ class _MLEnhancedChartState extends State<MLEnhancedChart> {
             isFrozen: widget.isFrozen,
             avgConfidence: avgConfidence,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           SizedBox(
             height: widget.height,
             child: _buildChart(),
           ),
           if (widget.showLegend) ...[
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             MlEnhancedChartLegend(
               showBaseline: widget.showBaseline,
               showConfidenceBand: widget.showConfidenceBand,
@@ -269,7 +270,7 @@ class _MLEnhancedChartState extends State<MLEnhancedChart> {
 
     return Container(
       decoration: ChartStyle.chartContainerDecoration,
-      padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+      padding: EdgeInsets.fromLTRB(8, 16, 16, 8),
       child: LineChart(
         duration: Duration.zero,
         LineChartData(
@@ -321,10 +322,10 @@ class _MLEnhancedChartState extends State<MLEnhancedChart> {
           reservedSize: 50,
           getTitlesWidget: (value, meta) {
             if (value == meta.min || value == meta.max) {
-              return const SizedBox.shrink();
+              return SizedBox.shrink();
             }
             return Padding(
-              padding: const EdgeInsets.only(right: 4),
+              padding: EdgeInsets.only(right: 4),
               child: Text(
                 value.toStringAsFixed(1),
                 style: ChartStyle.axisLabelStyle,
@@ -340,11 +341,11 @@ class _MLEnhancedChartState extends State<MLEnhancedChart> {
           interval: ((_maxX - _minX) / 4).clamp(1.0, double.infinity),
           getTitlesWidget: (value, meta) {
             if (value == meta.min || value == meta.max) {
-              return const SizedBox.shrink();
+              return SizedBox.shrink();
             }
             final dt = DateTime.fromMillisecondsSinceEpoch(value.toInt());
             return Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: EdgeInsets.only(top: DesignSpacing.xs),
               child: Text(
                 DateFormat('HH:mm').format(dt),
                 style: ChartStyle.axisLabelStyle,

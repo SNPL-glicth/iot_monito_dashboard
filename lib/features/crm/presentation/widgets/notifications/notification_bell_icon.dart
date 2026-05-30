@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Icono de campana de notificaciones con soporte para animación.
 class NotificationBellIcon extends StatelessWidget {
@@ -71,10 +72,10 @@ class NotificationBellIcon extends StatelessWidget {
                 right: 6,
                 top: 6,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                   decoration: BoxDecoration(
                     color: badgeColor,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(DesignRadius.sm),
                     boxShadow: [
                       BoxShadow(
                         color: badgeColor.withValues(alpha: 0.4),
@@ -119,10 +120,10 @@ class NotificationBellIcon extends StatelessWidget {
             right: 6,
             top: 6,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
                 color: badgeColor,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               constraints: const BoxConstraints(minWidth: 18),
               child: Text(

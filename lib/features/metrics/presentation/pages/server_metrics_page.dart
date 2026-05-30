@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../../core/presentation/widgets/app_loading_widget.dart';
 import '../../data/metrics_repository.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Página de métricas del servidor - Solo lectura
 class ServerMetricsPage extends StatefulWidget {
@@ -101,7 +103,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
             if (_lastUpdatedAt != null)
               Text(
                 'Actualizado: ${_lastUpdatedAt!.hour.toString().padLeft(2, '0')}:${_lastUpdatedAt!.minute.toString().padLeft(2, '0')}:${_lastUpdatedAt!.second.toString().padLeft(2, '0')}',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white70),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: DesignColors.textPrimary),
               ),
           ],
         ),
@@ -127,10 +129,10 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
-            const SizedBox(height: 12),
+            const Icon(Icons.error_outline, size: 48, color: DesignColors.red),
+            SizedBox(height: 12),
             Text('Error: $_error', textAlign: TextAlign.center),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             ElevatedButton.icon(
               onPressed: _loadMetrics,
               icon: const Icon(Icons.refresh),
@@ -146,7 +148,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
     return RefreshIndicator(
       onRefresh: _loadMetrics,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         children: [
           // Sistema
           _buildSectionHeader(Icons.computer, 'Sistema'),
@@ -163,7 +165,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
             ],
           ),
           
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           
           // Ingesta
           _buildSectionHeader(Icons.speed, 'Ingesta (Tiempo Real)'),
@@ -176,7 +178,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
             ],
           ),
           
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           
           // Base de datos
           _buildSectionHeader(Icons.storage, 'Base de Datos'),
@@ -193,13 +195,13 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
             ],
           ),
           
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           
           // Footer con timestamp
           Center(
             child: Text(
               'Última actualización: ${m.system.timestamp}',
-              style: const TextStyle(color: Colors.white38, fontSize: 12),
+              style: const TextStyle(color: DesignColors.textDim, fontSize: 12),
             ),
           ),
         ],
@@ -209,11 +211,11 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
 
   Widget _buildSectionHeader(IconData icon, String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: DesignSpacing.sm),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Colors.white70),
-          const SizedBox(width: 8),
+          Icon(icon, size: 20, color: DesignColors.textPrimary),
+          SizedBox(width: 8),
           Text(
             title,
             style: const TextStyle(
@@ -231,7 +233,7 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
     return Card(
       color: const Color(0xFF1E1E2E),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: children,
@@ -242,11 +244,11 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
 
   Widget _buildMetricRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.symmetric(vertical: DesignSpacing.xs),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Colors.white70)),
+          Text(label, style: const TextStyle(color: DesignColors.textPrimary)),
           Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
         ],
       ),
@@ -255,16 +257,16 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
 
   Widget _buildHighlightRow(String label, String value, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Colors.white70, fontSize: 15)),
+          Text(label, style: const TextStyle(color: DesignColors.textPrimary, fontSize: 15)),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
             child: Text(
               value,
@@ -282,31 +284,31 @@ class _ServerMetricsPageState extends State<ServerMetricsPage> {
 
   Widget _buildProgressRow(String label, double percent, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: const TextStyle(color: Colors.white70)),
+              Text(label, style: const TextStyle(color: DesignColors.textPrimary)),
               Text(
                 '${percent.toStringAsFixed(1)}%',
                 style: TextStyle(
-                  color: percent > 80 ? Colors.redAccent : color,
+                  color: percent > 80 ? DesignColors.red : color,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: percent / 100,
               backgroundColor: Colors.white12,
               valueColor: AlwaysStoppedAnimation(
-                percent > 80 ? Colors.redAccent : color,
+                percent > 80 ? DesignColors.red : color,
               ),
               minHeight: 6,
             ),

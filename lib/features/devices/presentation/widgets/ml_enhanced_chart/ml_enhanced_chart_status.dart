@@ -27,7 +27,7 @@ class MlEnhancedChartStatus extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           isFrozen ? 'CONGELADO' : 'EN VIVO',
           style: TextStyle(
@@ -43,7 +43,7 @@ class MlEnhancedChartStatus extends StatelessWidget {
             size: 14,
             color: ChartStyle.getConfidenceColor(avgConfidence),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             'ML ${(avgConfidence * 100).toStringAsFixed(0)}%',
             style: TextStyle(

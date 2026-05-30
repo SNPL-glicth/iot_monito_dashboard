@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/auth/user_role.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/crm_repository.dart';
 import '../../data/models/crm_alerts_models.dart';
 import '../../data/models/crm_devices_models.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class CrmDeviceAlertsPage extends StatefulWidget {
   const CrmDeviceAlertsPage({
@@ -52,13 +54,13 @@ class _CrmDeviceAlertsPageState extends State<CrmDeviceAlertsPage> {
   Color _severityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'warning':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'info':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 
@@ -89,7 +91,7 @@ class _CrmDeviceAlertsPageState extends State<CrmDeviceAlertsPage> {
               return Center(
                 child: Text(
                   'Error cargando alertas: ${snapshot.error}',
-                  style: DashboardTextStyles.error,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                 ),
               );
@@ -98,14 +100,14 @@ class _CrmDeviceAlertsPageState extends State<CrmDeviceAlertsPage> {
             final page = snapshot.data;
             final items = page?.items ?? const <CrmAlertHistoryItem>[];
             if (items.isEmpty) {
-              return const Center(
-                child: Text('No hay alertas registradas.', style: DashboardTextStyles.sensorMeta),
+              return Center(
+                child: Text('No hay alertas registradas.', style: DesignTextStyles.bodyText),
               );
             }
 
             return ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final a = items[index];
@@ -119,13 +121,13 @@ class _CrmDeviceAlertsPageState extends State<CrmDeviceAlertsPage> {
                     leading: Icon(Icons.warning_amber_rounded, color: _severityColor(a.severity)),
                     title: Text(
                       '$threshold (${a.severity.toUpperCase()})',
-                      style: DashboardTextStyles.alertTitle,
+                      style: DesignTextStyles.bodyText,
                     ),
                     subtitle: Text(
                       'Estado: $status\n'
                       'Valor: ${a.triggeredValue}${(a.unit ?? '').trim().isEmpty ? '' : ' ${a.unit}'}\n'
                       'Fecha: $when',
-                      style: DashboardTextStyles.alertText,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 );

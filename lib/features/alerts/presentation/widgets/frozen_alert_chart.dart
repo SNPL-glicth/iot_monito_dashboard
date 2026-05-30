@@ -5,6 +5,7 @@ import '../../../../core/alerts/alert_snapshot_service.dart';
 import 'frozen_alert_chart_helpers.dart';
 import 'frozen_alert_chart_widgets.dart';
 import 'frozen_chart_canvas.dart';
+import '../../../../core/theme/design_colors.dart';
 
 /// Gráfica CONGELADA para detalle de alerta - OPTIMIZADA.
 ///
@@ -117,8 +118,8 @@ class FrozenAlertChart extends StatelessWidget {
     }
 
     final severityColor = snapshot.isCritical
-        ? Colors.redAccent
-        : (snapshot.isWarning ? Colors.orangeAccent : Colors.tealAccent);
+        ? DesignColors.red
+        : (snapshot.isWarning ? DesignColors.amber : Colors.tealAccent);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,14 +128,14 @@ class FrozenAlertChart extends StatelessWidget {
           severity: snapshot.severity,
           severityColor: severityColor,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         FrozenChartCanvas(
           data: data,
           snapshot: snapshot,
           severityColor: severityColor,
           height: height,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         FrozenTriggerInfo(
           snapshot: snapshot,
           severityColor: severityColor,

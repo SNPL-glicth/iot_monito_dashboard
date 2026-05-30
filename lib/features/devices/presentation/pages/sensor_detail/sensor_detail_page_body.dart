@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../core/auth/user_role.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 import 'point_details_dialog.dart';
 import 'readings_expansion_tile.dart';
 import 'sensor_detail_body.dart';
@@ -17,6 +19,8 @@ class SensorDetailPageBody extends StatelessWidget {
     required this.sensorType,
     required this.isFrozen,
     required this.deviceName,
+    required this.sensorName,
+    required this.role,
     required this.onDay,
     required this.onWeek,
     required this.onMonth,
@@ -30,6 +34,8 @@ class SensorDetailPageBody extends StatelessWidget {
   final String sensorType;
   final bool isFrozen;
   final String deviceName;
+  final String sensorName;
+  final UserRole role;
   final VoidCallback onDay;
   final VoidCallback onWeek;
   final VoidCallback onMonth;
@@ -37,13 +43,12 @@ class SensorDetailPageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       children: [
-        Text(dashboard.row.sensorName ?? 'Sensor',
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
-        const SizedBox(height: 4),
-        Text('$deviceName · $sensorType', style: DashboardTextStyles.sensorMeta),
-        const SizedBox(height: 12),
+        Text(sensorName, style: DesignTextStyles.cardTitle.copyWith(fontSize: 20)),
+        SizedBox(height: DesignSpacing.xs),
+        Text('$deviceName · $sensorType', style: DesignTextStyles.bodyText),
+        SizedBox(height: DesignSpacing.md),
         SensorDetailBody(
           dashboard: dashboard,
           realtimeData: realtimeData,
@@ -59,14 +64,14 @@ class SensorDetailPageBody extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         ReadingsExpansionTile(
           onDay: onDay,
           onWeek: onWeek,
           onMonth: onMonth,
         ),
-        const SizedBox(height: 10),
-        Text('Rol: ${dashboard.role.name}', style: DashboardTextStyles.smallLabel),
+        SizedBox(height: DesignSpacing.sm),
+        Text('Rol: ${role.name}', style: DesignTextStyles.timestamp),
       ],
     );
   }

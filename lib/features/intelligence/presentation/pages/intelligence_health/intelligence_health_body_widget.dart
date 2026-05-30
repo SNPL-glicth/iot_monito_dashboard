@@ -13,6 +13,7 @@ import 'error_margin_section_widget.dart';
 import 'ignored_data_section_widget.dart';
 import 'ml_features_section_widget.dart';
 import 'footer_widget.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Body widget containing all intelligence health sections
 class IntelligenceHealthBodyWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       children: [
         // 1. Estado principal con health score
         HealthHeaderWidget(
@@ -42,11 +43,11 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
               ? DateTime.now().difference(DateTime.parse(data.timestamp)).inHours
               : null,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 1.5. ML Features Widget (NUEVO)
         MLFeaturesSectionWidget(mlFeatures: mlFeatures),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 2. Actividad del modelo
         ActivitySectionWidget(
@@ -55,7 +56,7 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           predictionsLast7d: data.modelActivity.predictionsLast7d,
           avgPredictionsPerHour: data.modelActivity.avgPredictionsPerHour,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 3. Métricas de error
         ErrorMetricsSectionWidget(
@@ -65,7 +66,7 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           mape: data.errorMetrics.mape,
           stdDev: data.errorMetrics.stdDev ?? 0.0,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 4. Calidad de predicciones
         QualitySectionWidget(
@@ -74,7 +75,7 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           highConfidenceRate: data.predictionQuality.highConfidenceRate,
           confidenceDistribution: data.predictionQuality.confidenceDistribution,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 5. Precisión por umbral
         AccuracySectionWidget(
@@ -83,21 +84,21 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           withinThreshold10pct: data.accuracyMetrics.withinThreshold10pct,
           withinThreshold20pct: data.accuracyMetrics.withinThreshold20pct,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 6. Detección de anomalías
         AnomalySectionWidget(
           totalAnomalies: data.anomalyDetection.totalAnomalies,
           anomalyRate: data.anomalyDetection.anomalyRate,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 7. NUEVO: Patrones detectados
         PatternAnalysisSectionWidget(
           patternsDetected: data.patternAnalysis.patternsDetected,
           dominantPattern: data.patternAnalysis.dominantPattern,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 8. NUEVO: Sensibilidad a micro-cambios
         MicroDeltaSectionWidget(
@@ -107,7 +108,7 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           ignoredChangesCount: data.microDeltaSensitivity.ignoredChangesCount,
           sensitivityThreshold: data.microDeltaSensitivity.sensitivityThreshold,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 9. NUEVO: Margen de error
         ErrorMarginSectionWidget(
@@ -116,29 +117,29 @@ class IntelligenceHealthBodyWidget extends StatelessWidget {
           marginConfidence: data.errorMarginAnalysis.marginConfidence,
           explanation: data.errorMarginAnalysis.explanation,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // 10. NUEVO: Datos ignorados
         if (data.ignoredDataReasons.isNotEmpty) ...[
           IgnoredDataSectionWidget(reasons: data.ignoredDataReasons),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
 
         // 11. Advertencias
         if (data.warnings.isNotEmpty) ...[
           WarningsSectionWidget(warnings: data.warnings),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
         ],
 
         // 12. Recomendaciones
         if (data.recommendations.isNotEmpty)
           RecommendationsSectionWidget(recommendations: data.recommendations),
 
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         
         // Footer con timestamp
         FooterWidget(timestamp: data.timestamp),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Campo de texto estilizado para diálogos de administración.
 class DialogTextField extends StatelessWidget {
@@ -25,13 +26,13 @@ class DialogTextField extends StatelessWidget {
       style: const TextStyle(color: Colors.white, fontSize: 15),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: DashboardColors.white70),
-        prefixIcon: Icon(icon, color: DashboardColors.white54, size: 20),
+        labelStyle: TextStyle(color: DesignColors.textPrimary),
+        prefixIcon: Icon(icon, color: DesignColors.textSecondary, size: 20),
         filled: true,
-        fillColor: DashboardColors.surfaceElevated,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: DashboardColors.white10)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: DashboardColors.primary, width: 1.5)),
+        fillColor: DesignColors.surface2,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide(color: DesignColors.border)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide(color: DesignColors.cyan, width: 1.5)),
       ),
     );
   }

@@ -6,6 +6,8 @@ import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import 'sensor_detail_page.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 class SensorDetailsArgs {
   const SensorDetailsArgs({
@@ -84,10 +86,10 @@ class SensorDetailsRoutePage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(title: const Text('Detalles de sensor')),
             body: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               child: Text(
                 'Error abriendo detalle: ${snapshot.error}',
-                style: const TextStyle(color: Colors.white70),
+                style: const TextStyle(color: DesignColors.textPrimary),
               ),
             ),
           );

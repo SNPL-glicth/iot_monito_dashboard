@@ -59,7 +59,7 @@ class DefineSensorFlowContentWidget extends StatelessWidget {
         ),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: _buildStepContent(context),
           ),
         ),
@@ -119,7 +119,7 @@ class DefineSensorFlowContentWidget extends StatelessWidget {
           onFinish: onFinish,
         );
       default:
-        return const SizedBox.shrink();
+        return SizedBox.shrink();
     }
   }
 }

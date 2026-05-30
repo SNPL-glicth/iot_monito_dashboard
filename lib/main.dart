@@ -9,6 +9,9 @@ import 'core/lifecycle/app_lifecycle_service.dart';
 import 'core/navigation/app_router.dart';
 import 'core/network/api_error_interceptor.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/design_colors.dart';
+import 'core/theme/design_spacing.dart';
+import 'core/theme/design_text_styles.dart';
 
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -87,41 +90,30 @@ class _SensorErrorWidget extends StatelessWidget {
 
     return Material(
       child: Container(
-        color: const Color(0xFF1A1A2E),
-        padding: const EdgeInsets.all(24),
+        color: DesignColors.background,
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.sensors_off,
-                size: 64,
-                color: Colors.white54,
-              ),
-              const SizedBox(height: 16),
-              const Text(
+              Icon(Icons.sensors_off,
+                  size: 64, color: DesignColors.textSecondary),
+              SizedBox(height: DesignSpacing.md),
+              Text(
                 'Este sensor no esta disponible temporalmente',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: DesignTextStyles.cardTitle.copyWith(fontSize: 18),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               if (isDebug)
                 Text(
-                  '${details.exceptionAsString()}',
+                  details.exceptionAsString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white38,
-                    fontSize: 12,
-                  ),
+                  style: DesignTextStyles.timestamp,
                 ),
-              const SizedBox(height: 24),
+              SizedBox(height: DesignSpacing.xl),
               ElevatedButton.icon(
                 onPressed: () {
-                  // Navigate back or trigger a retry via the navigator
                   final navigator = Navigator.of(context, rootNavigator: true);
                   if (navigator.canPop()) {
                     navigator.pop();

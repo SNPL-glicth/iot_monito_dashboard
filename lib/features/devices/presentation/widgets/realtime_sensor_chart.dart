@@ -6,6 +6,8 @@ import '../../../../core/utils/sensor_type_config.dart';
 import 'realtime_sensor_chart/realtime_sensor_chart_empty.dart';
 import 'realtime_sensor_chart/realtime_sensor_chart_legend.dart';
 import 'realtime_sensor_chart/realtime_sensor_chart_status.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Punto de datos para la gráfica en tiempo real
 class RealtimeDataPoint {
@@ -70,12 +72,12 @@ class RealtimeSensorChart extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const RealtimeSensorChartStatus(),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         SizedBox(
           height: height,
           child: _buildChart(),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         const RealtimeSensorChartLegend(),
       ],
     );
@@ -130,10 +132,10 @@ class RealtimeSensorChart extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF1A1F2E),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: Colors.white10),
       ),
-      padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+      padding: EdgeInsets.fromLTRB(8, 16, 16, 8),
       child: LineChart(
         // FIX Issue 4: Disable animations to prevent micro-flickering
         // Use swapAnimationDuration: Duration.zero for instant updates
@@ -167,10 +169,10 @@ class RealtimeSensorChart extends StatelessWidget {
                 reservedSize: 50,
                 getTitlesWidget: (value, meta) {
                   if (value == meta.min || value == meta.max) {
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(right: 4),
+                    padding: EdgeInsets.only(right: 4),
                     child: Text(
                       value.toStringAsFixed(1),
                       style: TextStyle(
@@ -189,11 +191,11 @@ class RealtimeSensorChart extends StatelessWidget {
                 interval: (viewMaxT - viewMinT) / 4,
                 getTitlesWidget: (value, meta) {
                   if (value == meta.min || value == meta.max) {
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   }
                   final dt = DateTime.fromMillisecondsSinceEpoch(value.toInt());
                   return Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: EdgeInsets.only(top: DesignSpacing.xs),
                     child: Text(
                       DateFormat('HH:mm').format(dt),
                       style: TextStyle(
@@ -240,14 +242,14 @@ class RealtimeSensorChart extends StatelessWidget {
                   if (isAlertSpot) {
                     return FlDotCirclePainter(
                       radius: 6,
-                      color: Colors.redAccent,
+                      color: DesignColors.red,
                       strokeWidth: 2,
                       strokeColor: Colors.white,
                     );
                   } else if (isWarningSpot) {
                     return FlDotCirclePainter(
                       radius: 5,
-                      color: Colors.orangeAccent,
+                      color: DesignColors.amber,
                       strokeWidth: 2,
                       strokeColor: Colors.white,
                     );
@@ -292,9 +294,9 @@ class RealtimeSensorChart extends StatelessWidget {
                   
                   final stateStr = pointData?.state ?? 'NORMAL';
                   final color = stateStr.toUpperCase() == 'ALERT' 
-                      ? Colors.redAccent 
+                      ? DesignColors.red 
                       : stateStr.toUpperCase() == 'WARNING' 
-                          ? Colors.orangeAccent 
+                          ? DesignColors.amber 
                           : Colors.white;
                   
                   return LineTooltipItem(
@@ -332,14 +334,14 @@ class RealtimeSensorChart extends StatelessWidget {
     if (alertThresholdMin != null) {
       lines.add(HorizontalLine(
         y: alertThresholdMin!,
-        color: Colors.redAccent.withValues(alpha: 0.6),
+        color: DesignColors.red.withValues(alpha: 0.6),
         strokeWidth: 1.5,
         dashArray: [5, 3],
         label: HorizontalLineLabel(
           show: true,
           alignment: Alignment.topLeft,
           style: TextStyle(
-            color: Colors.redAccent.withValues(alpha: 0.8),
+            color: DesignColors.red.withValues(alpha: 0.8),
             fontSize: 9,
             fontWeight: FontWeight.w500,
           ),
@@ -351,14 +353,14 @@ class RealtimeSensorChart extends StatelessWidget {
     if (alertThresholdMax != null) {
       lines.add(HorizontalLine(
         y: alertThresholdMax!,
-        color: Colors.redAccent.withValues(alpha: 0.6),
+        color: DesignColors.red.withValues(alpha: 0.6),
         strokeWidth: 1.5,
         dashArray: [5, 3],
         label: HorizontalLineLabel(
           show: true,
           alignment: Alignment.topLeft,
           style: TextStyle(
-            color: Colors.redAccent.withValues(alpha: 0.8),
+            color: DesignColors.red.withValues(alpha: 0.8),
             fontSize: 9,
             fontWeight: FontWeight.w500,
           ),
@@ -370,7 +372,7 @@ class RealtimeSensorChart extends StatelessWidget {
     if (warningThresholdMin != null) {
       lines.add(HorizontalLine(
         y: warningThresholdMin!,
-        color: Colors.orangeAccent.withValues(alpha: 0.5),
+        color: DesignColors.amber.withValues(alpha: 0.5),
         strokeWidth: 1.2,
         dashArray: [4, 4],
       ));
@@ -379,7 +381,7 @@ class RealtimeSensorChart extends StatelessWidget {
     if (warningThresholdMax != null) {
       lines.add(HorizontalLine(
         y: warningThresholdMax!,
-        color: Colors.orangeAccent.withValues(alpha: 0.5),
+        color: DesignColors.amber.withValues(alpha: 0.5),
         strokeWidth: 1.2,
         dashArray: [4, 4],
       ));

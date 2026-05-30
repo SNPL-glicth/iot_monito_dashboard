@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Chip de contador para notificaciones.
 class NotificationCountChip extends StatelessWidget {
@@ -16,10 +17,10 @@ class NotificationCountChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
@@ -33,7 +34,7 @@ class NotificationCountChip extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             '$count $label',
             style: TextStyle(

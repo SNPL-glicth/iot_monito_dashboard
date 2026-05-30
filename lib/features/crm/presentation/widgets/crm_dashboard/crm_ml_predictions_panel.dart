@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 import '../../../../alerts/data/models/unified_alert_item.dart';
 import '../../../../monitoring/data/models/prediction_view_model.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../../devices/presentation/pages/sensor_details_route_page.dart';
 import '../crm_dashboard_helpers.dart';
 
@@ -22,31 +24,36 @@ class CrmMlPredictionsPanel extends StatelessWidget {
     return Column(
       children: [
         _buildWarningsCard(context),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         _buildPredictionsCard(),
       ],
     );
   }
 
   Widget _buildWarningsCard(BuildContext context) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: DesignColors.surface,
+        border: Border.all(color: DesignColors.border, width: 0.5),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const Icon(Icons.warning_amber_rounded, color: Colors.orangeAccent),
-                const SizedBox(width: 8),
+                Icon(Icons.warning_amber_rounded, color: DesignColors.amber),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
-                  child: Text('Advertencias (ML)', style: DashboardTextStyles.deviceTitle),
+                  child: Text('Advertencias (ML)', style: DesignTextStyles.cardTitle),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             if (warnings.isEmpty)
-              const Text('Sin advertencias.', style: DashboardTextStyles.sensorMeta)
+              Text('Sin advertencias.', style: DesignTextStyles.bodyText)
             else
               ...warnings.take(5).map((a) {
                 final color = CrmDashboardHelpers.severityColor(a.severity);
@@ -63,7 +70,7 @@ class CrmMlPredictionsPanel extends StatelessWidget {
                 ].join(' · ');
 
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: DesignSpacing.sm),
                   child: InkWell(
                     onTap: () {
                       final sid = a.sensorId;
@@ -79,27 +86,27 @@ class CrmMlPredictionsPanel extends StatelessWidget {
                         Container(
                           width: 10,
                           height: 10,
-                          margin: const EdgeInsets.only(top: 6),
+                          margin: EdgeInsets.only(top: 6),
                           decoration: BoxDecoration(
                             color: color,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: DesignSpacing.sm),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 displayTitle,
-                                style: DashboardTextStyles.alertTitle,
+                                style: DesignTextStyles.bodyText,
                               ),
-                              const SizedBox(height: 2),
-                              Text(subtitle, style: DashboardTextStyles.sensorMeta),
+                              SizedBox(height: 2),
+                              Text(subtitle, style: DesignTextStyles.bodyText),
                               if (a.message != null && a.message!.isNotEmpty)
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 2),
-                                  child: Text(a.message!, style: DashboardTextStyles.alertText),
+                                  padding: EdgeInsets.only(top: 2),
+                                  child: Text(a.message!, style: DesignTextStyles.bodyText),
                                 ),
                             ],
                           ),
@@ -116,24 +123,29 @@ class CrmMlPredictionsPanel extends StatelessWidget {
   }
 
   Widget _buildPredictionsCard() {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: DesignColors.surface,
+        border: Border.all(color: DesignColors.border, width: 0.5),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const Icon(Icons.trending_up, color: Colors.deepPurpleAccent),
-                const SizedBox(width: 8),
+                Icon(Icons.trending_up, color: DesignColors.cyan),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
-                  child: Text('Predicciones', style: DashboardTextStyles.deviceTitle),
+                  child: Text('Predicciones', style: DesignTextStyles.cardTitle),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             if (predictions.isEmpty)
-              const Text('No hay predicciones.', style: DashboardTextStyles.sensorMeta)
+              Text('No hay predicciones.', style: DesignTextStyles.bodyText)
             else
               ...predictions.take(10).map((p) {
                 final target = CrmDashboardHelpers.formatDateTime(p.targetTimestamp);
@@ -147,22 +159,22 @@ class CrmMlPredictionsPanel extends StatelessWidget {
                 ].join(' · ');
 
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: DesignSpacing.sm),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.chevron_right, color: Colors.white54),
-                      const SizedBox(width: 6),
+                      Icon(Icons.chevron_right, color: DesignColors.textSecondary),
+                      SizedBox(width: DesignSpacing.sm),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               '${p.sensorName} → ${p.predictedValue} ${p.unit}',
-                              style: DashboardTextStyles.sensorTitle,
+                              style: DesignTextStyles.bodyText,
                             ),
-                            const SizedBox(height: 2),
-                            Text(subtitle, style: DashboardTextStyles.sensorMeta),
+                            SizedBox(height: 2),
+                            Text(subtitle, style: DesignTextStyles.bodyText),
                           ],
                         ),
                       ),

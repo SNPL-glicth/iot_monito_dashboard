@@ -1,17 +1,17 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/presentation/widgets/app_loading_widget.dart';
 import '../../data/models/monitoring_view_models.dart';
 import '../../data/monitoring_repository.dart';
-import '../styles/dashboard_styles.dart';
 import '../widgets/raw_diagnosis/raw_diagnosis_empty_state.dart';
 import '../widgets/raw_diagnosis/raw_diagnosis_error_widget.dart';
 import '../widgets/raw_diagnosis/raw_diagnosis_success_body.dart';
+import '../../../../../core/theme/design_colors.dart';
+
+
 
 /// Página de diagnóstico con datos crudos sin agregación.
 class SensorRawDiagnosisPage extends StatefulWidget {
@@ -131,16 +131,16 @@ class _SensorRawDiagnosisPageState extends State<SensorRawDiagnosisPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DashboardColors.background,
+      backgroundColor: DesignColors.background,
       appBar: AppBar(
-        backgroundColor: DashboardColors.cardBackground,
+        backgroundColor: DesignColors.surface,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Diagnóstico: ${widget.sensorName}',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const Text('Datos crudos en tiempo real',
-                style: TextStyle(fontSize: 12, color: Colors.white70)),
+            Text('Datos crudos en tiempo real',
+                style: TextStyle(fontSize: 12, color: DesignColors.textPrimary)),
           ],
         ),
         actions: [

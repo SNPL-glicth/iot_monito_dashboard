@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Card para eliminar todas las lecturas de sensores.
 class DeleteAllReadingsCard extends StatelessWidget {
@@ -16,47 +18,47 @@ class DeleteAllReadingsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: DashboardColors.redAccent15,
-                  borderRadius: BorderRadius.circular(10),
+                  color: DesignColors.red.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(DesignRadius.sm),
                 ),
-                child: Icon(Icons.delete_forever_rounded, color: DashboardColors.error, size: 22),
+                child: Icon(Icons.delete_forever_rounded, color: DesignColors.red, size: 22),
               ),
-              const SizedBox(width: 14),
-              const Expanded(
+              SizedBox(width: 14),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Eliminar TODAS las lecturas', style: DashboardTextStyles.deviceTitle),
+                    Text('Eliminar TODAS las lecturas', style: DesignTextStyles.cardTitle),
                     SizedBox(height: 2),
-                    Text('Borra todas las filas de lecturas. Ideal para reiniciar entorno demo.', style: DashboardTextStyles.sensorMeta),
+                    Text('Borra todas las filas de lecturas. Ideal para reiniciar entorno demo.', style: DesignTextStyles.bodyText),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: DashboardColors.error,
+                backgroundColor: DesignColors.red,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
               ),
               onPressed: isBusy ? null : onConfirm,
               child: isBusy
-                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                   : const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

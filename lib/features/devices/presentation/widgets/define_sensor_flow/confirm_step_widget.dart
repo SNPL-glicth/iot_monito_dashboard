@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Step 2a: Confirm sensor activation (reserve flow)
 class ConfirmStepWidget extends StatelessWidget {
@@ -26,21 +27,21 @@ class ConfirmStepWidget extends StatelessWidget {
       children: [
         // Token de confirmación
         Container(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           decoration: BoxDecoration(
-            color: DashboardColors.tealAccent10,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: DashboardColors.tealAccent30),
+            color: DesignColors.cyan.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(DesignRadius.lg),
+            border: Border.all(color: DesignColors.cyan.withValues(alpha: 0.3)),
           ),
           child: Column(
             children: [
               const Icon(Icons.verified_user, color: Colors.tealAccent, size: 48),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: DesignSpacing.lg),
+              Text(
                 'Sensor Reservado',
-                style: TextStyle(color: Colors.white70, fontSize: 14),
+                style: TextStyle(color: DesignColors.textPrimary, fontSize: 14),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               Text(
                 reserveData.sensorType.toUpperCase(),
                 style: const TextStyle(
@@ -49,18 +50,18 @@ class ConfirmStepWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               Text(
                 'Dispositivo: ${reserveData.deviceName}',
-                style: const TextStyle(color: DashboardColors.white70, fontSize: 14),
+                style: TextStyle(color: DesignColors.textPrimary, fontSize: 14),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: DesignSpacing.md),
               if (reserveData.requireQrConfirmation && reserveData.qrData != null)
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(DesignSpacing.md),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignRadius.sm),
                   ),
                   child: const Text(
                     'QR para confirmación cruzada',
@@ -70,14 +71,14 @@ class ConfirmStepWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: DesignSpacing.lg),
 
         // Info de confirmación
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           decoration: BoxDecoration(
-            color: DashboardColors.white05,
-            borderRadius: BorderRadius.circular(12),
+            color: DesignColors.border,
+            borderRadius: BorderRadius.circular(DesignRadius.md),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,18 +87,18 @@ class ConfirmStepWidget extends StatelessWidget {
                 'Confirme para activar el sensor:',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: DesignSpacing.md),
               DefineSensorWidgets.usageOption(Icons.check_circle, 'Botón', 'Presione "Confirmar Activación"'),
               DefineSensorWidgets.usageOption(Icons.memory, 'Firmware', 'POST /devices/sensors/confirm'),
               DefineSensorWidgets.usageOption(Icons.warning_amber, 'Importante', '⚠️ El API Key solo se muestra una vez'),
             ],
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: DesignSpacing.lg),
 
         if (error != null) ...[
           DefineSensorWidgets.errorWidget(error!),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
@@ -107,7 +108,7 @@ class ConfirmStepWidget extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.tealAccent,
                 side: const BorderSide(color: Colors.tealAccent),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
               ),
             ),
           ),
@@ -120,7 +121,7 @@ class ConfirmStepWidget extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: isLoading ? null : onConfirm,
             icon: isLoading
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
+                ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
                 : const Icon(Icons.check),
             label: Text(isLoading ? 'Confirmando...' : 'Confirmar Activación'),
             style: ElevatedButton.styleFrom(

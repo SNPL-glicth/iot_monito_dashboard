@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Controles de zoom para el candlestick chart.
 class CandlestickChartZoomControls extends StatelessWidget {
@@ -25,7 +27,7 @@ class CandlestickChartZoomControls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(4),
@@ -33,25 +35,25 @@ class CandlestickChartZoomControls extends StatelessWidget {
           child: Text(
             '${(zoomLevel * 100).toInt()}%',
             style: const TextStyle(
-              color: Colors.white70,
+              color: DesignColors.textPrimary,
               fontSize: 11,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8),
         _ZoomButton(
           icon: Icons.remove,
           onPressed: zoomLevel > minZoom ? onZoomOut : null,
           tooltip: 'Alejar',
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _ZoomButton(
           icon: Icons.add,
           onPressed: zoomLevel < maxZoom ? onZoomIn : null,
           tooltip: 'Acercar',
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         _ZoomButton(
           icon: Icons.fit_screen,
           onPressed: zoomLevel != 1.0 ? onReset : null,
@@ -83,7 +85,7 @@ class _ZoomButton extends StatelessWidget {
           onTap: onPressed,
           borderRadius: BorderRadius.circular(4),
           child: Container(
-            padding: const EdgeInsets.all(6),
+            padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
               color: onPressed != null
                   ? Colors.white.withValues(alpha: 0.1)
@@ -93,7 +95,7 @@ class _ZoomButton extends StatelessWidget {
             child: Icon(
               icon,
               size: 16,
-              color: onPressed != null ? Colors.white70 : Colors.white30,
+              color: onPressed != null ? DesignColors.textPrimary : Colors.white30,
             ),
           ),
         ),

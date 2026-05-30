@@ -11,6 +11,7 @@ import '../widgets/thresholds/threshold_create_dialog.dart';
 import '../widgets/thresholds/sensor_info_card.dart';
 import '../widgets/thresholds/threshold_profile_card.dart';
 import '../widgets/thresholds/threshold_legacy_list.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 class SensorThresholdsPage extends StatefulWidget {
   const SensorThresholdsPage({
@@ -147,7 +148,7 @@ class _SensorThresholdsPageState extends State<SensorThresholdsPage> {
           final legacyRows = snapshot.data ?? const <AlertThresholdViewModel>[];
 
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             children: [
               SensorInfoCard(
                 sensorName: widget.sensorName,
@@ -155,14 +156,14 @@ class _SensorThresholdsPageState extends State<SensorThresholdsPage> {
                 sensorId: widget.sensorId,
                 unit: widget.unit,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               ThresholdProfileCard(
                 future: _profileFuture,
                 unit: widget.unit,
                 canEdit: canEdit,
                 onEdit: _editProfile,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               ThresholdLegacyList(
                 thresholds: legacyRows,
                 canEdit: canEdit,

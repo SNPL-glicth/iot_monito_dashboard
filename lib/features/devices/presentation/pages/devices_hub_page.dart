@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'devices_categories_page.dart';
 import 'devices_clean_readings_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class DevicesHubPage extends StatelessWidget {
   const DevicesHubPage({
@@ -17,17 +19,17 @@ class DevicesHubPage extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: DashboardColors.cardBackground,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(feature, style: DashboardTextStyles.sectionHeader),
-        content: const Text(
+        backgroundColor: DesignColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
+        title: Text(feature, style: DesignTextStyles.screenTitle),
+        content: Text(
           'Sección en construcción (próximamente).',
-          style: DashboardTextStyles.sensorMeta,
+          style: DesignTextStyles.bodyText,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cerrar', style: TextStyle(color: DashboardColors.primary)),
+            child: Text('Cerrar', style: TextStyle(color: DesignColors.textPrimary)),
           ),
         ],
       ),
@@ -50,33 +52,34 @@ class DevicesHubPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Dispositivos'),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.all(DesignSpacing.lg),
+          children: [
           // Header con gradiente
           Container(
-            padding: const EdgeInsets.all(20),
-            decoration: ModernCardDecoration.gradient(DashboardColors.gradientPrimary),
+            padding: EdgeInsets.all(DesignSpacing.lg),
+            decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]), borderRadius: BorderRadius.circular(DesignRadius.lg)),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(DesignSpacing.md),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(14),
+                    color: DesignColors.textPrimary.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(DesignRadius.md),
                   ),
-                  child: const Icon(Icons.devices_rounded, color: Colors.white, size: 28),
+                  child: Icon(Icons.devices_rounded, color: DesignColors.textPrimary, size: 28),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: DesignSpacing.lg),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Centro de Dispositivos', style: DashboardTextStyles.sectionHeader),
-                      const SizedBox(height: 4),
+                      Text('Centro de Dispositivos', style: DesignTextStyles.screenTitle),
+                      SizedBox(height: DesignSpacing.xs),
                       Text(
                         'Gestión y monitoreo de equipos IoT',
-                        style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13),
+                        style: TextStyle(color: DesignColors.textPrimary.withValues(alpha: 0.8), fontSize: 13),
                       ),
                     ],
                   ),
@@ -84,23 +87,23 @@ class DevicesHubPage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: DesignSpacing.xl),
           
           // Opciones
           _modernDeviceTile(
             icon: Icons.category_rounded,
-            iconColor: DashboardColors.primary,
+            iconColor: DesignColors.cyan,
             title: isAdmin ? 'Dispositivos y sensores' : 'Mis dispositivos',
             subtitle: isAdmin
                 ? 'Ver por categoría: electricidad, ambientales, temperatura'
                 : 'Ver dispositivos por categoría',
             onTap: () => _openCategories(context),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           
           _modernDeviceTile(
             icon: Icons.settings_remote_rounded,
-            iconColor: DashboardColors.secondary,
+            iconColor: DesignColors.cyanDim,
             title: 'Comandos remotos',
             subtitle: 'Enviar acciones y órdenes a dispositivos IoT',
             enabled: isAdmin || role == UserRole.operator,
@@ -109,10 +112,10 @@ class DevicesHubPage extends StatelessWidget {
           ),
           
           if (isAdmin) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             _modernDeviceTile(
               icon: Icons.cleaning_services_rounded,
-              iconColor: DashboardColors.warning,
+              iconColor: DesignColors.amber,
               title: 'Limpiar lecturas',
               subtitle: 'Herramienta de mantenimiento para datos históricos',
               onTap: () {
@@ -125,21 +128,21 @@ class DevicesHubPage extends StatelessWidget {
             ),
           ],
           
-          const SizedBox(height: 20),
+          SizedBox(height: DesignSpacing.lg),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.white05,
-              borderRadius: BorderRadius.circular(10),
+              color: DesignColors.border,
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
             child: Row(
               children: [
-                Icon(Icons.info_outline_rounded, color: DashboardColors.info, size: 18),
-                const SizedBox(width: 10),
+                Icon(Icons.info_outline_rounded, color: DesignColors.textSecondary, size: 18),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     'Esta sección centraliza la gestión de dispositivos',
-                    style: DashboardTextStyles.sensorMeta,
+                    style: DesignTextStyles.bodyText,
                   ),
                 ),
               ],
@@ -147,6 +150,7 @@ class DevicesHubPage extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -162,25 +166,25 @@ class DevicesHubPage extends StatelessWidget {
     return Opacity(
       opacity: enabled ? 1.0 : 0.5,
       child: Container(
-        decoration: ModernCardDecoration.elevated(),
+        decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(DesignRadius.lg),
             onTap: enabled ? onTap : null,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(DesignSpacing.md),
                     decoration: BoxDecoration(
                       color: iconColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(DesignRadius.md),
                     ),
                     child: Icon(icon, color: iconColor, size: 24),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: DesignSpacing.lg),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,20 +192,20 @@ class DevicesHubPage extends StatelessWidget {
                         Row(
                           children: [
                             Flexible(
-                              child: Text(title, style: DashboardTextStyles.deviceTitle),
+                              child: Text(title, style: DesignTextStyles.cardTitle),
                             ),
                             if (isComingSoon) ...[
-                              const SizedBox(width: 8),
+                              SizedBox(width: DesignSpacing.sm),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                                 decoration: BoxDecoration(
-                                  color: DashboardColors.warning.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(8),
+                                  color: DesignColors.amber.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(DesignRadius.sm),
                                 ),
                                 child: Text(
                                   'Pronto',
                                   style: TextStyle(
-                                    color: DashboardColors.warning,
+                                    color: DesignColors.amber,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -210,14 +214,14 @@ class DevicesHubPage extends StatelessWidget {
                             ],
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(subtitle, style: DashboardTextStyles.sensorMeta),
+                        SizedBox(height: DesignSpacing.xs),
+                        Text(subtitle, style: DesignTextStyles.bodyText),
                       ],
                     ),
                   ),
                   Icon(
                     Icons.chevron_right_rounded,
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: DesignColors.textPrimary.withValues(alpha: 0.3),
                   ),
                 ],
               ),

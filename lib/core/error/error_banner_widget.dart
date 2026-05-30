@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'error_banner_config.dart';
+import '../../core/theme/design_spacing.dart';
 
 class ErrorBannerWidget extends StatelessWidget {
   const ErrorBannerWidget({
@@ -17,14 +18,14 @@ class ErrorBannerWidget extends StatelessWidget {
       label: config.message,
       child: Container(
         color: colorScheme.error,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: Row(
           children: [
             Icon(
               Icons.error_outline,
               color: colorScheme.onError,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Text(
                 config.message,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/admin_users_repository.dart';
 import '../../data/models/admin_user.dart';
 import 'dialog_text_field.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Muestra diálogo para crear o editar un usuario.
 Future<bool> showUserDialog({
@@ -24,20 +26,20 @@ Future<bool> showUserDialog({
       return StatefulBuilder(
         builder: (context, setDialogState) {
           return AlertDialog(
-            backgroundColor: DashboardColors.cardBackground,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            backgroundColor: DesignColors.surface,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
             title: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(DesignSpacing.sm),
                   decoration: BoxDecoration(
-                    color: DashboardColors.primaryAccent10,
-                    borderRadius: BorderRadius.circular(8),
+                    color: DesignColors.cyan.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(DesignRadius.sm),
                   ),
-                  child: Icon(isEdit ? Icons.edit_rounded : Icons.person_add_rounded, color: DashboardColors.primary, size: 20),
+                  child: Icon(isEdit ? Icons.edit_rounded : Icons.person_add_rounded, color: DesignColors.cyan, size: 20),
                 ),
-                const SizedBox(width: 12),
-                Text(isEdit ? 'Editar usuario' : 'Crear usuario', style: DashboardTextStyles.deviceTitle),
+                SizedBox(width: DesignSpacing.md),
+                Text(isEdit ? 'Editar usuario' : 'Crear usuario', style: DesignTextStyles.cardTitle),
               ],
             ),
             content: SingleChildScrollView(
@@ -46,28 +48,28 @@ Future<bool> showUserDialog({
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DialogTextField(controller: usernameController, label: 'Usuario', icon: Icons.person_outline_rounded),
-                  const SizedBox(height: 12),
+                  SizedBox(height: DesignSpacing.md),
                   DialogTextField(controller: emailController, label: 'Email', icon: Icons.email_outlined),
-                  const SizedBox(height: 12),
+                  SizedBox(height: DesignSpacing.md),
                   DialogTextField(
                     controller: passwordController,
                     label: isEdit ? 'Nueva contraseña (opcional)' : 'Contraseña',
                     icon: Icons.lock_outline_rounded,
                     obscure: true,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: DesignSpacing.md),
                   DropdownButtonFormField<String>(
                     initialValue: role,
-                    dropdownColor: DashboardColors.surfaceElevated,
+                    dropdownColor: DesignColors.surface2,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       labelText: 'Rol',
-                      labelStyle: TextStyle(color: DashboardColors.white70),
-                      prefixIcon: Icon(Icons.admin_panel_settings_outlined, color: DashboardColors.white54, size: 20),
+                      labelStyle: TextStyle(color: DesignColors.textPrimary),
+                      prefixIcon: Icon(Icons.admin_panel_settings_outlined, color: DesignColors.textSecondary, size: 20),
                       filled: true,
-                      fillColor: DashboardColors.surfaceElevated,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: DashboardColors.white10)),
+                      fillColor: DesignColors.surface2,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide(color: DesignColors.border)),
                     ),
                     items: const [
                       DropdownMenuItem(value: 'admin', child: Text('Administrador')),
@@ -78,30 +80,30 @@ Future<bool> showUserDialog({
                       if (value != null) setDialogState(() => role = value);
                     },
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: DesignSpacing.sm),
                   SwitchListTile(
                     value: isActive,
                     onChanged: (v) => setDialogState(() => isActive = v),
                     title: const Text('Activo', style: TextStyle(color: Colors.white)),
-                    activeTrackColor: DashboardColors.success,
+                    activeTrackColor: DesignColors.green,
                     contentPadding: EdgeInsets.zero,
                   ),
                 ],
               ),
             ),
-            actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+            actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                style: TextButton.styleFrom(foregroundColor: DashboardColors.white70),
+                style: TextButton.styleFrom(foregroundColor: DesignColors.textPrimary),
                 child: const Text('Cancelar'),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: DashboardColors.primary,
+                  backgroundColor: DesignColors.cyan,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
                 ),
                 child: Text(isEdit ? 'Guardar' : 'Crear'),
               ),
@@ -145,7 +147,7 @@ Future<bool> showUserDialog({
   } catch (e) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: DashboardColors.error),
+        SnackBar(content: Text('Error: $e'), backgroundColor: DesignColors.red),
       );
     }
     return false;

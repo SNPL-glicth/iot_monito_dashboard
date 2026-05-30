@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../features/monitoring/data/models/monitoring_view_models.dart';
 import '../../../../../features/monitoring/data/monitoring_repository.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Diálogo para editar un umbral legacy.
 Future<void> showThresholdEditDialog({
@@ -22,13 +23,13 @@ Future<void> showThresholdEditDialog({
   final ok = await showDialog<bool>(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text('Editar límite', style: DashboardTextStyles.deviceTitle),
+      title: Text('Editar límite', style: DesignTextStyles.cardTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Sensor: $sensorName ($unit)', style: DashboardTextStyles.sensorMeta),
-          Text('Condición: ${threshold.conditionType}', style: DashboardTextStyles.sensorMeta),
-          const SizedBox(height: 12),
+          Text('Sensor: $sensorName ($unit)', style: DesignTextStyles.bodyText),
+          Text('Condición: ${threshold.conditionType}', style: DesignTextStyles.bodyText),
+          SizedBox(height: DesignSpacing.md),
           TextField(
             controller: minCtrl,
             decoration: InputDecoration(
@@ -38,7 +39,7 @@ Future<void> showThresholdEditDialog({
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
           if (needsRange) ...[
-            const SizedBox(height: 10),
+            SizedBox(height: DesignSpacing.sm),
             TextField(
               controller: maxCtrl,
               decoration: const InputDecoration(
@@ -48,7 +49,7 @@ Future<void> showThresholdEditDialog({
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
             ),
           ],
-          const SizedBox(height: 10),
+          SizedBox(height: DesignSpacing.sm),
           TextField(
             controller: reasonCtrl,
             decoration: const InputDecoration(

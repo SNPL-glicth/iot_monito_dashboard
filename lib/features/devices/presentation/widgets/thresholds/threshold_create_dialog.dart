@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../features/monitoring/data/monitoring_repository.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Diálogo para crear un nuevo umbral legacy.
 Future<void> showThresholdCreateDialog({
@@ -21,14 +22,14 @@ Future<void> showThresholdCreateDialog({
   final ok = await showDialog<bool>(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text('Nuevo límite', style: DashboardTextStyles.deviceTitle),
+      title: Text('Nuevo límite', style: DesignTextStyles.cardTitle),
       content: StatefulBuilder(
         builder: (context, setState) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Sensor: $sensorName ($unit)', style: DashboardTextStyles.sensorMeta),
-              const SizedBox(height: 12),
+              Text('Sensor: $sensorName ($unit)', style: DesignTextStyles.bodyText),
+              SizedBox(height: DesignSpacing.md),
               TextField(
                 controller: nameCtrl,
                 decoration: const InputDecoration(
@@ -36,7 +37,7 @@ Future<void> showThresholdCreateDialog({
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: DesignSpacing.sm),
               DropdownButtonFormField<String>(
                 // ignore: deprecated_member_use
                 value: condition.value,
@@ -52,7 +53,7 @@ Future<void> showThresholdCreateDialog({
                 ],
                 onChanged: (v) => setState(() => condition.value = v ?? 'greater_than'),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: DesignSpacing.sm),
               DropdownButtonFormField<String>(
                 // ignore: deprecated_member_use
                 value: severity.value,
@@ -67,7 +68,7 @@ Future<void> showThresholdCreateDialog({
                 ],
                 onChanged: (v) => setState(() => severity.value = v ?? 'warning'),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: DesignSpacing.sm),
               TextField(
                 controller: minCtrl,
                 decoration: InputDecoration(
@@ -77,7 +78,7 @@ Future<void> showThresholdCreateDialog({
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
               if (condition.value == 'out_of_range') ...[
-                const SizedBox(height: 10),
+                SizedBox(height: DesignSpacing.sm),
                 TextField(
                   controller: maxCtrl,
                   decoration: const InputDecoration(

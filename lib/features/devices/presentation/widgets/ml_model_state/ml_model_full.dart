@@ -5,6 +5,7 @@ import '../../../data/models/ml_features_model.dart';
 import 'confidence_gauge.dart';
 import 'detail_row.dart';
 import 'metric_tile.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Vista completa del estado ML con gauge, detalles y métricas.
 class MlModelFull extends StatelessWidget {
@@ -44,10 +45,10 @@ class MlModelFull extends StatelessWidget {
     final confidenceColor = ChartStyle.getConfidenceColor(features.confidence);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       decoration: BoxDecoration(
         color: ChartStyle.backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: ChartStyle.borderColor),
       ),
       child: Column(
@@ -62,7 +63,7 @@ class MlModelFull extends StatelessWidget {
                 color: confidenceColor,
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               const Text(
                 'Estado del Modelo ML',
                 style: TextStyle(
@@ -81,7 +82,7 @@ class MlModelFull extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
 
           // Main content: Gauge + Details
           Row(
@@ -95,7 +96,7 @@ class MlModelFull extends StatelessWidget {
                   color: confidenceColor,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               if (showDetails)
                 Expanded(
                   child: Column(
@@ -107,7 +108,7 @@ class MlModelFull extends StatelessWidget {
                         value: features.patternLabel,
                         color: Colors.white,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       DetailRow(
                         icon: Icons.trending_flat,
                         label: 'Tendencia',
@@ -115,14 +116,14 @@ class MlModelFull extends StatelessWidget {
                             '${features.trendIcon} ${_getTrendLabel(features.trendDirection)}',
                         color: _getTrendColor(features.trendDirection),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       DetailRow(
                         icon: Icons.balance,
                         label: 'Estabilidad',
                         value: features.stabilityPercent,
                         color: ChartStyle.getConfidenceColor(features.stabilityScore),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       DetailRow(
                         icon: Icons.data_usage,
                         label: 'Ventana',
@@ -137,12 +138,12 @@ class MlModelFull extends StatelessWidget {
 
           // Anomaly alert
           if (features.isAnomalous) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
                 color: ChartStyle.alertColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
                 border: Border.all(
                   color: ChartStyle.alertColor.withValues(alpha: 0.3),
                 ),
@@ -154,7 +155,7 @@ class MlModelFull extends StatelessWidget {
                     color: ChartStyle.alertColor,
                     size: 20,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,12 +185,12 @@ class MlModelFull extends StatelessWidget {
           ],
 
           // Baseline info
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
             child: Row(
               children: [

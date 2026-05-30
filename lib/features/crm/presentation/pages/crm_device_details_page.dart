@@ -5,6 +5,7 @@ import '../../../../core/auth/user_role.dart';
 import '../../data/crm_repository.dart';
 import '../../data/models/crm_devices_models.dart';
 import '../widgets/device_detail/device_detail_content.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 class CrmDeviceDetailsPage extends StatefulWidget {
   const CrmDeviceDetailsPage({
@@ -67,7 +68,7 @@ class _CrmDeviceDetailsPageState extends State<CrmDeviceDetailsPage> {
         onRefresh: _refresh,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           child: FutureBuilder<CrmDeviceProfileFullResponse>(
             future: _future,
             builder: (context, snapshot) {

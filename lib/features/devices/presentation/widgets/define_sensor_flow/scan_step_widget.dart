@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../sensor_types_config.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Step 2b: Scan QR of physical sensor
 class ScanStepWidget extends StatelessWidget {
@@ -27,16 +28,16 @@ class ScanStepWidget extends StatelessWidget {
       children: [
         // Información del sensor definido
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           decoration: BoxDecoration(
             color: Colors.tealAccent.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignRadius.md),
             border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
           ),
           child: Row(
             children: [
               Icon(SensorTypesConfig.getIcon(selectedType), color: Colors.tealAccent, size: 32),
-              const SizedBox(width: 12),
+              SizedBox(width: DesignSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +48,7 @@ class ScanStepWidget extends StatelessWidget {
                     ),
                     Text(
                       'Unidad: ${SensorTypesConfig.getUnit(selectedType)}',
-                      style: const TextStyle(color: DashboardColors.white70),
+                      style: TextStyle(color: DesignColors.textPrimary),
                     ),
                   ],
                 ),
@@ -56,20 +57,20 @@ class ScanStepWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: DesignSpacing.xl),
 
         // Instrucciones
         Container(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           decoration: BoxDecoration(
-            color: DashboardColors.blueAccent10,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: DashboardColors.blueAccent30),
+            color: DesignColors.cyan.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(DesignRadius.lg),
+            border: Border.all(color: DesignColors.cyan.withValues(alpha: 0.3)),
           ),
           child: Column(
             children: [
               const Icon(Icons.qr_code_scanner, color: Colors.blueAccent, size: 48),
-              const SizedBox(height: 16),
+              SizedBox(height: DesignSpacing.lg),
               const Text(
                 'Escanee el código QR del sensor físico',
                 textAlign: TextAlign.center,
@@ -79,16 +80,16 @@ class ScanStepWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               Text(
                 'El QR está impreso en el hardware del sensor y contiene su identificador único.',
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: DashboardColors.white70),
+                style: TextStyle(color: DesignColors.textPrimary),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: DesignSpacing.xl),
 
         if (error != null)
           DefineSensorWidgets.errorWidget(error!),
@@ -100,7 +101,7 @@ class ScanStepWidget extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: isLoading ? null : onOpenScanner,
             icon: isLoading
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
+                ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
                 : const Icon(Icons.camera_alt),
             label: Text(isLoading ? 'Activando...' : 'Abrir Cámara'),
             style: ElevatedButton.styleFrom(
@@ -110,7 +111,7 @@ class ScanStepWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: DesignSpacing.lg),
 
         // Opción manual para testing
         OutlinedButton.icon(
@@ -118,7 +119,7 @@ class ScanStepWidget extends StatelessWidget {
           icon: const Icon(Icons.keyboard),
           label: const Text('Ingresar código manualmente'),
           style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.white70,
+            foregroundColor: DesignColors.textPrimary,
           ),
         ),
       ],

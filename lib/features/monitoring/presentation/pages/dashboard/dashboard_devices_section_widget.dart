@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../../../data/models/monitoring_view_models.dart';
 import '../../../data/models/reading/latest_reading_models.dart';
 import '../../../data/models/device_with_sensor_view_model.dart';
-import '../../styles/dashboard_styles.dart';
 import '../../../../../core/utils/date_utils.dart' as date_utils;
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Devices section widget for dashboard
 class DashboardDevicesSectionWidget extends StatelessWidget {
@@ -36,9 +38,9 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
     final t = (raw ?? '').toLowerCase();
     switch (t) {
       case 'temperature':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'humidity':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       case 'air_quality':
         return Colors.tealAccent;
       case 'power':
@@ -46,7 +48,7 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
       case 'voltage':
         return Colors.amberAccent;
       default:
-        return DashboardColors.sensorIcon;
+        return DesignColors.cyan;
     }
   }
 
@@ -95,41 +97,41 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
           child: Theme(
             data: Theme.of(context).copyWith(
               dividerColor: Colors.transparent,
-              listTileTheme: const ListTileThemeData(iconColor: Colors.white70),
+              listTileTheme: ListTileThemeData(iconColor: DesignColors.textPrimary),
             ),
             child: ExpansionTile(
-              tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              collapsedBackgroundColor: DashboardColors.cardBackground,
-              backgroundColor: DashboardColors.cardBackground,
+              tilePadding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.sm),
+              collapsedBackgroundColor: DesignColors.surface,
+              backgroundColor: DesignColors.surface,
               leading: Icon(
                 Icons.memory,
                 color: isOnline
-                    ? DashboardColors.deviceOnline
-                    : DashboardColors.deviceOffline,
+                    ? DesignColors.green
+                    : DesignColors.red,
               ),
               title: Text(
                 first.deviceName,
-                style: DashboardTextStyles.deviceTitle,
+                style: DesignTextStyles.cardTitle,
               ),
               subtitle: Text(
                 '${_deviceTypeLabel(first.deviceType)} · ${first.deviceStatus}',
-                style: DashboardTextStyles.deviceSubtitle,
+                style: DesignTextStyles.bodyText,
               ),
-              childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              childrenPadding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.sm),
               children: [
                 if (first.lastConnection != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.only(bottom: DesignSpacing.sm),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'ultima conexion',
-                          style: DashboardTextStyles.smallLabel,
+                          style: DesignTextStyles.timestamp,
                         ),
                         Text(
                           formatDateTime(first.lastConnection),
-                          style: DashboardTextStyles.sensorMeta,
+                          style: DesignTextStyles.bodyText,
                         ),
                       ],
                     ),
@@ -154,11 +156,11 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
                   final timeText = formatDateTime(latestTime);
 
                   return Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(12),
+                    margin: EdgeInsets.only(bottom: DesignSpacing.sm),
+                    padding: EdgeInsets.all(DesignSpacing.md),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.03),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(DesignRadius.md),
                       border: Border.all(color: Colors.white10),
                     ),
                     child: Row(
@@ -169,7 +171,7 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
                           height: 40,
                           decoration: BoxDecoration(
                             color: accent.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(DesignRadius.md),
                             border: Border.all(color: accent.withValues(alpha: 0.35)),
                           ),
                           child: Icon(
@@ -178,7 +180,7 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
                             size: 20,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: DesignSpacing.md),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +191,7 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
                                   Expanded(
                                     child: Text(
                                       sensorTypeLabel,
-                                      style: DashboardTextStyles.sensorTitle,
+                                      style: DesignTextStyles.bodyText,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -203,15 +205,15 @@ class DashboardDevicesSectionWidget extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: DesignSpacing.xs),
                               Text(
                                 meta,
-                                style: DashboardTextStyles.sensorMeta,
+                                style: DesignTextStyles.bodyText,
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: DesignSpacing.xs),
                               Text(
                                 'Última lectura: $timeText',
-                                style: DashboardTextStyles.smallLabel,
+                                style: DesignTextStyles.timestamp,
                               ),
                             ],
                           ),

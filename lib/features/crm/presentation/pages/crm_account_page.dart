@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/current_user.dart';
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../widgets/account/account_header.dart';
 import '../widgets/account/profile_card.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class CrmAccountPage extends StatefulWidget {
   const CrmAccountPage({
     super.key,
     required this.role,
+    this.onLogout,
   });
 
   final UserRole role;
+  final VoidCallback? onLogout;
 
   @override
   State<CrmAccountPage> createState() => _CrmAccountPageState();
@@ -74,31 +78,15 @@ class _CrmAccountPageState extends State<CrmAccountPage> {
     final rawEmail = (u?.email ?? '').trim();
     final email = (rawEmail.toLowerCase() == 'null') ? '' : rawEmail;
 
-    final String roleLabel;
-    switch (widget.role) {
-      case UserRole.admin:
-        roleLabel = 'Administrador';
-        break;
-      case UserRole.operator:
-        roleLabel = 'Operador';
-        break;
-      case UserRole.viewer:
-        roleLabel = 'Supervisor';
-        break;
-    }
+    final roleLabel = {UserRole.admin: 'Administrador', UserRole.operator: 'Operador', UserRole.viewer: 'Supervisor'}[widget.role]!;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cuenta'),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            _user = null;
-          });
-          CurrentUser.clear();
-          await _bootstrap();
-        },
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () async { setState(() => _user = null); CurrentUser.clear(); await _bootstrap(); },
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -110,70 +98,53 @@ class _CrmAccountPageState extends State<CrmAccountPage> {
               )
             else if (_error != null)
               Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text('Error cargando perfil: $_error', style: DashboardTextStyles.error),
+                padding: EdgeInsets.all(DesignSpacing.lg),
+                child: Text('Error cargando perfil: $_error', style: DesignTextStyles.bodyText),
               )
             else
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(DesignSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: DashboardColors.primaryAccent10,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
-                            Icons.info_outline_rounded,
-                            color: DashboardColors.primary,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text('Información personal', style: DashboardTextStyles.sectionHeader),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ProfileCard(
-                      username: username,
-                      email: email,
-                      roleLabel: roleLabel,
-                      userId: u?.id ?? '',
-                    ),
-                    const SizedBox(height: 16),
+                    Row(children: [
+                      Container(
+                        padding: EdgeInsets.all(DesignSpacing.sm),
+                        decoration: BoxDecoration(color: DesignColors.cyan.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(DesignRadius.sm)),
+                        child: Icon(Icons.info_outline_rounded, color: DesignColors.textSecondary, size: 20),
+                      ),
+                      SizedBox(width: DesignSpacing.md),
+                      Text('Información personal', style: DesignTextStyles.screenTitle),
+                    ]),
+                    SizedBox(height: DesignSpacing.lg),
+                    ProfileCard(username: username, email: email, roleLabel: roleLabel, userId: u?.id ?? ''),
+                    SizedBox(height: DesignSpacing.lg),
                     Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: DashboardColors.white05,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.lightbulb_outline_rounded,
-                            color: DashboardColors.warning,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Desliza hacia abajo para refrescar',
-                              style: DashboardTextStyles.sensorMeta,
-                            ),
-                          ),
-                        ],
-                      ),
+                      padding: EdgeInsets.all(DesignSpacing.md),
+                      decoration: BoxDecoration(color: DesignColors.border, borderRadius: BorderRadius.circular(DesignRadius.sm)),
+                      child: Row(children: [
+                        Icon(Icons.lightbulb_outline_rounded, color: DesignColors.amber, size: 18),
+                        SizedBox(width: DesignSpacing.sm),
+                        Expanded(child: Text('Desliza hacia abajo para refrescar', style: DesignTextStyles.bodyText)),
+                      ]),
                     ),
+                    SizedBox(height: DesignSpacing.xl),
+                    if (widget.onLogout != null)
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: widget.onLogout,
+                          icon: Icon(Icons.logout_outlined, color: DesignColors.red),
+                          label: Text('Cerrar sesión', style: DesignTextStyles.bodyText.copyWith(color: DesignColors.red)),
+                        ),
+                      ),
                   ],
                 ),
               ),
           ],
         ),
       ),
+    ),
     );
   }
 

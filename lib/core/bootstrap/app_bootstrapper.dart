@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
 import 'package:flutter/material.dart';
-
 import '../../../firebase_options.dart';
 import '../../core/auth/auth_storage.dart';
 import '../../core/auth/token_manager.dart';
@@ -16,7 +14,10 @@ import '../../core/presentation/widgets/app_loading_widget.dart';
 import '../../core/realtime/realtime_service.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/crm/presentation/pages/crm_home_page.dart';
-import '../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../core/theme/design_colors.dart';
+import '../../../core/theme/design_spacing.dart';
+
+
 
 bool _firebaseReady = false;
 
@@ -191,20 +192,20 @@ class _AppBootstrapperState extends State<AppBootstrapper> {
 
   Widget _buildSplashScreen() {
     return Scaffold(
-      backgroundColor: DashboardColors.background,
+      backgroundColor: DesignColors.background,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Logo con gradiente
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(DesignSpacing.xl),
               decoration: BoxDecoration(
-                gradient: DashboardColors.gradientPrimary,
+                gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]),
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: DashboardColors.primary.withValues(alpha: 0.3),
+                    color: DesignColors.cyan.withValues(alpha: 0.3),
                     blurRadius: 24,
                     offset: const Offset(0, 10),
                   ),
@@ -216,7 +217,7 @@ class _AppBootstrapperState extends State<AppBootstrapper> {
                 size: 56,
               ),
             ),
-            const SizedBox(height: 28),
+            SizedBox(height: 28),
             const Text(
               'IoT System',
               style: TextStyle(
@@ -226,17 +227,17 @@ class _AppBootstrapperState extends State<AppBootstrapper> {
                 letterSpacing: 0.5,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               'Inicializando...',
               style: TextStyle(
-                color: DashboardColors.white54,
+                color: DesignColors.textSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
               ),
             ),
-            const SizedBox(height: 32),
-            const SizedBox(
+            SizedBox(height: 32),
+            SizedBox(
               width: 32,
               height: 32,
               child: AppLoadingWidget(),

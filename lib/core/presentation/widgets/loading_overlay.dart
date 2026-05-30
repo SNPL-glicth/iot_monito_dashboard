@@ -34,7 +34,7 @@ class LoadingOverlay extends StatelessWidget {
                       strokeWidth: 3,
                     ),
                     if (message != null) ...[
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Text(
                         message!,
                         style: const TextStyle(

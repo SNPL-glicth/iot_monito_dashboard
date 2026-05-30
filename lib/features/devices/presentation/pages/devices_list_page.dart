@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../widgets/devices_list/device_filter_helpers.dart';
 import '../widgets/devices_list/sensor_category_card.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class DevicesListPage extends StatefulWidget {
   const DevicesListPage({
@@ -75,11 +77,11 @@ class _DevicesListPageState extends State<DevicesListPage> {
             )
           : null,
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         children: [
           if (widget.description != null && widget.description!.trim().isNotEmpty) ...[
-            Text(widget.description!, style: DashboardTextStyles.sensorMeta),
-            const SizedBox(height: 12),
+            Text(widget.description!, style: DesignTextStyles.bodyText),
+            SizedBox(height: DesignSpacing.md),
           ],
           Wrap(
             spacing: 8,
@@ -98,19 +100,19 @@ class _DevicesListPageState extends State<DevicesListPage> {
                 )
                 .toList(),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           if (widget.showConfigHint) ...[
             Card(
               child: ListTile(
-                leading: const Icon(Icons.info_outline, color: Colors.white70),
-                title: const Text('Modo configuración', style: DashboardTextStyles.deviceTitle),
-                subtitle: const Text(
+                leading: Icon(Icons.info_outline, color: DesignColors.textPrimary),
+                title: Text('Modo configuración', style: DesignTextStyles.cardTitle),
+                subtitle: Text(
                   'Próximamente: acciones de alta/edición por tipo y por dispositivo.',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
           ],
           FutureBuilder<List<dynamic>>(
             future: Future.wait([
@@ -126,7 +128,7 @@ class _DevicesListPageState extends State<DevicesListPage> {
               }
               if (snapshot.hasError) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 24),
+                  padding: EdgeInsets.only(top: 24),
                   child: Text('Error: ${snapshot.error}'),
                 );
               }
@@ -143,7 +145,7 @@ class _DevicesListPageState extends State<DevicesListPage> {
 
               if (rows.isEmpty) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: EdgeInsets.only(top: DesignSpacing.sm),
                   child: Text('Sin resultados para filtro: ${_filter.label}'),
                 );
               }
@@ -170,21 +172,21 @@ class _DevicesListPageState extends State<DevicesListPage> {
                       leading: Icon(_filter.icon, color: Colors.tealAccent),
                       title: Text(
                         'Dispositivos: ${uniqueDeviceIds.length}',
-                        style: DashboardTextStyles.deviceTitle,
+                        style: DesignTextStyles.cardTitle,
                       ),
                       subtitle: Text(
                         'Filtro: ${_filter.label} · Se muestran 3 categorías de sensor',
-                        style: DashboardTextStyles.sensorMeta,
+                        style: DesignTextStyles.bodyText,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: DesignSpacing.sm),
                   ...SensorCategory.values.map((cat) {
                     final list = byCategory[cat] ?? const <DeviceWithSensorViewModel>[];
                     final representative = pickRepresentative(list, latestBySensorId);
 
                     if (representative == null) {
-                      return const SizedBox.shrink();
+                      return SizedBox.shrink();
                     }
 
                     final latest = representative.sensorId == null

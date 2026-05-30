@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/network/api_client.dart';
 import '../../../../core/auth/auth_storage.dart';
 import '../../../../core/auth/token_manager.dart';
 import '../../../auth/presentation/pages/login_page.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../../core/auth/user_role.dart';
 import '../../../alerts/presentation/pages/alerts_hub_page.dart';
 import '../../../devices/presentation/pages/devices_hub_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class OperatorDashboardPage extends StatelessWidget {
   const OperatorDashboardPage({
@@ -33,25 +35,25 @@ class OperatorDashboardPage extends StatelessWidget {
         titleSpacing: 0,
         title: Row(
           children: [
-            const SizedBox(width: 8),
-            const Text('IoT Monitoring', style: DashboardTextStyles.appBarTitle),
-            const SizedBox(width: 12),
+            SizedBox(width: DesignSpacing.sm),
+            Text('IoT Monitoring', style: DesignTextStyles.screenTitle),
+            SizedBox(width: DesignSpacing.md),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
               decoration: BoxDecoration(
                 color: Colors.white10,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
               ),
               child: Text(
                 roleLabel,
-                style: DashboardTextStyles.appBarRoleChip,
+                style: DesignTextStyles.timestamp,
               ),
             ),
           ],
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         children: [
           Card(
             child: ListTile(
@@ -97,8 +99,8 @@ class OperatorDashboardPage extends StatelessWidget {
       backgroundColor: const Color(0xFF020617),
       child: Theme(
         data: baseTheme.copyWith(
-          listTileTheme: const ListTileThemeData(
-            iconColor: Colors.white70,
+          listTileTheme: ListTileThemeData(
+            iconColor: DesignColors.textPrimary,
             textColor: Colors.white,
           ),
         ),
@@ -107,7 +109,7 @@ class OperatorDashboardPage extends StatelessWidget {
             children: [
               DrawerHeader(
                 margin: EdgeInsets.zero,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(DesignSpacing.lg),
                 decoration: const BoxDecoration(
                   color: Color(0xFF020617),
                 ),
@@ -115,20 +117,20 @@ class OperatorDashboardPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Icon(Icons.sensors, color: Colors.tealAccent, size: 32),
-                    const SizedBox(width: 12),
+                    SizedBox(width: DesignSpacing.md),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'IoT Monitoring',
-                            style: DashboardTextStyles.drawerHeaderTitle,
+                            style: DesignTextStyles.screenTitle,
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: DesignSpacing.xs),
                           Text(
                             roleLabel,
-                            style: DashboardTextStyles.drawerHeaderSubtitle,
+                            style: DesignTextStyles.bodyText,
                           ),
                         ],
                       ),
@@ -178,7 +180,7 @@ class OperatorDashboardPage extends StatelessWidget {
               ),
               const Divider(height: 1),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: EdgeInsets.symmetric(vertical: DesignSpacing.xs),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -191,7 +193,7 @@ class OperatorDashboardPage extends StatelessWidget {
                       },
                     ),
                     ListTile(
-                      leading: const Icon(Icons.logout, color: Colors.redAccent),
+                      leading: Icon(Icons.logout, color: DesignColors.red),
                       title: const Text('Cerrar sesión'),
                       onTap: () async {
                         final navigator = Navigator.of(context);
@@ -220,14 +222,14 @@ class OperatorDashboardPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: DashboardColors.cardBackground,
-          title: const Text(
+          backgroundColor: DesignColors.surface,
+          title: Text(
             'Usuario actual',
-            style: DashboardTextStyles.sectionHeader,
+            style: DesignTextStyles.screenTitle,
           ),
           content: Text(
             'Rol: $roleLabel\n\nEn futuras versiones se puede mostrar más información del perfil aquí.',
-            style: DashboardTextStyles.sensorMeta,
+            style: DesignTextStyles.bodyText,
           ),
           actions: [
             TextButton(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
+import '../../../../core/theme/design_text_styles.dart';
 
 /// Helpers de formateo y widgets auxiliares para CrmDashboardContent
 class CrmDashboardHelpers {
@@ -17,13 +19,13 @@ class CrmDashboardHelpers {
   static Color severityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'warning':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'info':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 
@@ -33,20 +35,20 @@ class CrmDashboardHelpers {
   }
 
   static Widget sectionHeader({required IconData icon, required String title, Color? color}) {
-    final accent = color ?? DashboardColors.sectionAccent;
+    final accent = color ?? DesignColors.cyan;
 
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(DesignSpacing.sm),
           decoration: BoxDecoration(
             color: accent.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
-        const SizedBox(width: 12),
-        Text(title, style: DashboardTextStyles.sectionHeader),
+        SizedBox(width: DesignSpacing.md),
+        Text(title, style: DesignTextStyles.screenTitle),
       ],
     );
   }
@@ -59,30 +61,33 @@ class CrmDashboardHelpers {
     required Gradient gradient,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.gradient(gradient),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: Colors.white.withValues(alpha: 0.9), size: 24),
+              Icon(icon, color: DesignColors.textPrimary.withValues(alpha: 0.9), size: 24),
               Text(
                 label,
-                style: DashboardTextStyles.smallLabel.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
+                style: DesignTextStyles.bodyText.copyWith(
+                  color: DesignColors.textPrimary.withValues(alpha: 0.8),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(value, style: DashboardTextStyles.kpiValue),
-          const SizedBox(height: 4),
+          SizedBox(height: DesignSpacing.md),
+          Text(value, style: DesignTextStyles.kpiValue),
+          SizedBox(height: DesignSpacing.xs),
           Text(
             subtitle,
-            style: DashboardTextStyles.sensorMeta.copyWith(
-              color: Colors.white.withValues(alpha: 0.8),
+            style: DesignTextStyles.bodyText.copyWith(
+              color: DesignColors.textPrimary.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -100,46 +105,48 @@ class CrmDashboardHelpers {
     final total = items.values.fold(0, (a, b) => a + b);
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(
+        color: DesignColors.surface,
+        border: Border.all(color: DesignColors.border, width: 0.5),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, color: DashboardColors.primary, size: 20),
-              const SizedBox(width: 10),
-              Text(title, style: DashboardTextStyles.deviceTitle),
+              Icon(icon, color: DesignColors.cyan, size: 20),
+              SizedBox(width: DesignSpacing.md),
+              Text(title, style: DesignTextStyles.cardTitle),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.xs),
                 decoration: BoxDecoration(
-                  color: DashboardColors.primaryAccent20,
-                  borderRadius: BorderRadius.circular(12),
+                  color: DesignColors.cyan.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(DesignRadius.md),
                 ),
                 child: Text(
                   'Total: $total',
-                  style: DashboardTextStyles.smallLabel.copyWith(
-                    color: DashboardColors.primaryLight,
-                  ),
+                  style: DesignTextStyles.badgeText(),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           if (entries.isEmpty)
-            const Text('Sin datos', style: DashboardTextStyles.sensorMeta)
+            Text('Sin datos', style: DesignTextStyles.bodyText)
           else
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: DesignSpacing.sm,
+              runSpacing: DesignSpacing.sm,
               children: entries.map((e) {
-                final color = colorMap[e.key.toLowerCase()] ?? DashboardColors.info;
+                final color = colorMap[e.key.toLowerCase()] ?? DesignColors.cyan;
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(DesignRadius.xl),
                     border: Border.all(color: color.withValues(alpha: 0.3)),
                   ),
                   child: Row(
@@ -153,11 +160,11 @@ class CrmDashboardHelpers {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: DesignSpacing.sm),
                       Text(
                         '${capitalize(e.key)}: ${e.value}',
-                        style: DashboardTextStyles.sensorMeta.copyWith(
-                          color: Colors.white,
+                        style: DesignTextStyles.bodyText.copyWith(
+                          color: DesignColors.textPrimary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

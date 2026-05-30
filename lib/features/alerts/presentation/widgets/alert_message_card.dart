@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Tarjeta de mensaje adicional de una alerta
 class AlertMessageCard extends StatelessWidget {
@@ -15,24 +16,24 @@ class AlertMessageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 const Icon(Icons.info_outline, color: Colors.blueAccent),
-                const SizedBox(width: 8),
+                SizedBox(width: DesignSpacing.sm),
                 Text(
                   'Información adicional',
-                  style: DashboardTextStyles.deviceTitle,
+                  style: DesignTextStyles.cardTitle,
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             Text(
               message,
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
           ],
         ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/models/sensor_consolidated_status_view_model.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/provisioning_repository.dart';
 import '../../../monitoring/data/repositories/monitoring_cache.dart';
 import '../widgets/sensor_onboarding_flow.dart';
@@ -16,6 +14,10 @@ import '../widgets/device_detail/device_kpi_row.dart';
 import '../widgets/device_detail/device_activation_button.dart';
 import '../widgets/device_detail/sensor_list_tile.dart';
 import 'sensor_details_route_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class DeviceDetailPage extends StatefulWidget {
   const DeviceDetailPage({
@@ -135,13 +137,13 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
                     ],
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'delete',
                   child: Row(
                     children: [
-                      Icon(Icons.delete_outline, size: 20, color: Colors.redAccent),
+                      Icon(Icons.delete_outline, size: 20, color: DesignColors.red),
                       SizedBox(width: 8),
-                      Text('Eliminar dispositivo', style: TextStyle(color: Colors.redAccent)),
+                      Text('Eliminar dispositivo', style: TextStyle(color: DesignColors.red)),
                     ],
                   ),
                 ),
@@ -229,7 +231,7 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
               }
 
               return ListView(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(DesignSpacing.lg),
                 children: [
                   DeviceHeaderCard(
                     deviceName: first.deviceName,
@@ -237,7 +239,7 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
                     deviceStatus: first.deviceStatus,
                     lastConnection: first.lastConnection,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: DesignSpacing.lg),
                   DeviceKpiRow(
                     sensorCount: sensorRows.length,
                     alerts: alerts,
@@ -247,7 +249,7 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
                   if (widget.role == UserRole.admin &&
                       (first.deviceStatus.toLowerCase() == 'draft' ||
                        first.deviceStatus.toLowerCase() == 'pending_activation')) ...[
-                    const SizedBox(height: 16),
+                    SizedBox(height: DesignSpacing.lg),
                     DeviceActivationButton(
                       deviceStatus: first.deviceStatus,
                       deviceUuid: first.deviceUuid,
@@ -255,11 +257,11 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
                       onActivate: () => _showActivationDialog(first.deviceUuid, first.deviceName),
                     ),
                   ],
-                  const SizedBox(height: 20),
+                  SizedBox(height: DesignSpacing.lg),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Sensores', style: DashboardTextStyles.sectionHeader),
+                      Text('Sensores', style: DesignTextStyles.screenTitle),
                       if (widget.role == UserRole.admin)
                         TextButton.icon(
                           onPressed: () => _showAddSensorModal(first.deviceUuid, first.deviceName),
@@ -271,9 +273,9 @@ class _DeviceDetailPageState extends State<DeviceDetailPage> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: DesignSpacing.sm),
                   if (sensorRows.isEmpty)
-                    const Text('Sin sensores asociados.', style: DashboardTextStyles.sensorMeta)
+                    Text('Sin sensores asociados.', style: DesignTextStyles.bodyText)
                   else
                     ...sensorRows.map((row) {
                       final sid = row.sensorId!;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
-import '../../styles/dashboard_styles.dart';
 
 class RawDiagnosisStatsHeader extends StatelessWidget {
   const RawDiagnosisStatsHeader({
@@ -18,8 +19,8 @@ class RawDiagnosisStatsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      color: DashboardColors.cardBackground,
+      padding: EdgeInsets.all(DesignSpacing.md),
+      color: DesignColors.surface,
       child: Row(
         children: [
           Expanded(
@@ -33,13 +34,13 @@ class RawDiagnosisStatsHeader extends StatelessWidget {
                 if (lastFetchedAt != null)
                   Text(
                     'Actualizado: ${DateFormat('HH:mm:ss').format(lastFetchedAt!)}',
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    style: TextStyle(color: DesignColors.textPrimary, fontSize: 12),
                   ),
               ],
             ),
           ),
           if (isLoading)
-            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
+            SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Tile de información de perfil con icono, label y valor.
 class ProfileTile extends StatelessWidget {
@@ -20,30 +21,30 @@ class ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: iconColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(DesignRadius.md),
             ),
             child: Icon(icon, color: iconColor, size: 22),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: DashboardTextStyles.smallLabel,
+                  style: DesignTextStyles.bodyText,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: DesignSpacing.xs),
                 Text(
                   value,
-                  style: DashboardTextStyles.deviceTitle,
+                  style: DesignTextStyles.cardTitle,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iot_monito_dashboard/features/ml/streaming/ml_stream_config.dart';
 import 'package:iot_monito_dashboard/features/ml/streaming/ml_features_streamer.dart';

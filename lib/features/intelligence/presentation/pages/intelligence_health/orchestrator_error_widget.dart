@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widget de error específico para fallos del orchestrator/diagnóstico ML.
 /// Muestra estado del servicio, botón de reintentar y timestamp del último dato válido.
@@ -28,43 +30,43 @@ class OrchestratorErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
-                color: DashboardColors.error.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(16),
+                color: DesignColors.red.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(DesignRadius.lg),
               ),
-              child: Icon(Icons.cloud_off_rounded, color: DashboardColors.error, size: 48),
+              child: Icon(Icons.cloud_off_rounded, color: DesignColors.red, size: 48),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: DesignSpacing.lg),
+            Text(
               'Servicio de diagnóstico no disponible',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               errorMessage,
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: DesignSpacing.xl),
             _InfoRow(icon: Icons.network_ping, label: 'Último ping', value: _format(lastKnownPing)),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             _InfoRow(icon: Icons.access_time, label: 'Último dato válido', value: _format(lastValidTimestamp)),
-            const SizedBox(height: 24),
+            SizedBox(height: DesignSpacing.xl),
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Reintentar'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: DashboardColors.primary,
+                backgroundColor: DesignColors.cyan,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
             ),
           ],
@@ -86,10 +88,10 @@ class _InfoRow extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16, color: Colors.white54),
-        const SizedBox(width: 8),
-        Text('$label: ', style: DashboardTextStyles.sensorMeta),
-        Text(value, style: DashboardTextStyles.smallLabel.copyWith(color: Colors.white70)),
+        Icon(icon, size: 16, color: DesignColors.textSecondary),
+        SizedBox(width: DesignSpacing.sm),
+        Text('$label: ', style: DesignTextStyles.bodyText),
+        Text(value, style: DesignTextStyles.timestamp.copyWith(color: DesignColors.textPrimary)),
       ],
     );
   }

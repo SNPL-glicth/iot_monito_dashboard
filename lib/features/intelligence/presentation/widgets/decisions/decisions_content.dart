@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/intelligence_models.dart';
 import 'decision_card.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Contenido principal de la página de decisiones (carga, error, vacío, lista).
 class DecisionsContent extends StatelessWidget {
@@ -28,14 +30,14 @@ class DecisionsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading && decisions == null) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(),
               SizedBox(height: 16),
-              Text('Cargando decisiones...', style: DashboardTextStyles.sensorMeta),
+              Text('Cargando decisiones...', style: DesignTextStyles.bodyText),
             ],
           ),
         ),
@@ -46,36 +48,36 @@ class DecisionsContent extends StatelessWidget {
       return SliverFillRemaining(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(DesignSpacing.xxl),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(DesignSpacing.lg),
                   decoration: BoxDecoration(
-                    color: DashboardColors.error.withValues(alpha: 0.15),
+                    color: DesignColors.red.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: const Icon(Icons.error_outline_rounded, size: 48, color: DashboardColors.error),
+                  child: Icon(Icons.error_outline_rounded, size: 48, color: DesignColors.red),
                 ),
-                const SizedBox(height: 20),
-                const Text('Error al cargar decisiones', style: DashboardTextStyles.deviceTitle),
-                const SizedBox(height: 8),
+                SizedBox(height: DesignSpacing.lg),
+                Text('Error al cargar decisiones', style: DesignTextStyles.cardTitle),
+                SizedBox(height: DesignSpacing.sm),
                 Text(
                   error!,
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: DesignSpacing.lg),
                 ElevatedButton.icon(
                   onPressed: onRetry,
                   icon: const Icon(Icons.refresh_rounded),
                   label: const Text('Reintentar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: DashboardColors.primary,
+                    backgroundColor: DesignColors.cyan,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
                   ),
                 ),
               ],
@@ -91,41 +93,41 @@ class DecisionsContent extends StatelessWidget {
       return SliverFillRemaining(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(DesignSpacing.xxl),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(DesignSpacing.lg),
                   decoration: BoxDecoration(
-                    color: DashboardColors.success.withValues(alpha: 0.15),
+                    color: DesignColors.green.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: const Icon(Icons.check_circle_outline_rounded, size: 56, color: DashboardColors.success),
+                  child: Icon(Icons.check_circle_outline_rounded, size: 56, color: DesignColors.green),
                 ),
-                const SizedBox(height: 24),
-                const Text('Sin decisiones pendientes', style: DashboardTextStyles.sectionHeader),
-                const SizedBox(height: 12),
+                SizedBox(height: DesignSpacing.xl),
+                Text('Sin decisiones pendientes', style: DesignTextStyles.screenTitle),
+                SizedBox(height: DesignSpacing.md),
                 Text(
                   statusFilter.isNotEmpty || severityFilter.isNotEmpty
                       ? 'No hay decisiones que coincidan con los filtros seleccionados.'
                       : 'El sistema no ha generado acciones recomendadas.\nEsto puede significar que no hay eventos anómalos recientes.',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: DesignSpacing.xl),
                 Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: ModernCardDecoration.elevated(),
+                  padding: EdgeInsets.all(DesignSpacing.lg),
+                  decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.info_outline_rounded, color: DashboardColors.info, size: 20),
-                      const SizedBox(width: 12),
-                      const Flexible(
+                      Icon(Icons.info_outline_rounded, color: DesignColors.cyan, size: 20),
+                      SizedBox(width: DesignSpacing.md),
+                      Flexible(
                         child: Text(
                           'Las decisiones se generan automáticamente\ncuando el ML detecta anomalías.',
-                          style: DashboardTextStyles.smallLabel,
+                          style: DesignTextStyles.timestamp,
                         ),
                       ),
                     ],
@@ -139,7 +141,7 @@ class DecisionsContent extends StatelessWidget {
     }
 
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) => DecisionCard(

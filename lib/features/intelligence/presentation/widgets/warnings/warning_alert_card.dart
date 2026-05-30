@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../features/alerts/data/models/alert_with_state.dart';
 import '../../../../../features/devices/presentation/pages/sensor_details_route_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Tarjeta de alerta estilo trading moderno.
 class WarningAlertCard extends StatelessWidget {
@@ -15,9 +17,9 @@ class WarningAlertCard extends StatelessWidget {
   static Color severityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'warning':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       default:
         return Colors.tealAccent;
     }
@@ -40,10 +42,10 @@ class WarningAlertCard extends StatelessWidget {
     final icon = severityIcon(alert.severity);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1F2E),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(
           color: color.withValues(alpha: 0.3),
           width: 1,
@@ -59,7 +61,7 @@ class WarningAlertCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           onTap: () {
             final sid = alert.sensorId;
             if (sid == null || sid.isEmpty) return;
@@ -69,21 +71,21 @@ class WarningAlertCard extends StatelessWidget {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(DesignSpacing.sm),
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(DesignRadius.sm),
                       ),
                       child: Icon(icon, color: color, size: 20),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +100,7 @@ class WarningAlertCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 2),
+                          SizedBox(height: 2),
                           Row(
                             children: [
                               Icon(
@@ -106,7 +108,7 @@ class WarningAlertCard extends StatelessWidget {
                                 size: 12,
                                 color: Colors.white.withValues(alpha: 0.5),
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4),
                               Expanded(
                                 child: Text(
                                   alert.sensorName ?? 'Sensor',
@@ -124,7 +126,7 @@ class WarningAlertCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                       decoration: BoxDecoration(
                         color: alert.isActive
                             ? color.withValues(alpha: 0.2)
@@ -148,12 +150,12 @@ class WarningAlertCard extends StatelessWidget {
                   ],
                 ),
                 if (alert.message != null && alert.message!.isNotEmpty) ...[
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignRadius.sm),
                     ),
                     child: Text(
                       alert.message!,
@@ -167,7 +169,7 @@ class WarningAlertCard extends StatelessWidget {
                     ),
                   ),
                 ],
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Row(
                   children: [
                     Icon(
@@ -175,7 +177,7 @@ class WarningAlertCard extends StatelessWidget {
                       size: 12,
                       color: Colors.white.withValues(alpha: 0.4),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       alert.deviceName,
                       style: TextStyle(
@@ -189,7 +191,7 @@ class WarningAlertCard extends StatelessWidget {
                       size: 12,
                       color: Colors.white.withValues(alpha: 0.4),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       alert.occurredAt,
                       style: TextStyle(

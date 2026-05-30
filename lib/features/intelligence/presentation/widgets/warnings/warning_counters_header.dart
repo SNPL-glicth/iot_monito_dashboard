@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Header con contadores estilo trading dashboard.
 class WarningCountersHeader extends StatelessWidget {
@@ -16,7 +18,7 @@ class WarningCountersHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.md),
       decoration: BoxDecoration(
         color: const Color(0xFF1A1F2E),
         border: Border(
@@ -31,18 +33,18 @@ class WarningCountersHeader extends StatelessWidget {
             color: Colors.tealAccent,
             icon: Icons.notifications_active,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           _buildCounterChip(
             label: 'CRÍTICAS',
             count: criticalCount,
-            color: Colors.redAccent,
+            color: DesignColors.red,
             icon: Icons.error,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           _buildCounterChip(
             label: 'WARNINGS',
             count: warningCount,
-            color: Colors.orangeAccent,
+            color: DesignColors.amber,
             icon: Icons.warning,
           ),
           const Spacer(),
@@ -65,17 +67,17 @@ class WarningCountersHeader extends StatelessWidget {
     required IconData icon,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: color),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             '$count',
             style: TextStyle(
@@ -84,7 +86,7 @@ class WarningCountersHeader extends StatelessWidget {
               color: color,
             ),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(

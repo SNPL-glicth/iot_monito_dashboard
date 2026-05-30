@@ -32,7 +32,7 @@ class SensorDetailAppBar extends StatelessWidget implements PreferredSizeWidget 
       title: Row(
         children: [
           Icon(SensorUtils.sensorIcon(row.sensorType), color: accent, size: 20),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: Text(
               sensorName == '—' ? (sensorType.trim().isEmpty ? 'Sensor' : sensorType) : sensorName,

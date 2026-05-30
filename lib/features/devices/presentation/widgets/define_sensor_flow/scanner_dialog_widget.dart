@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Scanner dialog widget for QR code scanning
 class ScannerDialogWidget extends StatelessWidget {
@@ -62,7 +63,7 @@ class ManualCodeDialogWidget extends StatelessWidget {
         style: const TextStyle(color: Colors.white),
         decoration: const InputDecoration(
           hintText: 'Ej: SENSOR-12345',
-          hintStyle: TextStyle(color: Colors.white38),
+          hintStyle: TextStyle(color: DesignColors.textDim),
         ),
       ),
       actions: [

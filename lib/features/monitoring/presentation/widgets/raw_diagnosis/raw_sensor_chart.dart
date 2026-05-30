@@ -3,6 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../../data/models/monitoring_view_models.dart';
 import '../../../data/models/reading/raw_reading_models.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Gráfica de línea con datos crudos de sensor.
 class RawSensorChart extends StatelessWidget {
@@ -59,7 +61,7 @@ class RawSensorChart extends StatelessWidget {
               reservedSize: 50,
               getTitlesWidget: (value, meta) => Text(
                 value.toStringAsFixed(2),
-                style: const TextStyle(color: Colors.white54, fontSize: 10),
+                style: const TextStyle(color: DesignColors.textSecondary, fontSize: 10),
               ),
             ),
           ),
@@ -70,15 +72,15 @@ class RawSensorChart extends StatelessWidget {
               interval: (readings.length / 5).ceilToDouble().clamp(1, 100),
               getTitlesWidget: (value, meta) {
                 final idx = value.toInt();
-                if (idx < 0 || idx >= readings.length) return const SizedBox();
+                if (idx < 0 || idx >= readings.length) return SizedBox();
                 final ts = readings[idx].timestampFormatted;
                 final parts = ts.split(' ');
                 final time = parts.length > 1 ? parts[1] : ts;
                 return Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: EdgeInsets.only(top: DesignSpacing.xs),
                   child: Text(
                     time,
-                    style: const TextStyle(color: Colors.white38, fontSize: 9),
+                    style: const TextStyle(color: DesignColors.textDim, fontSize: 9),
                   ),
                 );
               },

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../data/models/monitoring_view_models.dart';
-import '../../styles/dashboard_styles.dart';
 import 'week_data.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 class WeekDayCard extends StatelessWidget {
   const WeekDayCard({
@@ -31,19 +33,19 @@ class WeekDayCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         initiallyExpanded: isToday,
-        tilePadding: const EdgeInsets.symmetric(horizontal: 12),
-        childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        tilePadding: EdgeInsets.symmetric(horizontal: 12),
+        childrenPadding: EdgeInsets.fromLTRB(12, 0, 12, 12),
         title: Row(
           children: [
             Expanded(
-              child: Text(label, style: DashboardTextStyles.sensorTitle),
+              child: Text(label, style: DesignTextStyles.bodyText),
             ),
             if (isToday) ...[
-              const SizedBox(width: 8),
+              SizedBox(width: DesignSpacing.sm),
               Chip(
-                label: Text('HOY', style: DashboardTextStyles.chipActive),
+                label: Text('HOY', style: DesignTextStyles.timestamp.copyWith(color: DesignColors.green)),
                 backgroundColor: Colors.green.withValues(alpha: 0.18),
-                side: BorderSide(color: DashboardTextStyles.chipActive.color!),
+                side: BorderSide(color: DesignTextStyles.timestamp.copyWith(color: DesignColors.green).color!),
                 visualDensity: VisualDensity.compact,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -52,23 +54,23 @@ class WeekDayCard extends StatelessWidget {
         ),
         subtitle: Text(
           '${DateFormat('dd/MM').format(day)} · $countLabel',
-          style: DashboardTextStyles.sensorMeta,
+          style: DesignTextStyles.bodyText,
         ),
         children: [
           if (readings.isEmpty)
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'No hay lecturas para este día.',
-                style: DashboardTextStyles.sensorMeta,
+                style: DesignTextStyles.bodyText,
               ),
             )
           else if (picked.isEmpty)
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'No hay lecturas en el rango de tarde (12:00 - 22:59).',
-                style: DashboardTextStyles.sensorMeta,
+                style: DesignTextStyles.bodyText,
               ),
             )
           else
@@ -77,9 +79,9 @@ class WeekDayCard extends StatelessWidget {
               return ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.show_chart, color: Colors.white70, size: 20),
-                title: Text(value, style: DashboardTextStyles.sensorTitle),
-                subtitle: Text(fmtTime(r.timestamp), style: DashboardTextStyles.sensorMeta),
+                leading: Icon(Icons.show_chart, color: DesignColors.textPrimary, size: 20),
+                title: Text(value, style: DesignTextStyles.bodyText),
+                subtitle: Text(fmtTime(r.timestamp), style: DesignTextStyles.bodyText),
               );
             }),
         ],

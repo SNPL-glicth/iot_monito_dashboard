@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 import '../crm_dashboard_helpers.dart';
 import '../../../data/models/crm_dashboard_models.dart';
 
@@ -32,31 +34,35 @@ class CrmWelcomeHeader extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(
+        color: DesignColors.surface,
+        border: Border.all(color: DesignColors.border, width: 0.5),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+      ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              gradient: DashboardColors.gradientPrimary,
-              borderRadius: BorderRadius.circular(12),
+              color: DesignColors.cyan.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.md),
             ),
-            child: Icon(greetingIcon, color: Colors.white, size: 28),
+            child: Icon(greetingIcon, color: DesignColors.cyan, size: 28),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: DesignSpacing.lg),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '$greeting, Administrador',
-                  style: DashboardTextStyles.sectionHeader,
+                  style: DesignTextStyles.screenTitle,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: DesignSpacing.xs),
                 Text(
                   'Período: ${CrmDashboardHelpers.formatDateTime(data.from)} → ${CrmDashboardHelpers.formatDateTime(data.to)}',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
               ],
             ),

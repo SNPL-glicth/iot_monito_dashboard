@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'raw_readings/raw_sensor_readings_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// Widget de acceso a lecturas crudas por sensor
 /// 
@@ -32,12 +34,12 @@ class RawReadingsChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (sensors.isEmpty) {
-      return const Card(
+      return Card(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           child: Text(
             'Sin sensores disponibles',
-            style: DashboardTextStyles.sensorMeta,
+            style: DesignTextStyles.bodyText,
           ),
         ),
       );
@@ -49,9 +51,9 @@ class RawReadingsChart extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => _navigateToRawReadings(context),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           child: Row(
             children: [
               Container(
@@ -59,7 +61,7 @@ class RawReadingsChart extends StatelessWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   color: Colors.tealAccent.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(DesignRadius.md),
                   border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
                 ),
                 child: const Icon(
@@ -68,7 +70,7 @@ class RawReadingsChart extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: DesignSpacing.lg),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +83,7 @@ class RawReadingsChart extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: DesignSpacing.xs),
                     Text(
                       '$activeSensorCount sensor${activeSensorCount != 1 ? 'es' : ''} disponible${activeSensorCount != 1 ? 's' : ''}',
                       style: TextStyle(
@@ -92,7 +94,7 @@ class RawReadingsChart extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: Colors.white54),
+              Icon(Icons.chevron_right, color: DesignColors.textSecondary),
             ],
           ),
         ),

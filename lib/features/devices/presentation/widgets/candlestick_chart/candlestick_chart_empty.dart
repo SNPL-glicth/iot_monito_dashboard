@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Estado vacío del candlestick chart.
 class CandlestickChartEmpty extends StatelessWidget {
@@ -10,7 +11,7 @@ class CandlestickChartEmpty extends StatelessWidget {
       height: 280,
       decoration: BoxDecoration(
         color: const Color(0xFF1A1F2E),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: Colors.white10),
       ),
       child: Center(
@@ -22,7 +23,7 @@ class CandlestickChartEmpty extends StatelessWidget {
               size: 48,
               color: Colors.white.withValues(alpha: 0.2),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               'Sin alertas activas',
               style: TextStyle(
@@ -30,7 +31,7 @@ class CandlestickChartEmpty extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               'La gráfica se mostrará cuando haya alertas o advertencias',
               style: TextStyle(

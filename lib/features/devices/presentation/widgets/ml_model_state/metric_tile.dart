@@ -26,7 +26,7 @@ class MetricTile extends StatelessWidget {
             fontSize: 10,
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         Text(
           value,
           style: TextStyle(

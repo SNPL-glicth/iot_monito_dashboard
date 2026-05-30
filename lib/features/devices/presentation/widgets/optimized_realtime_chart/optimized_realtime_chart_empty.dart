@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Estado vacío del optimized realtime chart.
 class OptimizedRealtimeChartEmpty extends StatelessWidget {
@@ -12,7 +13,7 @@ class OptimizedRealtimeChartEmpty extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: const Color(0xFF1A1F2E),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: Colors.white10),
       ),
       child: Center(
@@ -24,7 +25,7 @@ class OptimizedRealtimeChartEmpty extends StatelessWidget {
               size: 48,
               color: Colors.white.withValues(alpha: 0.2),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
               'Esperando datos...',
               style: TextStyle(

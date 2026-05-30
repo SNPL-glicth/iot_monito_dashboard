@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../crm_dashboard_helpers.dart';
 import '../../../data/models/crm_dashboard_models.dart';
 import 'crm_top_devices_card.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Sección de KPIs del dashboard CRM con grid y breakdowns.
 class CrmKpisSection extends StatelessWidget {
@@ -35,10 +36,10 @@ class CrmKpisSection extends StatelessWidget {
                 label: 'DISPOSITIVOS',
                 value: '$totalDevices',
                 subtitle: '$onlineDevices online',
-                gradient: DashboardColors.gradientPrimary,
+                gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: DesignSpacing.md),
             Expanded(
               child: CrmDashboardHelpers.modernKpiCard(
                 icon: Icons.warning_amber_rounded,
@@ -46,37 +47,37 @@ class CrmKpisSection extends StatelessWidget {
                 value: '$totalAlerts',
                 subtitle: '$criticalAlerts críticas',
                 gradient: totalAlerts > 0
-                    ? DashboardColors.gradientError
-                    : DashboardColors.gradientSuccess,
+                    ? LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.red, DesignColors.red.withValues(alpha: 0.7)])
+                    : LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.green, DesignColors.green.withValues(alpha: 0.7)]),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         CrmDashboardHelpers.statusBreakdownCard(
           title: 'Estado de Dispositivos',
           icon: Icons.router_outlined,
           items: devices,
           colorMap: {
-            'online': DashboardColors.success,
-            'active': DashboardColors.success,
-            'offline': DashboardColors.error,
-            'inactive': DashboardColors.warning,
-            'maintenance': DashboardColors.info,
+            'online': DesignColors.green,
+            'active': DesignColors.green,
+            'offline': DesignColors.red,
+            'inactive': DesignColors.amber,
+            'maintenance': DesignColors.cyan,
           },
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         CrmDashboardHelpers.statusBreakdownCard(
           title: 'Alertas por Severidad',
           icon: Icons.notifications_outlined,
           items: alerts,
           colorMap: {
-            'critical': DashboardColors.error,
-            'warning': DashboardColors.warning,
-            'info': DashboardColors.info,
+            'critical': DesignColors.red,
+            'warning': DesignColors.amber,
+            'info': DesignColors.cyan,
           },
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         if (topDevices.isNotEmpty) CrmTopDevicesCard(topDevices: topDevices),
       ],
     );

@@ -7,6 +7,7 @@ import '../widgets/warnings/warning_alert_card.dart';
 import '../widgets/warnings/warning_counters_header.dart';
 import '../widgets/warnings/warning_error_state.dart';
 import '../widgets/warnings/warning_empty_state.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Página de advertencias inteligentes con UI modernizada estilo trading
 /// 
@@ -69,18 +70,18 @@ class _IntelligenceWarningsPageState extends State<IntelligenceWarningsPage> {
         actions: [
           // Indicador de estado en tiempo real
           Container(
-            margin: const EdgeInsets.only(right: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            margin: EdgeInsets.only(right: 12),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.tealAccent.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(DesignRadius.lg),
               border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.psychology, size: 14, color: Colors.tealAccent.withValues(alpha: 0.8)),
-                const SizedBox(width: 4),
+                SizedBox(width: 4),
                 Text(
                   'ML ACTIVO',
                   style: TextStyle(
@@ -127,7 +128,7 @@ class _IntelligenceWarningsPageState extends State<IntelligenceWarningsPage> {
 
                   return ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(DesignSpacing.md),
                     itemCount: items.length,
                     itemBuilder: (context, index) => WarningAlertCard(alert: items[index]),
                   );

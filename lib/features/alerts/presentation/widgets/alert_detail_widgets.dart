@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widgets helper para AlertDetailPage
 class AlertDetailWidgets {
@@ -16,7 +18,7 @@ class AlertDetailWidgets {
             fontSize: 11,
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: DesignSpacing.xs),
         Text(
           value,
           style: TextStyle(
@@ -45,24 +47,24 @@ class AlertDetailWidgets {
   static Widget errorWidget(String error) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.error_outline,
               size: 48,
-              color: Colors.redAccent.withValues(alpha: 0.7),
+              color: DesignColors.red.withValues(alpha: 0.7),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: DesignSpacing.lg),
             Text(
               'Error cargando alerta',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               error,
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
           ],
@@ -74,11 +76,11 @@ class AlertDetailWidgets {
   /// Widget de indicador de estado congelado
   static Widget frozenIndicator() {
     return Container(
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      margin: EdgeInsets.only(right: 12),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.blueGrey.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(16),
+        color: DesignColors.textSecondary.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -88,7 +90,7 @@ class AlertDetailWidgets {
             size: 14,
             color: Colors.white.withValues(alpha: 0.7),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: 4),
           Text(
             'CONGELADO',
             style: TextStyle(
@@ -105,20 +107,20 @@ class AlertDetailWidgets {
   /// Widget de nota sobre estado congelado
   static Widget frozenNote() {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(DesignSpacing.md),
       decoration: BoxDecoration(
-        color: Colors.blueGrey.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blueGrey.withValues(alpha: 0.3)),
+        color: DesignColors.textSecondary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
+        border: Border.all(color: DesignColors.textSecondary.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
           Icon(
             Icons.info_outline,
             size: 18,
-            color: Colors.blueGrey.withValues(alpha: 0.7),
+            color: DesignColors.textSecondary.withValues(alpha: 0.7),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: DesignSpacing.sm),
           Expanded(
             child: Text(
               'Esta vista muestra el estado exacto al momento de la alerta. '

@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/lifecycle/app_lifecycle_service.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
+import '../../../../core/theme/design_text_styles.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'sensor_detail/sensor_detail_app_bar.dart';
 import 'sensor_detail/sensor_detail_page_body.dart';
 import 'sensor_detail/sensor_detail_view_model.dart';
@@ -126,7 +127,8 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
     if (_viewModel.loadingInitial && _viewModel.dashboard == null) {
       return Scaffold(
         appBar: AppBar(title: Text(sensorName)),
-        body: const Center(child: CircularProgressIndicator()),
+        body: Center(
+            child: CircularProgressIndicator(color: DesignColors.cyan)),
       );
     }
 
@@ -134,19 +136,29 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
       return Scaffold(
         appBar: AppBar(title: Text(sensorName)),
         body: Center(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Error al cargar datos', style: DashboardTextStyles.deviceTitle),
-                  const SizedBox(height: 8),
-                  Text(_viewModel.loadError.toString(), style: DashboardTextStyles.sensorMeta),
-                  const SizedBox(height: 16),
-                  ElevatedButton(onPressed: _refresh, child: const Text('Reintentar')),
-                ],
-              ),
+          child: Container(
+            margin: EdgeInsets.all(DesignSpacing.xl),
+            padding: EdgeInsets.all(DesignSpacing.xl),
+            decoration: BoxDecoration(
+              color: DesignColors.surface,
+              border: Border.all(color: DesignColors.border, width: 0.5),
+              borderRadius: BorderRadius.circular(DesignRadius.md),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.error_outline,
+                    color: DesignColors.red, size: 32),
+                SizedBox(height: DesignSpacing.md),
+                Text('Error al cargar datos',
+                    style: DesignTextStyles.cardTitle),
+                SizedBox(height: DesignSpacing.sm),
+                Text(_viewModel.loadError.toString(),
+                    style: DesignTextStyles.bodyText),
+                SizedBox(height: DesignSpacing.lg),
+                ElevatedButton(onPressed: _refresh,
+                    child: const Text('Reintentar')),
+              ],
             ),
           ),
         ),
@@ -157,7 +169,8 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
     if (dashboard == null) {
       return Scaffold(
         appBar: AppBar(title: Text(sensorName)),
-        body: const Center(child: Text('Sin datos', style: DashboardTextStyles.sensorMeta)),
+        body: Center(
+            child: Text('Sin datos', style: DesignTextStyles.bodyText)),
       );
     }
 
@@ -177,6 +190,8 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
         sensorType: widget.row.sensorType ?? '',
         isFrozen: widget.viewMode != SensorDetailViewMode.realtime,
         deviceName: widget.row.deviceName,
+        sensorName: sensorName,
+        role: widget.role,
         onDay: () => _openReadingsDay(sensorName, unit),
         onWeek: () => _openReadingsWeek(sensorName, unit),
         onMonth: () => _openMonthPicker(sensorName, unit),

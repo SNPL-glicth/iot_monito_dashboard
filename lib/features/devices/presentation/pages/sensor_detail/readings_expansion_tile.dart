@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widget for readings expansion tile with period selection buttons
 class ReadingsExpansionTile extends StatelessWidget {
@@ -18,11 +19,11 @@ class ReadingsExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      tilePadding: const EdgeInsets.symmetric(horizontal: 12),
-      title: const Text('Lecturas (ver por período)', style: DashboardTextStyles.deviceTitle),
+      tilePadding: EdgeInsets.symmetric(horizontal: 12),
+      title: Text('Lecturas (ver por período)', style: DesignTextStyles.cardTitle),
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(DesignSpacing.md),
           child: Wrap(
             spacing: 8,
             children: [

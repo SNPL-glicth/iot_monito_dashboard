@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Helpers de color e icono para detalle de dispositivo CRM.
 class DeviceDetailHelpers {
@@ -9,13 +9,13 @@ class DeviceDetailHelpers {
       case 'online':
         return Colors.greenAccent;
       case 'offline':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'maintenance':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'error':
         return Colors.red;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 
@@ -23,9 +23,9 @@ class DeviceDetailHelpers {
     final t = (raw ?? '').toLowerCase();
     switch (t) {
       case 'temperature':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'humidity':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       case 'air_quality':
         return Colors.tealAccent;
       case 'power':
@@ -33,7 +33,7 @@ class DeviceDetailHelpers {
       case 'voltage':
         return Colors.amberAccent;
       default:
-        return DashboardColors.sensorIcon;
+        return DesignColors.cyan;
     }
   }
 
@@ -58,13 +58,13 @@ class DeviceDetailHelpers {
   static Color severityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'warning':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'info':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 }

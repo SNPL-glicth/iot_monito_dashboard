@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
-import '../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widget skeleton estandarizado para tarjetas de carga.
 ///
@@ -13,7 +14,7 @@ class AppSkeletonCard extends StatelessWidget {
     this.height = 80,
     this.width,
     this.borderRadius = 12,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = const EdgeInsets.all(DesignSpacing.lg),
     this.child,
   });
 
@@ -29,7 +30,7 @@ class AppSkeletonCard extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: DashboardColors.cardBackground,
+        color: DesignColors.surface,
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.05),
@@ -38,7 +39,7 @@ class AppSkeletonCard extends StatelessWidget {
       ),
       child: Padding(
         padding: padding,
-        child: child ?? const SizedBox.shrink(),
+        child: child ?? SizedBox.shrink(),
       ),
     );
   }
@@ -63,7 +64,7 @@ class AppSkeletonLine extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: DashboardColors.surfaceElevated,
+        color: DesignColors.surface2,
         borderRadius: BorderRadius.circular(borderRadius),
       ),
     );

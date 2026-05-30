@@ -7,6 +7,9 @@ import '../widgets/alert_list_view.dart';
 import '../widgets/alerts_hub_helpers.dart';
 import '../widgets/alerts_hub_widgets.dart';
 import 'alert_detail_page.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_text_styles.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Página de alertas con paginación e infinite scroll.
 ///
@@ -149,7 +152,7 @@ class _AlertsHubPageState extends State<AlertsHubPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Alertas')),
-      body: _buildBody(criticalCount, warningCount),
+      body: SafeArea(child: _buildBody(criticalCount, warningCount)),
     );
   }
 
@@ -163,7 +166,7 @@ class _AlertsHubPageState extends State<AlertsHubPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Error cargando alertas: $_error', textAlign: TextAlign.center),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _refresh,
               icon: const Icon(Icons.refresh),
@@ -199,7 +202,7 @@ class _AlertsHubPageState extends State<AlertsHubPage> {
               final sensorId = a.sensorId;
               if (sensorId == null || sensorId.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Alerta sin sensor asociado'), backgroundColor: Colors.orangeAccent),
+                  SnackBar(content: Text('Alerta sin sensor asociado'), backgroundColor: DesignColors.amber),
                 );
                 return;
               }
@@ -221,18 +224,18 @@ class _AlertsHubPageState extends State<AlertsHubPage> {
   Widget _buildFooter() {
     if (_loadingMore) {
       return const Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: LinearProgressIndicator(minHeight: 2),
       );
     }
     if (!_hasMore) {
-      return const Padding(
-        padding: EdgeInsets.all(16),
+      return Padding(
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: Center(
-          child: Text('Sin más alertas', style: TextStyle(color: Colors.white54, fontSize: 12)),
+          child: Text('Sin más alertas', style: DesignTextStyles.bodyText),
         ),
       );
     }
-    return const SizedBox.shrink();
+    return SizedBox.shrink();
   }
 }

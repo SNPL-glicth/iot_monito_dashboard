@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../styles/dashboard_styles.dart';
 
 /// Helpers compartidos para widgets del dashboard.
 class DashboardHelpers {
@@ -25,9 +27,9 @@ class DashboardHelpers {
     final t = (raw ?? '').toLowerCase();
     switch (t) {
       case 'temperature':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'humidity':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       case 'air_quality':
         return Colors.tealAccent;
       case 'power':
@@ -35,7 +37,7 @@ class DashboardHelpers {
       case 'voltage':
         return Colors.amberAccent;
       default:
-        return DashboardColors.sensorIcon;
+        return DesignColors.cyan;
     }
   }
 
@@ -64,22 +66,22 @@ class DashboardHelpers {
     required String title,
     Color? color,
   }) {
-    final accent = color ?? DashboardColors.sectionAccent;
+    final accent = color ?? DesignColors.cyan;
 
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(DesignSpacing.sm),
           decoration: BoxDecoration(
             color: accent.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: DesignSpacing.md),
         Text(
           title,
-          style: DashboardTextStyles.sectionHeader,
+          style: DesignTextStyles.screenTitle,
         ),
       ],
     );

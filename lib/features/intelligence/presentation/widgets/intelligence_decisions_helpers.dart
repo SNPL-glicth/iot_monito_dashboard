@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/intelligence_models.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// Helpers de formateo y widgets auxiliares para IntelligenceDecisionsPage
 class IntelligenceDecisionsHelpers {
@@ -20,11 +22,11 @@ class IntelligenceDecisionsHelpers {
   static Color severityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
-        return DashboardColors.error;
+        return DesignColors.red;
       case 'warning':
-        return DashboardColors.warning;
+        return DesignColors.amber;
       default:
-        return DashboardColors.info;
+        return DesignColors.cyan;
     }
   }
 
@@ -68,13 +70,13 @@ class IntelligenceDecisionsHelpers {
   static Color statusColor(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return DashboardColors.error;
+        return DesignColors.red;
       case 'acknowledged':
-        return DashboardColors.warning;
+        return DesignColors.amber;
       case 'resolved':
-        return DashboardColors.success;
+        return DesignColors.green;
       default:
-        return DashboardColors.info;
+        return DesignColors.cyan;
     }
   }
 
@@ -87,18 +89,18 @@ class IntelligenceDecisionsHelpers {
     return PopupMenuButton<String>(
       onSelected: onChanged,
       offset: const Offset(0, 40),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: DashboardColors.cardBackground,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
+      color: DesignColors.surface,
       itemBuilder: (context) => options.map((opt) => PopupMenuItem(
         value: opt['value'],
-        child: Text(opt['label']!, style: DashboardTextStyles.sensorMeta),
+        child: Text(opt['label']!, style: DesignTextStyles.bodyText),
       )).toList(),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: DashboardColors.white05,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: DashboardColors.white10),
+          color: DesignColors.border,
+          borderRadius: BorderRadius.circular(DesignRadius.sm),
+          border: Border.all(color: DesignColors.border),
         ),
         child: Row(
           children: [
@@ -106,13 +108,13 @@ class IntelligenceDecisionsHelpers {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: DashboardTextStyles.smallLabel),
-                  const SizedBox(height: 2),
-                  Text(value, style: DashboardTextStyles.sensorTitle),
+                  Text(label, style: DesignTextStyles.timestamp),
+                  SizedBox(height: 2),
+                  Text(value, style: DesignTextStyles.bodyText),
                 ],
               ),
             ),
-            const Icon(Icons.expand_more_rounded, color: Colors.white54, size: 20),
+            Icon(Icons.expand_more_rounded, color: DesignColors.textSecondary, size: 20),
           ],
         ),
       ),
@@ -121,20 +123,20 @@ class IntelligenceDecisionsHelpers {
 
   static Widget buildMetaChip(IconData icon, String label, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: color),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             label,
-            style: DashboardTextStyles.smallLabel.copyWith(color: color),
+            style: DesignTextStyles.timestamp.copyWith(color: color),
           ),
         ],
       ),
@@ -143,13 +145,13 @@ class IntelligenceDecisionsHelpers {
 
   static Widget buildActionItem(RecommendedActionViewModel action) {
     final priorityColor = action.priority == 1
-        ? DashboardColors.error
+        ? DesignColors.red
         : action.priority == 2
-            ? DashboardColors.warning
-            : DashboardColors.info;
+            ? DesignColors.amber
+            : DesignColors.cyan;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: DesignSpacing.sm),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -172,16 +174,16 @@ class IntelligenceDecisionsHelpers {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: DesignSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(action.action, style: DashboardTextStyles.sensorMeta),
-                const SizedBox(height: 2),
+                Text(action.action, style: DesignTextStyles.bodyText),
+                SizedBox(height: 2),
                 Text(
                   action.timeframe.replaceAll('_', ' '),
-                  style: DashboardTextStyles.smallLabel,
+                  style: DesignTextStyles.timestamp,
                 ),
               ],
             ),

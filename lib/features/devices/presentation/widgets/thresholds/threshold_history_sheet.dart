@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../features/monitoring/data/models/monitoring_view_models.dart';
 import '../../../../../features/monitoring/data/monitoring_repository.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Bottom sheet para mostrar el historial de cambios de un umbral.
 Future<void> showThresholdHistorySheet({
@@ -31,23 +33,23 @@ Future<void> showThresholdHistorySheet({
     builder: (_) {
       return SafeArea(
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           children: [
-            Text('Historial: ${threshold.name}', style: DashboardTextStyles.sectionHeader),
-            const SizedBox(height: 8),
+            Text('Historial: ${threshold.name}', style: DesignTextStyles.screenTitle),
+            SizedBox(height: DesignSpacing.sm),
             if (history.isEmpty)
-              const Text('Sin cambios registrados.', style: DashboardTextStyles.sensorMeta)
+              Text('Sin cambios registrados.', style: DesignTextStyles.bodyText)
             else
               ...history.map((h) {
                 final from = '${h.oldMin ?? '-'} – ${h.oldMax ?? '-'}';
                 final to = '${h.newMin ?? '-'} – ${h.newMax ?? '-'}';
                 return Card(
                   child: ListTile(
-                    leading: const Icon(Icons.history, color: Colors.white70),
-                    title: Text(h.changedAt, style: DashboardTextStyles.sensorTitle),
+                    leading: Icon(Icons.history, color: DesignColors.textPrimary),
+                    title: Text(h.changedAt, style: DesignTextStyles.bodyText),
                     subtitle: Text(
                       'De: $from\nA: $to\nPor: ${h.changedBy}${h.reason == null || h.reason!.trim().isEmpty ? '' : '\nRazón: ${h.reason}'}',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 );

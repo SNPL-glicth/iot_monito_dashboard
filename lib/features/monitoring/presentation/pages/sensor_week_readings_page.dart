@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/time/network_clock.dart';
 import '../../data/models/monitoring_view_models.dart';
 import '../../data/monitoring_repository.dart';
-import '../styles/dashboard_styles.dart';
 import '../widgets/week_readings/week_data.dart';
 import '../widgets/week_readings/week_day_card.dart';
 import '../widgets/week_readings/week_readings_skeleton.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class SensorWeekReadingsPage extends StatelessWidget {
   const SensorWeekReadingsPage({
@@ -84,26 +85,26 @@ class SensorWeekReadingsPage extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(
               child: Text('Error cargando lecturas: ${snapshot.error}',
-                  style: DashboardTextStyles.error, textAlign: TextAlign.center),
+                  style: DesignTextStyles.bodyText, textAlign: TextAlign.center),
             );
           }
           final data = snapshot.data;
           if (data == null) {
-            return const Center(child: Text('No hay datos.', style: DashboardTextStyles.sensorMeta));
+            return Center(child: Text('No hay datos.', style: DesignTextStyles.bodyText));
           }
 
           final today = DateTime(data.nowBogota.year, data.nowBogota.month, data.nowBogota.day);
 
           return ListView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             children: [
               Text(
                 "Semana: ${DateFormat('dd/MM').format(data.monday)} - "
                 "${DateFormat('dd/MM').format(data.endExclusive.subtract(const Duration(days: 1)))}",
-                style: DashboardTextStyles.smallLabel,
+                style: DesignTextStyles.timestamp,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: DesignSpacing.md),
               Column(
                 children: List<Widget>.generate(7, (index) {
                   final day = data.monday.add(Duration(days: index));

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'raw_readings_chart_view.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Página de selección de sensor para lecturas crudas.
 class RawSensorReadingsPage extends StatefulWidget {
@@ -61,25 +63,25 @@ class _RawSensorReadingsPageState extends State<RawSensorReadingsPage> {
     if (widget.sensors.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(DesignSpacing.xl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.sensors_off,
                 size: 64,
-                color: Colors.white.withValues(alpha: 0.3),
+                color: DesignColors.textPrimary.withValues(alpha: 0.3),
               ),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: DesignSpacing.lg),
+              Text(
                 'Sin sensores activos',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: DesignColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               Text(
                 'No hay sensores habilitados en este dispositivo',
                 style: TextStyle(
@@ -95,26 +97,26 @@ class _RawSensorReadingsPageState extends State<RawSensorReadingsPage> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       itemCount: widget.sensors.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.only(bottom: DesignSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     const Icon(Icons.sensors, color: Colors.tealAccent, size: 24),
-                    const SizedBox(width: 12),
+                    SizedBox(width: DesignSpacing.md),
                     Text(
                       'Sensores Activos',
-                      style: DashboardTextStyles.sectionHeader,
+                      style: DesignTextStyles.screenTitle,
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: DesignSpacing.sm),
                 Text(
                   'Selecciona un sensor para ver sus lecturas crudas',
                   style: TextStyle(
@@ -133,14 +135,14 @@ class _RawSensorReadingsPageState extends State<RawSensorReadingsPage> {
             : '';
 
         return Card(
-          margin: const EdgeInsets.only(bottom: 8),
+          margin: EdgeInsets.only(bottom: DesignSpacing.sm),
           child: ListTile(
             leading: Container(
               width: 44,
               height: 44,
               decoration: BoxDecoration(
                 color: Colors.tealAccent.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
                 border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
               ),
               child: const Icon(
@@ -151,13 +153,13 @@ class _RawSensorReadingsPageState extends State<RawSensorReadingsPage> {
             ),
             title: Text(
               sensor.name.isEmpty ? 'Sensor ${sensor.id}' : sensor.name,
-              style: DashboardTextStyles.sensorTitle,
+              style: DesignTextStyles.bodyText,
             ),
             subtitle: Text(
               'ID: ${sensor.id}$unitText',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
-            trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+            trailing: Icon(Icons.chevron_right, color: DesignColors.textSecondary),
             onTap: () {
               setState(() {
                 _selectedSensorId = sensor.id;

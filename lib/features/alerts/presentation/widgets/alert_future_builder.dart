@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../../../crm/data/models/crm_alerts_models.dart';
 import '../../../crm/data/models/pagination/crm_pagination_models.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'alerts_hub_helpers.dart';
 import 'alerts_hub_widgets.dart';
 import 'alert_list_view.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// FutureBuilder para cargar y mostrar alertas con filtros y resumen.
 class AlertFutureBuilder extends StatelessWidget {
@@ -43,10 +44,10 @@ class AlertFutureBuilder extends StatelessWidget {
               children: [
                 Text(
                   'Error cargando alertas: ${snapshot.error}',
-                  style: DashboardTextStyles.error,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: DesignSpacing.lg),
                 ElevatedButton.icon(
                   onPressed: onRefresh,
                   icon: const Icon(Icons.refresh),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../../monitoring/data/models/monitoring_view_models.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/optimized_realtime_chart.dart';
 import '../../widgets/optimized_realtime_chart_models.dart';
 import 'sensor_metrics_card.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Main body content for sensor detail page
 class SensorDetailBody extends StatelessWidget {
@@ -42,15 +43,15 @@ class SensorDetailBody extends StatelessWidget {
           isSensorActive: isSensorActive,
           refreshing: refreshing,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         Card(
           child: Padding(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _chartHeader(),
-                const SizedBox(height: 10),
+                SizedBox(height: DesignSpacing.sm),
                 _buildChart(thresholds),
               ],
             ),
@@ -64,16 +65,16 @@ class SensorDetailBody extends StatelessWidget {
     return Row(
       children: [
         const Icon(Icons.show_chart, color: Color(0xFF00E676)),
-        const SizedBox(width: 8),
-        const Expanded(
+        SizedBox(width: DesignSpacing.sm),
+        Expanded(
           child: Text(
             'Gráfica en Tiempo Real',
-            style: DashboardTextStyles.deviceTitle,
+            style: DesignTextStyles.cardTitle,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(4),

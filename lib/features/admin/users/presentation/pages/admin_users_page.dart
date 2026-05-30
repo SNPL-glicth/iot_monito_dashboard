@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/auth/user_role.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/admin_users_repository.dart';
 import '../../data/models/admin_user.dart';
 import '../widgets/user_dialog.dart';
 import '../widgets/delete_user_dialog.dart';
 import 'admin_user_details_page.dart';
 import 'admin_user_edit_page.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 class AdminUsersPage extends StatefulWidget {
   const AdminUsersPage({super.key, required this.currentRole});
@@ -120,7 +121,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: isError ? DashboardColors.error : DashboardColors.success,
+        backgroundColor: isError ? DesignColors.red : DesignColors.green,
       ),
     );
   }
@@ -169,7 +170,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -179,9 +180,9 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
                     ? IconButton(icon: const Icon(Icons.clear), onPressed: _clearSearch)
                     : null,
                 filled: true,
-                fillColor: DashboardColors.surfaceElevated,
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                fillColor: DesignColors.surface2,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.sm), borderSide: BorderSide.none),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12),
               ),
               onSubmitted: _onSearch,
             ),
@@ -192,7 +193,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
       floatingActionButton: widget.currentRole != UserRole.admin
           ? null
           : FloatingActionButton(
-              backgroundColor: DashboardColors.primary,
+              backgroundColor: DesignColors.cyan,
               onPressed: () => _showUserDialog(),
               child: const Icon(Icons.add_rounded),
             ),
@@ -209,7 +210,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Error: $_error', textAlign: TextAlign.center),
-            const SizedBox(height: 16),
+            SizedBox(height: DesignSpacing.lg),
             ElevatedButton.icon(
               onPressed: () => _loadUsers(reset: true),
               icon: const Icon(Icons.refresh),
@@ -226,7 +227,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
     if (isMobile) {
       return ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         itemCount: _users.length + (_hasMore || _loadingMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == _users.length) {
@@ -333,18 +334,18 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
 
   Widget _buildFooter() {
     if (_loadingMore) {
-      return const Padding(
-        padding: EdgeInsets.all(16),
+      return Padding(
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: Center(child: LinearProgressIndicator(minHeight: 2)),
       );
     }
     if (!_hasMore) {
-      return const Padding(
-        padding: EdgeInsets.all(16),
-        child: Center(child: Text('Sin más usuarios', style: TextStyle(color: Colors.white54, fontSize: 12))),
+      return Padding(
+        padding: EdgeInsets.all(DesignSpacing.lg),
+        child: Center(child: Text('Sin más usuarios', style: TextStyle(color: DesignColors.textSecondary, fontSize: 12))),
       );
     }
-    return const SizedBox.shrink();
+    return SizedBox.shrink();
   }
 }
 

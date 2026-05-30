@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/auth/user_role.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/models/crm_devices_models.dart';
 import '../../pages/crm_device_alerts_page.dart';
 import '../../pages/crm_device_history_page.dart';
 import 'device_detail_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Contenido de la página de detalle de dispositivo CRM.
 class DeviceDetailContent extends StatelessWidget {
@@ -31,25 +33,25 @@ class DeviceDetailContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionHeader(icon: Icons.info_outline, title: 'Resumen', color: Colors.tealAccent),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         Card(
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Icon(Icons.memory, color: statusColor),
-                    const SizedBox(width: 8),
+                    SizedBox(width: DesignSpacing.sm),
                     Expanded(
                       child: Text(
                         s.deviceName,
-                        style: DashboardTextStyles.deviceTitle,
+                        style: DesignTextStyles.cardTitle,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: DesignSpacing.sm),
                     Chip(
                       label: Text(s.status),
                       backgroundColor: Colors.white10,
@@ -57,53 +59,53 @@ class DeviceDetailContent extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text('UUID: ${s.deviceUuid}', style: DashboardTextStyles.sensorMeta),
-                Text('Tipo: ${s.deviceType}', style: DashboardTextStyles.sensorMeta),
-                Text('Sensores: ${s.sensorCount}', style: DashboardTextStyles.sensorMeta),
-                Text('Alertas activas: ${s.activeAlerts}', style: DashboardTextStyles.sensorMeta),
-                Text('Última conexión: ${formatDateTime(s.lastConnection)}', style: DashboardTextStyles.sensorMeta),
-                Text('Última alerta: ${formatDateTime(s.lastAlertAt)}', style: DashboardTextStyles.sensorMeta),
+                SizedBox(height: DesignSpacing.sm),
+                Text('UUID: ${s.deviceUuid}', style: DesignTextStyles.bodyText),
+                Text('Tipo: ${s.deviceType}', style: DesignTextStyles.bodyText),
+                Text('Sensores: ${s.sensorCount}', style: DesignTextStyles.bodyText),
+                Text('Alertas activas: ${s.activeAlerts}', style: DesignTextStyles.bodyText),
+                Text('Última conexión: ${formatDateTime(s.lastConnection)}', style: DesignTextStyles.bodyText),
+                Text('Última alerta: ${formatDateTime(s.lastAlertAt)}', style: DesignTextStyles.bodyText),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        _sectionHeader(icon: Icons.query_stats_outlined, title: 'KPIs del dispositivo', color: Colors.orangeAccent),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.lg),
+        _sectionHeader(icon: Icons.query_stats_outlined, title: 'KPIs del dispositivo', color: DesignColors.amber),
+        SizedBox(height: DesignSpacing.sm),
         Card(
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Rango: ${formatDateTime(data.from)} → ${formatDateTime(data.to)} (bucket: ${data.bucket})',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
-                const SizedBox(height: 8),
-                Text('Alertas 24h:', style: DashboardTextStyles.deviceTitle),
-                const SizedBox(height: 6),
+                SizedBox(height: DesignSpacing.sm),
+                Text('Alertas 24h:', style: DesignTextStyles.cardTitle),
+                SizedBox(height: 6),
                 _chipsFromMap(data.kpisAlerts24h),
-                const SizedBox(height: 12),
-                Text('Alertas 7d:', style: DashboardTextStyles.deviceTitle),
-                const SizedBox(height: 6),
+                SizedBox(height: DesignSpacing.md),
+                Text('Alertas 7d:', style: DesignTextStyles.cardTitle),
+                SizedBox(height: 6),
                 _chipsFromMap(data.kpisAlerts7d),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: DesignSpacing.lg),
         _sectionHeader(icon: Icons.insights, title: 'Histórico y métricas', color: Colors.cyanAccent),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         Card(
           child: ListTile(
             leading: const Icon(Icons.query_stats_outlined, color: Colors.cyanAccent),
-            title: const Text('Ver histórico + métricas', style: DashboardTextStyles.deviceTitle),
+            title: Text('Ver histórico + métricas', style: DesignTextStyles.cardTitle),
             subtitle: Text(
               'Sensores: ${data.sensors.length}\n'
               'Rango: ${formatDateTime(data.from)} → ${formatDateTime(data.to)} (bucket: ${data.bucket})',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
@@ -119,17 +121,17 @@ class DeviceDetailContent extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 16),
-        _sectionHeader(icon: Icons.warning_amber_rounded, title: 'Historial de alertas', color: Colors.redAccent),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.lg),
+        _sectionHeader(icon: Icons.warning_amber_rounded, title: 'Historial de alertas', color: DesignColors.red),
+        SizedBox(height: DesignSpacing.sm),
         Card(
           child: ListTile(
-            leading: const Icon(Icons.history, color: Colors.redAccent),
-            title: const Text('Ver historial de alertas', style: DashboardTextStyles.deviceTitle),
+            leading: Icon(Icons.history, color: DesignColors.red),
+            title: Text('Ver historial de alertas', style: DesignTextStyles.cardTitle),
             subtitle: Text(
               'Alertas activas: ${s.activeAlerts}\n'
               'Última alerta: ${formatDateTime(s.lastAlertAt)}',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
@@ -150,26 +152,26 @@ class DeviceDetailContent extends StatelessWidget {
   }
 
   Widget _sectionHeader({required IconData icon, required String title, Color? color}) {
-    final accent = color ?? DashboardColors.sectionAccent;
+    final accent = color ?? DesignColors.cyan;
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(DesignSpacing.sm),
           decoration: BoxDecoration(
             color: accent.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
           ),
           child: Icon(icon, color: accent, size: 20),
         ),
-        const SizedBox(width: 12),
-        Text(title, style: DashboardTextStyles.sectionHeader),
+        SizedBox(width: DesignSpacing.md),
+        Text(title, style: DesignTextStyles.screenTitle),
       ],
     );
   }
 
   Widget _chipsFromMap(Map<String, int> map) {
     if (map.isEmpty) {
-      return const Text('Sin datos', style: DashboardTextStyles.sensorMeta);
+      return Text('Sin datos', style: DesignTextStyles.bodyText);
     }
     final entries = map.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
     return Wrap(

@@ -5,6 +5,8 @@ import '../../data/admin_users_repository.dart';
 import '../../data/models/admin_user.dart';
 import '../widgets/delete_user_dialog.dart';
 import 'admin_user_edit_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 class AdminUserDetailsPage extends StatefulWidget {
   const AdminUserDetailsPage({
@@ -77,7 +79,7 @@ class _AdminUserDetailsPageState extends State<AdminUserDetailsPage> {
         title: Text('Usuario: ${_user.username}'),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         children: [
           Card(
             child: ListTile(
@@ -117,7 +119,7 @@ class _AdminUserDetailsPageState extends State<AdminUserDetailsPage> {
               subtitle: Text(_user.isActive ? 'Activo' : 'Inactivo'),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -127,11 +129,11 @@ class _AdminUserDetailsPageState extends State<AdminUserDetailsPage> {
                   label: const Text('Editar'),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: DesignColors.red,
                     foregroundColor: Colors.white,
                   ),
                   onPressed: widget.currentRole != UserRole.admin ? null : _confirmDelete,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/design_colors.dart';
+import '../../../core/theme/design_spacing.dart';
+import '../../../core/theme/design_text_styles.dart';
 
-import '../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Card reutilizable para el dashboard con estilo moderno glassmorphism.
 ///
@@ -15,7 +17,7 @@ class DashboardCard extends StatelessWidget {
     required this.child,
     this.icon,
     this.trailing,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = const EdgeInsets.all(DesignSpacing.lg),
   });
 
   final String title;
@@ -27,9 +29,9 @@ class DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: DashboardColors.cardBackground,
+      color: DesignColors.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
       ),
       child: Padding(
         padding: padding,
@@ -40,19 +42,19 @@ class DashboardCard extends StatelessWidget {
             Row(
               children: [
                 if (icon != null) ...[
-                  Icon(icon, color: DashboardColors.primary, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(icon, color: DesignColors.cyan, size: 20),
+                  SizedBox(width: DesignSpacing.sm),
                 ],
                 Expanded(
                   child: Text(
                     title,
-                    style: DashboardTextStyles.deviceTitle,
+                    style: DesignTextStyles.cardTitle,
                   ),
                 ),
                 if (trailing != null) trailing!,
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             child,
           ],
         ),

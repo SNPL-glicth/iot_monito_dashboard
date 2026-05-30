@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../monitoring/data/models/monitoring_view_models.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Widget to display sensor metrics (current value, state, ML events, etc.)
 class SensorMetricsCard extends StatelessWidget {
@@ -30,23 +32,23 @@ class SensorMetricsCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _header(stColor, isSensorActive),
-            const SizedBox(height: 10),
+            SizedBox(height: DesignSpacing.sm),
             _currentValue(currentValue, unit),
-            const SizedBox(height: 10),
+            SizedBox(height: DesignSpacing.sm),
             _kv('Lectura', currentTs),
-            const SizedBox(height: 10),
+            SizedBox(height: DesignSpacing.sm),
             _stateBadge(state, stColor),
             if (m.isWarmingUp) ...[
-              const SizedBox(height: 10),
+              SizedBox(height: DesignSpacing.sm),
               _warmUpIndicator(m),
             ],
             if (dashboard.mlEvent != null) ...[
-              const SizedBox(height: 10),
+              SizedBox(height: DesignSpacing.sm),
               _mlEventCard(dashboard.mlEvent!),
             ],
           ],
@@ -59,36 +61,36 @@ class SensorMetricsCard extends StatelessWidget {
     return Row(
       children: [
         const Icon(Icons.show_chart, color: Color(0xFF00E676)),
-        const SizedBox(width: 8),
-        const Expanded(
+        SizedBox(width: DesignSpacing.sm),
+        Expanded(
           child: Text(
             'Estado y última lectura',
-            style: DashboardTextStyles.deviceTitle,
+            style: DesignTextStyles.cardTitle,
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: DesignSpacing.sm),
         if (refreshing)
-          const SizedBox(
+          SizedBox(
             width: 18,
             height: 18,
             child: CircularProgressIndicator(strokeWidth: 2),
           ),
-        const SizedBox(width: 8),
+        SizedBox(width: DesignSpacing.sm),
         Chip(
           label: Text(
             isSensorActive ? 'ACTIVO' : 'INACTIVO',
             style: isSensorActive
-                ? DashboardTextStyles.chipActive
-                : DashboardTextStyles.chipInactive,
+                ? DesignTextStyles.timestamp.copyWith(color: DesignColors.green)
+                : DesignTextStyles.timestamp.copyWith(color: DesignColors.red),
           ),
           backgroundColor: isSensorActive
               ? Colors.green.withValues(alpha: 0.18)
               : Colors.red.withValues(alpha: 0.18),
           side: BorderSide(
             color: isSensorActive
-                ? DashboardTextStyles.chipActive.color!
-                : DashboardTextStyles.chipInactive.color!,
+                ? DesignTextStyles.timestamp.copyWith(color: DesignColors.green).color!
+                : DesignTextStyles.timestamp.copyWith(color: DesignColors.red).color!,
           ),
           visualDensity: VisualDensity.compact,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -114,13 +116,13 @@ class SensorMetricsCard extends StatelessWidget {
           ),
         ),
         if (unit.isNotEmpty) ...[
-          const SizedBox(width: 8),
+          SizedBox(width: DesignSpacing.sm),
           Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: EdgeInsets.only(bottom: 4),
             child: Text(
               unit,
-              style: const TextStyle(
-                color: Colors.white70,
+              style: TextStyle(
+                color: DesignColors.textPrimary,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -134,13 +136,13 @@ class SensorMetricsCard extends StatelessWidget {
   Widget _stateBadge(String state, Color stColor) {
     return Row(
       children: [
-        Text('Estado actual', style: DashboardTextStyles.smallLabel),
-        const SizedBox(width: 10),
+        Text('Estado actual', style: DesignTextStyles.timestamp),
+        SizedBox(width: DesignSpacing.sm),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             color: stColor.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(DesignRadius.md),
             border: Border.all(color: stColor.withValues(alpha: 0.35)),
           ),
           child: Text(
@@ -159,15 +161,15 @@ class SensorMetricsCard extends StatelessWidget {
   Widget _warmUpIndicator(TelemetryMetricsViewModel m) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(DesignSpacing.md),
       decoration: BoxDecoration(
         color: Colors.blueAccent.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.35)),
       ),
       child: Row(
         children: [
-          const SizedBox(
+          SizedBox(
             width: 16,
             height: 16,
             child: CircularProgressIndicator(
@@ -175,7 +177,7 @@ class SensorMetricsCard extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: DesignSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +190,7 @@ class SensorMetricsCard extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: DesignSpacing.xs),
                 Text(
                   'Acumulando lecturas base (${m.operationalState.validReadingsCount}/${m.operationalState.minReadingsForNormal}). '
                   'No se generarán alertas hasta completar.',
@@ -208,10 +210,10 @@ class SensorMetricsCard extends StatelessWidget {
   Widget _mlEventCard(MlEventViewModel mlEvent) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(DesignSpacing.md),
       decoration: BoxDecoration(
         color: Colors.purpleAccent.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.30)),
       ),
       child: Column(
@@ -225,12 +227,12 @@ class SensorMetricsCard extends StatelessWidget {
               fontSize: 12,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             (mlEvent.message ?? '').trim().isEmpty
                 ? 'Evento ML registrado.'
                 : mlEvent.message!.trim(),
-            style: DashboardTextStyles.sensorMeta,
+            style: DesignTextStyles.bodyText,
           ),
         ],
       ),
@@ -243,11 +245,11 @@ class SensorMetricsCard extends StatelessWidget {
       children: [
         SizedBox(
           width: 110,
-          child: Text(k, style: DashboardTextStyles.smallLabel),
+          child: Text(k, style: DesignTextStyles.timestamp),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: DesignSpacing.sm),
         Expanded(
-          child: Text(v, style: DashboardTextStyles.sensorMeta),
+          child: Text(v, style: DesignTextStyles.bodyText),
         ),
       ],
     );
@@ -271,9 +273,9 @@ class SensorMetricsCard extends StatelessWidget {
   Color _tradingStateColor(String raw) {
     switch (raw.toUpperCase()) {
       case 'ALERT':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'WARNING':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       default:
         return Colors.tealAccent;
     }

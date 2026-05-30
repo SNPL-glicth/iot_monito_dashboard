@@ -38,8 +38,7 @@ dependencies:
   http: ^1.2.2
   intl: ^0.20.2
   fl_chart: ^1.1.1
-  flutter_bloc: ^8.1.6
-  equatable: ^2.0.5
+  google_fonts: ^6.2.1
 
   # Notificaciones push y sesión persistente
   firebase_core: ^4.3.0

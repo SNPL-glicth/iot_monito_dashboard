@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../device_detail_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Header con gradiente del dispositivo.
 class DeviceHeaderCard extends StatelessWidget {
@@ -25,9 +27,12 @@ class DeviceHeaderCard extends StatelessWidget {
     final lastConn = DeviceDetailHelpers.formatDateTime(lastConnection);
 
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: ModernCardDecoration.gradient(
-        isOnline ? DashboardColors.gradientSuccess : DashboardColors.gradientWarning,
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(
+        gradient: isOnline
+            ? LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.green, DesignColors.green.withValues(alpha: 0.7)])
+            : LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.amber, DesignColors.amber.withValues(alpha: 0.7)]),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,28 +40,28 @@ class DeviceHeaderCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(DesignSpacing.md),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(14),
+                  color: DesignColors.textPrimary.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(DesignRadius.md),
                 ),
-                child: const Icon(Icons.memory_rounded, color: Colors.white, size: 28),
+                child: Icon(Icons.memory_rounded, color: DesignColors.textPrimary, size: 28),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: DesignSpacing.lg),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       deviceName,
-                      style: DashboardTextStyles.sectionHeader,
+                      style: DesignTextStyles.screenTitle,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: DesignSpacing.xs),
                     Text(
                       '$typeLabel · $deviceStatus',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: DesignColors.textPrimary.withValues(alpha: 0.8),
                         fontSize: 13,
                       ),
                     ),
@@ -65,11 +70,11 @@ class DeviceHeaderCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Text(
             'Última conexión: $lastConn',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: DesignColors.textPrimary.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),

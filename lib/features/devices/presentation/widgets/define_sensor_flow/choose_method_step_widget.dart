@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../sensor_types_config.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Step 1: Choose activation method (QR or Reserve)
 class ChooseMethodStepWidget extends StatelessWidget {
@@ -35,16 +36,16 @@ class ChooseMethodStepWidget extends StatelessWidget {
       children: [
         // Info del sensor definido
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           decoration: BoxDecoration(
-            color: DashboardColors.greenAccent10,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: DashboardColors.greenAccent30),
+            color: DesignColors.green.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(DesignRadius.md),
+            border: Border.all(color: DesignColors.green.withValues(alpha: 0.3)),
           ),
           child: Row(
             children: [
               const Icon(Icons.check_circle, color: Colors.greenAccent, size: 32),
-              const SizedBox(width: 12),
+              SizedBox(width: DesignSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +56,7 @@ class ChooseMethodStepWidget extends StatelessWidget {
                     ),
                     Text(
                       '${SensorTypesConfig.getLabel(selectedType)} · ${SensorTypesConfig.getUnit(selectedType)}',
-                      style: const TextStyle(color: DashboardColors.white70),
+                      style: TextStyle(color: DesignColors.textPrimary),
                     ),
                   ],
                 ),
@@ -63,13 +64,13 @@ class ChooseMethodStepWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: DesignSpacing.xl),
 
         const Text(
           '¿Cómo desea activar el sensor?',
           style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: DesignSpacing.lg),
 
         // Opción 1: Escanear QR
         DefineSensorWidgets.methodCard(
@@ -80,7 +81,7 @@ class ChooseMethodStepWidget extends StatelessWidget {
           onTap: onQRSelected,
           isLoading: isLoading,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
 
         // Opción 2: Flujo publish → reserve → confirm
         if (!publishDone) ...[
@@ -98,7 +99,7 @@ class ChooseMethodStepWidget extends StatelessWidget {
             title: 'Publicado correctamente',
             subtitle: 'El sensor está en estado PENDING_CLAIM.',
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           if (!reserveDone) ...[
             DefineSensorWidgets.methodCard(
               icon: Icons.link,
@@ -116,11 +117,11 @@ class ChooseMethodStepWidget extends StatelessWidget {
             ),
           ],
         ],
-        const SizedBox(height: 16),
+        SizedBox(height: DesignSpacing.lg),
 
         if (error != null) ...[
           DefineSensorWidgets.errorWidget(error!),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           if (publishDone && !reserveDone)
             SizedBox(
               width: double.infinity,
@@ -131,7 +132,7 @@ class ChooseMethodStepWidget extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.tealAccent,
                   side: const BorderSide(color: Colors.tealAccent),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
                 ),
               ),
             ),
@@ -146,22 +147,22 @@ class ChooseMethodStepWidget extends StatelessWidget {
     required String subtitle,
   }) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: DashboardColors.greenAccent10,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: DashboardColors.greenAccent30),
+        color: DesignColors.green.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
+        border: Border.all(color: DesignColors.green.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
           Icon(icon, color: Colors.greenAccent, size: 24),
-          const SizedBox(width: 12),
+          SizedBox(width: DesignSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-                Text(subtitle, style: const TextStyle(color: DashboardColors.white70, fontSize: 13)),
+                Text(subtitle, style: TextStyle(color: DesignColors.textPrimary, fontSize: 13)),
               ],
             ),
           ),

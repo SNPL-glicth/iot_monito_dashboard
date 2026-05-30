@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../../crm/data/models/crm_alerts_models.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'alerts_hub_helpers.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// Lista de alertas historial con filtrado por sensor e infinite scroll.
 class AlertListView extends StatelessWidget {
@@ -27,7 +29,7 @@ class AlertListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       itemCount: items.length + (footer != null ? 1 : 0),
       itemBuilder: (context, index) {
         if (footer != null && index == items.length) {
@@ -43,43 +45,43 @@ class AlertListView extends StatelessWidget {
         final when = a.triggeredAt;
 
         return Card(
-          margin: const EdgeInsets.only(bottom: 8),
+          margin: EdgeInsets.only(bottom: DesignSpacing.sm),
           child: ListTile(
             leading: Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               child: Icon(icon, color: color, size: 24),
             ),
             title: Text(
               '$threshold (${a.severity.toUpperCase()})',
-              style: DashboardTextStyles.alertTitle,
+              style: DesignTextStyles.bodyText,
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 4),
+                SizedBox(height: DesignSpacing.xs),
                 Row(
                   children: [
-                    Icon(Icons.device_hub, size: 12, color: Colors.white54),
-                    const SizedBox(width: 4),
+                    Icon(Icons.device_hub, size: 12, color: DesignColors.textSecondary),
+                    SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         a.deviceName,
-                        style: const TextStyle(color: Colors.white70, fontSize: 12),
+                        style: TextStyle(color: DesignColors.textPrimary, fontSize: 12),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Row(
                   children: [
-                    Icon(Icons.sensors, size: 12, color: Colors.white54),
-                    const SizedBox(width: 4),
+                    Icon(Icons.sensors, size: 12, color: DesignColors.textSecondary),
+                    SizedBox(width: 4),
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
@@ -96,16 +98,16 @@ class AlertListView extends StatelessWidget {
                                 style: TextStyle(
                                   color: selectedSensorId == a.sensorId
                                       ? Colors.tealAccent
-                                      : Colors.white70,
+                                      : DesignColors.textPrimary,
                                   fontSize: 12,
                                   decoration: TextDecoration.underline,
-                                  decorationColor: Colors.white38,
+                                  decorationColor: DesignColors.textDim,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             if (selectedSensorId != a.sensorId) ...[
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4),
                               Icon(
                                 Icons.filter_list,
                                 size: 10,
@@ -118,11 +120,11 @@ class AlertListView extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 12, color: Colors.white54),
-                    const SizedBox(width: 4),
+                    Icon(Icons.access_time, size: 12, color: DesignColors.textSecondary),
+                    SizedBox(width: 4),
                     Text(
                       when,
                       style: TextStyle(
@@ -136,7 +138,7 @@ class AlertListView extends StatelessWidget {
                 ),
               ],
             ),
-            trailing: const Icon(Icons.chevron_right, color: Colors.white38),
+            trailing: const Icon(Icons.chevron_right, color: DesignColors.textDim),
             onTap: () => onAlertTap(a),
           ),
         );

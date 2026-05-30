@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/raw_readings_repository.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Vista de gráfica de lecturas crudas para un sensor específico.
 class RawReadingsChartView extends StatefulWidget {
@@ -110,21 +112,21 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.schedule, color: Colors.white54, size: 18),
-              const SizedBox(width: 8),
-              const Text(
+              Icon(Icons.schedule, color: DesignColors.textSecondary, size: 18),
+              SizedBox(width: DesignSpacing.sm),
+              Text(
                 'Período:',
-                style: TextStyle(color: Colors.white70, fontSize: 13),
+                style: TextStyle(color: DesignColors.textPrimary, fontSize: 13),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: DesignSpacing.md),
               ...[1, 6, 12, 24].map((h) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: EdgeInsets.only(right: DesignSpacing.sm),
                     child: ChoiceChip(
                       label: Text('${h}h'),
                       selected: _hoursBack == h,
@@ -133,7 +135,7 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
                       labelStyle: TextStyle(
                         color: _hoursBack == h
                             ? Colors.tealAccent
-                            : Colors.white70,
+                            : DesignColors.textPrimary,
                         fontSize: 12,
                       ),
                       visualDensity: VisualDensity.compact,
@@ -141,18 +143,18 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
                   )),
               const Spacer(),
               if (_isLoading)
-                const SizedBox(
+                SizedBox(
                   width: 18,
                   height: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Expanded(
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(DesignSpacing.lg),
                 child: _buildChart(),
               ),
             ),
@@ -164,9 +166,9 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
 
   Widget _buildChart() {
     if (_dataFuture == null) {
-      return const Center(
+      return Center(
         child: Text('Seleccione un sensor',
-            style: DashboardTextStyles.sensorMeta),
+            style: DesignTextStyles.bodyText),
       );
     }
 
@@ -183,15 +185,15 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline,
-                    color: Colors.redAccent, size: 32),
-                const SizedBox(height: 8),
+                Icon(Icons.error_outline,
+                    color: DesignColors.red, size: 32),
+                SizedBox(height: DesignSpacing.sm),
                 Text(
                   'Error: ${snapshot.error}',
-                  style: DashboardTextStyles.error,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: DesignSpacing.sm),
                 TextButton.icon(
                   onPressed: _loadData,
                   icon: const Icon(Icons.refresh, size: 16),
@@ -210,10 +212,10 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
               children: [
                 Icon(Icons.info_outline,
                     color: Colors.white.withValues(alpha: 0.5), size: 32),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: DesignSpacing.sm),
+                Text(
                   'Sin lecturas en este período',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
                 Text(
                   'El sensor puede no estar reportando datos',
@@ -253,7 +255,7 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
                   ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Expanded(
               child: RepaintBoundary(
                 child: LineChart(
@@ -295,7 +297,7 @@ class _RawReadingsChartViewState extends State<RawReadingsChartView> {
                           getTitlesWidget: (value, meta) {
                             final idx = value.round();
                             if (idx < 0 || idx >= readings.length) {
-                              return const SizedBox.shrink();
+                              return SizedBox.shrink();
                             }
                             final dt = readings[idx].timestamp.toLocal();
                             return Text(

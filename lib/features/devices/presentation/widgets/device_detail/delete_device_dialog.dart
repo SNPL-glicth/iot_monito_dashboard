@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/provisioning_repository.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Muestra diálogo de confirmación para eliminar un dispositivo.
 Future<void> showDeleteDeviceDialog({
@@ -16,7 +17,7 @@ Future<void> showDeleteDeviceDialog({
       backgroundColor: const Color(0xFF1E293B),
       title: const Row(
         children: [
-          Icon(Icons.warning_amber, color: Colors.redAccent),
+          Icon(Icons.warning_amber, color: DesignColors.red),
           SizedBox(width: 8),
           Text('Eliminar dispositivo'),
         ],
@@ -32,7 +33,7 @@ Future<void> showDeleteDeviceDialog({
         ),
         ElevatedButton(
           onPressed: () => Navigator.of(ctx).pop(true),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+          style: ElevatedButton.styleFrom(backgroundColor: DesignColors.red),
           child: const Text('Eliminar'),
         ),
       ],
@@ -54,7 +55,7 @@ Future<void> showDeleteDeviceDialog({
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: ${e.toString().replaceAll('Exception: ', '')}'),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: DesignColors.red,
           ),
         );
       }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/notifications/notification_state_service.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Tile de notificación individual.
 class NotificationTile extends StatelessWidget {
@@ -22,7 +23,7 @@ class NotificationTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.md),
         color: notification.isRead
             ? Colors.transparent
             : color.withValues(alpha: 0.05),
@@ -34,7 +35,7 @@ class NotificationTile extends StatelessWidget {
               height: 36,
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               child: Icon(
                 isAlert ? Icons.warning_amber : Icons.psychology,
@@ -42,7 +43,7 @@ class NotificationTile extends StatelessWidget {
                 size: 20,
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +54,7 @@ class NotificationTile extends StatelessWidget {
                         Container(
                           width: 8,
                           height: 8,
-                          margin: const EdgeInsets.only(right: 6),
+                          margin: EdgeInsets.only(right: 6),
                           decoration: BoxDecoration(
                             color: color,
                             shape: BoxShape.circle,
@@ -77,7 +78,7 @@ class NotificationTile extends StatelessWidget {
                   ),
                   if (notification.message != null &&
                       notification.message!.isNotEmpty) ...[
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Text(
                       notification.message!,
                       style: TextStyle(
@@ -88,7 +89,7 @@ class NotificationTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Row(
                     children: [
                       if (notification.deviceName != null) ...[
@@ -97,7 +98,7 @@ class NotificationTile extends StatelessWidget {
                           size: 12,
                           color: Colors.white.withValues(alpha: 0.4),
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           notification.deviceName!,
                           style: TextStyle(
@@ -105,14 +106,14 @@ class NotificationTile extends StatelessWidget {
                             fontSize: 10,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                       ],
                       Icon(
                         Icons.access_time,
                         size: 12,
                         color: Colors.white.withValues(alpha: 0.4),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         _formatTime(notification.createdAt),
                         style: TextStyle(

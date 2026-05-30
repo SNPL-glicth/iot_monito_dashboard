@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/alerts/alert_snapshot_service.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'alert_detail_widgets.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// Tarjeta de información del header de una alerta
 class AlertHeaderCard extends StatelessWidget {
@@ -17,12 +19,12 @@ class AlertHeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final severityColor = snapshot.isCritical
-        ? Colors.redAccent
-        : (snapshot.isWarning ? Colors.orangeAccent : Colors.tealAccent);
+        ? DesignColors.red
+        : (snapshot.isWarning ? DesignColors.amber : Colors.tealAccent);
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,30 +35,30 @@ class AlertHeaderCard extends StatelessWidget {
                   color: severityColor,
                   size: 28,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         snapshot.sensorName,
-                        style: DashboardTextStyles.deviceTitle,
+                        style: DesignTextStyles.cardTitle,
                       ),
                       Text(
                         snapshot.deviceName,
-                        style: DashboardTextStyles.sensorMeta,
+                        style: DesignTextStyles.bodyText,
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
                     color: severityColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(DesignRadius.lg),
                     border: Border.all(
                       color: severityColor.withValues(alpha: 0.4),
                     ),
@@ -72,9 +74,9 @@ class AlertHeaderCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: DesignSpacing.lg),
             const Divider(color: Colors.white12),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             Row(
               children: [
                 Expanded(
@@ -88,12 +90,12 @@ class AlertHeaderCard extends StatelessWidget {
                   child: AlertDetailWidgets.infoItem(
                     'Fecha/Hora',
                     DateFormat('dd/MM/yyyy HH:mm:ss').format(snapshot.triggeredAt),
-                    Colors.white70,
+                    DesignColors.textPrimary,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             Row(
               children: [
                 if (snapshot.thresholdMin != null || snapshot.thresholdMax != null)
@@ -105,7 +107,7 @@ class AlertHeaderCard extends StatelessWidget {
                         snapshot.thresholdMax,
                         snapshot.unit,
                       ),
-                      Colors.redAccent,
+                      DesignColors.red,
                     ),
                   ),
                 if (snapshot.warningMin != null || snapshot.warningMax != null)
@@ -117,7 +119,7 @@ class AlertHeaderCard extends StatelessWidget {
                         snapshot.warningMax,
                         snapshot.unit,
                       ),
-                      Colors.orangeAccent,
+                      DesignColors.amber,
                     ),
                   ),
               ],

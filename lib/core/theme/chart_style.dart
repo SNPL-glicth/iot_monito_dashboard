@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/design_spacing.dart';
 
 /// Unified chart styling for consistent visualization across the app.
 /// 
@@ -165,7 +166,7 @@ class ChartStyle {
   /// Get box decoration for chart container
   static BoxDecoration get chartContainerDecoration => BoxDecoration(
     color: backgroundColor,
-    borderRadius: BorderRadius.circular(12),
+    borderRadius: BorderRadius.circular(DesignRadius.md),
     border: Border.all(color: borderColor),
   );
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../core/theme/design_colors.dart';
+import '../../core/theme/design_spacing.dart';
 
 /// Error boundary para widgets de graficas de sensores.
 ///
@@ -45,7 +47,7 @@ class _SensorChartErrorBoundaryState extends State<SensorChartErrorBoundary> {
 
     return Container(
       color: const Color(0xFF1A1A2E),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,27 +58,27 @@ class _SensorChartErrorBoundaryState extends State<SensorChartErrorBoundary> {
               size: 48,
               color: Colors.white30,
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             const Text(
               'Datos del sensor no disponibles',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white70,
+                color: DesignColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               'ID: ${widget.sensorId ?? "desconocido"}',
               style: const TextStyle(
-                color: Colors.white38,
+                color: DesignColors.textDim,
                 fontSize: 12,
               ),
             ),
             if (isDebug && _error != null)
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.only(top: DesignSpacing.sm),
                 child: Text(
                   'Error: $_error',
                   textAlign: TextAlign.center,
@@ -86,7 +88,7 @@ class _SensorChartErrorBoundaryState extends State<SensorChartErrorBoundary> {
                   ),
                 ),
               ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             if (widget.onRetry != null)
               ElevatedButton.icon(
                 onPressed: widget.onRetry,

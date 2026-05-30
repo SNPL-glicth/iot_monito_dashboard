@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/alerts/alert_snapshot_service.dart';
 import 'frozen_alert_chart_helpers.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Canvas del gráfico LineChart para alertas congeladas.
 class FrozenChartCanvas extends StatelessWidget {
@@ -58,10 +60,10 @@ class FrozenChartCanvas extends StatelessWidget {
                 reservedSize: 45,
                 getTitlesWidget: (value, meta) {
                   if (value == meta.min || value == meta.max) {
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(right: 4),
+                    padding: EdgeInsets.only(right: 4),
                     child: Text(
                       value.toStringAsFixed(1),
                       style: TextStyle(
@@ -79,11 +81,11 @@ class FrozenChartCanvas extends StatelessWidget {
                 reservedSize: 25,
                 getTitlesWidget: (value, meta) {
                   if (value == meta.min || value == meta.max) {
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   }
                   final dt = DateTime.fromMillisecondsSinceEpoch(value.toInt());
                   return Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: EdgeInsets.only(top: DesignSpacing.xs),
                     child: Text(
                       DateFormat('HH:mm').format(dt),
                       style: TextStyle(
@@ -131,18 +133,18 @@ class FrozenChartCanvas extends StatelessWidget {
                   if (pointState == 'ALERT') {
                     return FlDotCirclePainter(
                       radius: 4,
-                      color: Colors.redAccent,
+                      color: DesignColors.red,
                       strokeWidth: 1,
-                      strokeColor: Colors.white70,
+                      strokeColor: DesignColors.textPrimary,
                     );
                   }
 
                   if (pointState == 'WARNING') {
                     return FlDotCirclePainter(
                       radius: 3,
-                      color: Colors.orangeAccent,
+                      color: DesignColors.amber,
                       strokeWidth: 1,
-                      strokeColor: Colors.white54,
+                      strokeColor: DesignColors.textSecondary,
                     );
                   }
 
@@ -200,13 +202,13 @@ class FrozenChartCanvas extends StatelessWidget {
     if (snapshot.thresholdMin != null) {
       lines.add(HorizontalLine(
         y: snapshot.thresholdMin!,
-        color: Colors.redAccent.withValues(alpha: 0.7),
+        color: DesignColors.red.withValues(alpha: 0.7),
         strokeWidth: 1.5,
         dashArray: [5, 5],
         label: HorizontalLineLabel(
           show: true,
           alignment: Alignment.topRight,
-          style: const TextStyle(color: Colors.redAccent, fontSize: 9),
+          style: const TextStyle(color: DesignColors.red, fontSize: 9),
           labelResolver: (_) => 'Alert Min',
         ),
       ));
@@ -214,13 +216,13 @@ class FrozenChartCanvas extends StatelessWidget {
     if (snapshot.thresholdMax != null) {
       lines.add(HorizontalLine(
         y: snapshot.thresholdMax!,
-        color: Colors.redAccent.withValues(alpha: 0.7),
+        color: DesignColors.red.withValues(alpha: 0.7),
         strokeWidth: 1.5,
         dashArray: [5, 5],
         label: HorizontalLineLabel(
           show: true,
           alignment: Alignment.topRight,
-          style: const TextStyle(color: Colors.redAccent, fontSize: 9),
+          style: const TextStyle(color: DesignColors.red, fontSize: 9),
           labelResolver: (_) => 'Alert Max',
         ),
       ));
@@ -229,7 +231,7 @@ class FrozenChartCanvas extends StatelessWidget {
     if (snapshot.warningMin != null) {
       lines.add(HorizontalLine(
         y: snapshot.warningMin!,
-        color: Colors.orangeAccent.withValues(alpha: 0.5),
+        color: DesignColors.amber.withValues(alpha: 0.5),
         strokeWidth: 1,
         dashArray: [3, 3],
       ));
@@ -237,7 +239,7 @@ class FrozenChartCanvas extends StatelessWidget {
     if (snapshot.warningMax != null) {
       lines.add(HorizontalLine(
         y: snapshot.warningMax!,
-        color: Colors.orangeAccent.withValues(alpha: 0.5),
+        color: DesignColors.amber.withValues(alpha: 0.5),
         strokeWidth: 1,
         dashArray: [3, 3],
       ));

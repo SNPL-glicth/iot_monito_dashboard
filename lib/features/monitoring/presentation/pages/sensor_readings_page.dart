@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/time/network_clock.dart';
 import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class SensorReadingsPage extends StatelessWidget {
   const SensorReadingsPage({
@@ -75,7 +77,7 @@ class SensorReadingsPage extends StatelessWidget {
           children: [
             Text(title, overflow: TextOverflow.ellipsis),
             if (filterLabel != null && filterLabel!.trim().isNotEmpty)
-              Text(filterLabel!, style: DashboardTextStyles.smallLabel),
+              Text(filterLabel!, style: DesignTextStyles.timestamp),
           ],
         ),
       ),
@@ -89,7 +91,7 @@ class SensorReadingsPage extends StatelessWidget {
               return Center(
                 child: Text(
                   'Error cargando lecturas: ${snapshot.error}',
-                  style: DashboardTextStyles.error,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                 ),
               );
@@ -98,14 +100,14 @@ class SensorReadingsPage extends StatelessWidget {
             final items = snapshot.data ?? const <SensorReadingViewModel>[];
 
             if (items.isEmpty) {
-              return const Center(
-                child: Text('No hay lecturas registradas.', style: DashboardTextStyles.sensorMeta),
+              return Center(
+                child: Text('No hay lecturas registradas.', style: DesignTextStyles.bodyText),
               );
             }
 
             return ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final r = items[index];
@@ -114,9 +116,9 @@ class SensorReadingsPage extends StatelessWidget {
 
                 return Card(
                   child: ListTile(
-                    leading: const Icon(Icons.show_chart, color: Colors.white70),
-                    title: Text(value, style: DashboardTextStyles.sensorTitle),
-                    subtitle: Text(ts, style: DashboardTextStyles.sensorMeta),
+                    leading: Icon(Icons.show_chart, color: DesignColors.textPrimary),
+                    title: Text(value, style: DesignTextStyles.bodyText),
+                    subtitle: Text(ts, style: DesignTextStyles.bodyText),
                   ),
                 );
               },

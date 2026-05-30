@@ -20,17 +20,17 @@ class MlEnhancedChartLegend extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _legendItem(ChartStyle.valueLineColor, 'Valor real'),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         if (showBaseline) ...[
           _legendItem(ChartStyle.baselineColor, 'Baseline ML', dashed: true),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
         ],
         if (showConfidenceBand) ...[
           _legendItem(ChartStyle.confidenceBorderColor, 'Confianza', filled: true),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
         ],
         _legendItem(ChartStyle.warningColor, 'Advertencia'),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         _legendItem(ChartStyle.alertColor, 'Alerta'),
       ],
     );
@@ -68,7 +68,7 @@ class MlEnhancedChartLegend extends StatelessWidget {
               border: Border.all(color: Colors.white30, width: 1),
             ),
           ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           label,
           style: ChartStyle.legendStyle,

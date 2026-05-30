@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Anomaly section widget showing anomaly detection metrics
 class AnomalySectionWidget extends StatelessWidget {
@@ -17,16 +18,16 @@ class AnomalySectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasAnomalies = totalAnomalies > 0;
-    final rateColor = anomalyRate > 10 ? DashboardColors.warning : DashboardColors.success;
+    final rateColor = anomalyRate > 10 ? DesignColors.amber : DesignColors.green;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IntelligenceHealthWidgets.sectionHeader(Icons.bug_report_rounded, 'Detección de Anomalías', Colors.purple),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -34,7 +35,7 @@ class AnomalySectionWidget extends StatelessWidget {
                   'Total detectadas',
                   '$totalAnomalies',
                   Icons.warning_amber_rounded,
-                  color: hasAnomalies ? DashboardColors.warning : DashboardColors.success,
+                  color: hasAnomalies ? DesignColors.amber : DesignColors.green,
                 ),
               ),
               Expanded(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../../core/theme/design_colors.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Formatters y helpers de UI para IntelligenceHealthPage
 class IntelligenceHealthHelpers {
@@ -24,9 +24,9 @@ class IntelligenceHealthHelpers {
   static LinearGradient getHealthGradient(String health) {
     switch (health) {
       case 'healthy':
-        return DashboardColors.gradientSuccess;
+        return LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.green, DesignColors.green.withValues(alpha: 0.7)]);
       case 'degraded':
-        return DashboardColors.gradientWarning;
+        return LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.amber, DesignColors.amber.withValues(alpha: 0.7)]);
       case 'critical':
         return const LinearGradient(
           colors: [Color(0xFFE53935), Color(0xFFC62828)],
@@ -54,18 +54,18 @@ class IntelligenceHealthHelpers {
   static Color getPatternColor(String type) {
     switch (type) {
       case 'stable':
-        return DashboardColors.success;
+        return DesignColors.green;
       case 'micro_variation':
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
       case 'small_change':
-        return DashboardColors.info;
+        return DesignColors.cyan;
       case 'medium_change':
-        return DashboardColors.warning;
+        return DesignColors.amber;
       case 'spike':
       case 'volatile':
-        return DashboardColors.error;
+        return DesignColors.red;
       case 'normal':
-        return DashboardColors.primary;
+        return DesignColors.cyan;
       default:
         return Colors.grey;
     }

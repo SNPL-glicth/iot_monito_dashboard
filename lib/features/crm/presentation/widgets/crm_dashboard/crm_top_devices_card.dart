@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/models/crm_dashboard_models.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Card de dispositivos prioritarios por cantidad de alertas activas.
 class CrmTopDevicesCard extends StatelessWidget {
@@ -17,26 +19,26 @@ class CrmTopDevicesCard extends StatelessWidget {
     final items = topDevices.take(5).toList();
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.trending_up, color: DashboardColors.warning, size: 20),
-              const SizedBox(width: 10),
-              Text('Dispositivos Prioritarios', style: DashboardTextStyles.deviceTitle),
+              Icon(Icons.trending_up, color: DesignColors.amber, size: 20),
+              SizedBox(width: DesignSpacing.sm),
+              Text('Dispositivos Prioritarios', style: DesignTextStyles.cardTitle),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           ...items.asMap().entries.map((entry) {
             final idx = entry.key;
             final d = entry.value;
             final isFirst = idx == 0;
 
             return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: DesignSpacing.sm),
               child: Row(
                 children: [
                   Container(
@@ -44,40 +46,38 @@ class CrmTopDevicesCard extends StatelessWidget {
                     height: 28,
                     decoration: BoxDecoration(
                       color: isFirst
-                          ? DashboardColors.warning.withValues(alpha: 0.2)
-                          : DashboardColors.white10,
-                      borderRadius: BorderRadius.circular(8),
+                          ? DesignColors.amber.withValues(alpha: 0.2)
+                          : DesignColors.border,
+                      borderRadius: BorderRadius.circular(DesignRadius.sm),
                     ),
                     child: Center(
                       child: Text(
                         '${idx + 1}',
                         style: TextStyle(
-                          color: isFirst ? DashboardColors.warning : Colors.white54,
+                          color: isFirst ? DesignColors.amber : DesignColors.textSecondary,
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: DesignSpacing.md),
                   Expanded(
                     child: Text(
                       d.deviceName,
-                      style: DashboardTextStyles.sensorTitle,
+                      style: DesignTextStyles.bodyText,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                     decoration: BoxDecoration(
-                      color: DashboardColors.error.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
+                      color: DesignColors.red.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(DesignRadius.md),
                     ),
                     child: Text(
                       '${d.activeAlerts} alertas',
-                      style: DashboardTextStyles.smallLabel.copyWith(
-                        color: DashboardColors.error,
-                      ),
+                      style: DesignTextStyles.badgeText(color: DesignColors.red),
                     ),
                   ),
                 ],

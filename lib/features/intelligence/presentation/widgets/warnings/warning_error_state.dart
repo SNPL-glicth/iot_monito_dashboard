@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Estado de error para la página de advertencias inteligentes.
 class WarningErrorState extends StatelessWidget {
@@ -12,24 +14,24 @@ class WarningErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.error_outline,
               size: 48,
-              color: Colors.redAccent.withValues(alpha: 0.6),
+              color: DesignColors.red.withValues(alpha: 0.6),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: DesignSpacing.lg),
             Text(
               'Error cargando advertencias',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               error,
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
           ],

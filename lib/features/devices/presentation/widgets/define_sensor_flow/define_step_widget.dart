@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../sensor_types_config.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Step 0: Define sensor metrics and thresholds
 class DefineStepWidget extends StatelessWidget {
@@ -38,15 +39,15 @@ class DefineStepWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Seleccione el tipo de sensor y configure los umbrales.',
-            style: TextStyle(color: DashboardColors.white70),
+            style: TextStyle(color: DesignColors.textPrimary),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: DesignSpacing.lg),
 
           // Selector de tipo
-          const Text('Tipo de sensor', style: TextStyle(color: Colors.white70, fontSize: 12)),
-          const SizedBox(height: 8),
+          Text('Tipo de sensor', style: TextStyle(color: DesignColors.textPrimary, fontSize: 12)),
+          SizedBox(height: DesignSpacing.sm),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -63,20 +64,20 @@ class DefineStepWidget extends StatelessWidget {
               );
             }).toList(),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: DesignSpacing.xl),
 
           // Unidad (automática)
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.white05,
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.border,
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
             child: Row(
               children: [
                 const Icon(Icons.straighten, color: Colors.tealAccent, size: 20),
-                const SizedBox(width: 12),
-                const Text('Unidad: ', style: TextStyle(color: Colors.white70)),
+                SizedBox(width: DesignSpacing.md),
+                Text('Unidad: ', style: TextStyle(color: DesignColors.textPrimary)),
                 Text(
                   SensorTypesConfig.getUnit(selectedType),
                   style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -84,23 +85,23 @@ class DefineStepWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: DesignSpacing.xl),
 
           // Umbrales
           DefineSensorWidgets.thresholdSection(
             title: 'Umbral de Advertencia',
-            color: Colors.orangeAccent,
+            color: DesignColors.amber,
             minController: warningMinController,
             maxController: warningMaxController,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           DefineSensorWidgets.thresholdSection(
             title: 'Umbral de Alerta',
-            color: Colors.redAccent,
+            color: DesignColors.red,
             minController: alertMinController,
             maxController: alertMaxController,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: DesignSpacing.xl),
 
           // Error
           if (error != null)
@@ -113,7 +114,7 @@ class DefineStepWidget extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: isLoading ? null : onNext,
               icon: isLoading
-                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                   : const Icon(Icons.arrow_forward),
               label: Text(isLoading ? 'Definiendo...' : 'Siguiente'),
               style: ElevatedButton.styleFrom(
@@ -122,7 +123,7 @@ class DefineStepWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: DesignSpacing.lg),
         ],
       ),
     );

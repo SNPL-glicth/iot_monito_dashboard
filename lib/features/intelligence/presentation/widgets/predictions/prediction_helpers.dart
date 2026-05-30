@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/intelligence_models.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Helpers de estilo para predicciones del sistema.
 class PredictionHelpers {
@@ -18,9 +19,9 @@ class PredictionHelpers {
   static Color trendColor(String trend) {
     switch (trend.toLowerCase()) {
       case 'up':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'down':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       default:
         return Colors.grey;
     }
@@ -28,8 +29,8 @@ class PredictionHelpers {
 
   static Color severityColor(String severity) {
     final s = severity.toUpperCase();
-    if (s == 'CRITICAL') return Colors.redAccent;
-    if (s == 'HIGH' || s == 'WARNING') return Colors.orangeAccent;
+    if (s == 'CRITICAL') return DesignColors.red;
+    if (s == 'HIGH' || s == 'WARNING') return DesignColors.amber;
     if (s == 'MEDIUM') return Colors.amberAccent;
     return Colors.greenAccent;
   }

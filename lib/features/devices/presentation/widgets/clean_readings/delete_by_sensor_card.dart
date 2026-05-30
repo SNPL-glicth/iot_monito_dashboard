@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../features/monitoring/data/models/device_with_sensor_view_model.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Card con dropdown para eliminar lecturas de un sensor específico.
 class DeleteBySensorCard extends StatelessWidget {
@@ -23,35 +25,35 @@ class DeleteBySensorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: DashboardColors.orangeAccent15,
-                  borderRadius: BorderRadius.circular(10),
+                  color: DesignColors.amber.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(DesignRadius.sm),
                 ),
-                child: Icon(Icons.sensors_rounded, color: DashboardColors.warning, size: 22),
+                child: Icon(Icons.sensors_rounded, color: DesignColors.amber, size: 22),
               ),
-              const SizedBox(width: 14),
-              const Expanded(
+              SizedBox(width: 14),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Eliminar lecturas de un sensor', style: DashboardTextStyles.deviceTitle),
+                    Text('Eliminar lecturas de un sensor', style: DesignTextStyles.cardTitle),
                     SizedBox(height: 2),
-                    Text('Selecciona el sensor para borrar solo sus lecturas.', style: DashboardTextStyles.sensorMeta),
+                    Text('Selecciona el sensor para borrar solo sus lecturas.', style: DesignTextStyles.bodyText),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           FutureBuilder<List<DeviceWithSensorViewModel>>(
             future: sensorsFuture,
             builder: (context, snapshot) {
@@ -59,14 +61,14 @@ class DeleteBySensorCard extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError) {
-                return Text('Error al cargar sensores: ${snapshot.error}', style: DashboardTextStyles.error);
+                return Text('Error al cargar sensores: ${snapshot.error}', style: DesignTextStyles.bodyText);
               }
 
               final rows = (snapshot.data ?? const <DeviceWithSensorViewModel>[])
                   .where((r) => r.sensorId != null)
                   .toList();
               if (rows.isEmpty) {
-                return const Text('No hay sensores disponibles para seleccionar.', style: DashboardTextStyles.sensorMeta);
+                return Text('No hay sensores disponibles para seleccionar.', style: DesignTextStyles.bodyText);
               }
 
               rows.sort((a, b) {
@@ -88,16 +90,16 @@ class DeleteBySensorCard extends StatelessWidget {
               return DropdownButtonFormField<String>(
                 initialValue: selectedSensorId,
                 isExpanded: true,
-                dropdownColor: DashboardColors.surfaceElevated,
+                dropdownColor: DesignColors.surface2,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Seleccionar sensor',
-                  labelStyle: TextStyle(color: DashboardColors.white70),
-                  prefixIcon: Icon(Icons.sensors_outlined, color: DashboardColors.white54, size: 20),
+                  labelStyle: TextStyle(color: DesignColors.textPrimary),
+                  prefixIcon: Icon(Icons.sensors_outlined, color: DesignColors.textSecondary, size: 20),
                   filled: true,
-                  fillColor: DashboardColors.surfaceElevated,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: DashboardColors.white10)),
+                  fillColor: DesignColors.surface2,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide.none),
+                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide(color: DesignColors.border)),
                 ),
                 items: rows.map((r) => DropdownMenuItem<String>(
                   value: r.sensorId,
@@ -107,19 +109,19 @@ class DeleteBySensorCard extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: DashboardColors.warning,
+                backgroundColor: DesignColors.amber,
                 foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
               ),
               onPressed: isBusy ? null : onDelete,
               child: isBusy
-                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
                   : const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

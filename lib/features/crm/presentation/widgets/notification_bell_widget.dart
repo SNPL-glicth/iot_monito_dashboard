@@ -6,6 +6,7 @@ import '../../../../core/notifications/notification_state_service.dart';
 import '../../../devices/presentation/pages/sensor_details_route_page.dart';
 import 'notifications/notifications_dialog.dart';
 import 'notifications/notification_bell_icon.dart';
+import '../../../../core/theme/design_colors.dart';
 
 /// Widget de campana de notificaciones - REFACTOR ESTRUCTURAL.
 /// 
@@ -150,7 +151,7 @@ class _NotificationBellWidgetState extends State<NotificationBellWidget>
         
         final unreadCount = state.unreadCount;
         final hasAlerts = state.unreadAlertCount > 0;
-        final badgeColor = hasAlerts ? Colors.redAccent : Colors.purpleAccent;
+        final badgeColor = hasAlerts ? DesignColors.red : Colors.purpleAccent;
         
         return NotificationBellIcon(
           animation: _bellPulse,

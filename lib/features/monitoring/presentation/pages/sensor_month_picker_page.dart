@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
 import 'sensor_readings_page.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 class SensorMonthPickerPage extends StatelessWidget {
   const SensorMonthPickerPage({
@@ -43,7 +45,7 @@ class SensorMonthPickerPage extends StatelessWidget {
         title: Text('Mes ($year)'),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         itemCount: 12,
         itemBuilder: (context, index) {
           final month = index + 1;
@@ -54,7 +56,7 @@ class SensorMonthPickerPage extends StatelessWidget {
 
           return Card(
             child: ListTile(
-              leading: const Icon(Icons.calendar_month, color: Colors.white70),
+              leading: const Icon(Icons.calendar_month, color: DesignColors.textPrimary),
               title: Text(label),
               subtitle: Text('$label $year'),
               trailing: const Icon(Icons.chevron_right),

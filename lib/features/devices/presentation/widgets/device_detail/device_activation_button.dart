@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Botón de activación del dispositivo (solo cuando está en DRAFT o PENDING_ACTIVATION).
 class DeviceActivationButton extends StatelessWidget {
@@ -23,26 +24,26 @@ class DeviceActivationButton extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      decoration: ModernCardDecoration.elevated(),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(DesignRadius.lg),
           onTap: isDraft ? onActivate : null,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   isDraft ? Icons.qr_code_rounded : Icons.hourglass_empty_rounded,
-                  color: isDraft ? DashboardColors.primary : DashboardColors.warning,
+                  color: isDraft ? DesignColors.cyan : DesignColors.amber,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Text(
                   isDraft ? 'Activar Dispositivo' : 'Esperando activación',
                   style: TextStyle(
-                    color: isDraft ? DashboardColors.primary : DashboardColors.warning,
+                    color: isDraft ? DesignColors.cyan : DesignColors.amber,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

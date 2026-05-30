@@ -8,6 +8,7 @@ import 'alert_detail_widgets.dart';
 import 'alert_header_card.dart';
 import 'alert_chart_card.dart';
 import 'alert_message_card.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Body de la página de detalle de alerta con acciones ack/resolve.
 class AlertDetailBody extends StatelessWidget {
@@ -49,18 +50,18 @@ class AlertDetailBody extends StatelessWidget {
     final canAct = AlertDetailActions.canAcknowledge(role);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AlertHeaderCard(snapshot: snapshot),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           AlertChartCard(snapshot: snapshot),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           if (snapshot.message != null && snapshot.message!.isNotEmpty)
             AlertMessageCard(message: snapshot.message!),
           if (canAct) ...[
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             _ActionButton(
               active: isAcknowledged,
               loading: acknowledging,
@@ -80,7 +81,7 @@ class AlertDetailBody extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _ActionButton(
               active: isResolved,
               loading: resolving,
@@ -101,7 +102,7 @@ class AlertDetailBody extends StatelessWidget {
               ),
             ),
           ],
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           AlertDetailWidgets.frozenNote(),
         ],
       ),
@@ -135,15 +136,15 @@ class _ActionButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: loading ? null : onPressed,
         icon: loading
-            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+            ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
             : Icon(active ? Icons.check_circle : Icons.check_circle_outline),
         label: Text(active ? activeLabel : inactiveLabel),
         style: ElevatedButton.styleFrom(
           backgroundColor: active ? activeColor.withValues(alpha: 0.3) : inactiveColor.withValues(alpha: 0.2),
           foregroundColor: active ? activeColor : inactiveColor,
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
             side: BorderSide(color: (active ? activeColor : inactiveColor).withValues(alpha: 0.5)),
           ),
         ),

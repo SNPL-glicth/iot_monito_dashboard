@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
-import '../../styles/dashboard_styles.dart';
 
 class WeekReadingsSkeleton extends StatelessWidget {
   const WeekReadingsSkeleton({super.key});
@@ -9,10 +10,10 @@ class WeekReadingsSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       children: [
         _placeholderBox(width: 180, height: 14),
-        const SizedBox(height: 12),
+        SizedBox(height: DesignSpacing.md),
         ...List.generate(7, (_) => _dayCardSkeleton()),
       ],
     );
@@ -20,18 +21,18 @@ class WeekReadingsSkeleton extends StatelessWidget {
 
   Widget _dayCardSkeleton() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: DesignSpacing.sm),
       child: Container(
         decoration: BoxDecoration(
-          color: DashboardColors.cardBackground,
-          borderRadius: BorderRadius.circular(12),
+          color: DesignColors.surface,
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(14),
+              padding: EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -42,24 +43,24 @@ class WeekReadingsSkeleton extends StatelessWidget {
                       _placeholderBox(width: 40, height: 12),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: DesignSpacing.sm),
                   _placeholderBox(width: 140, height: 12),
                 ],
               ),
             ),
             ...List.generate(3, (_) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               child: Row(
                 children: [
                   _placeholderBox(width: 20, height: 20, radius: 4),
-                  const SizedBox(width: 12),
+                  SizedBox(width: DesignSpacing.md),
                   Expanded(
                     child: _placeholderBox(height: 12, radius: 4),
                   ),
                 ],
               ),
             )),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
           ],
         ),
       ),
@@ -71,7 +72,7 @@ class WeekReadingsSkeleton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: DashboardColors.surfaceElevated,
+        color: DesignColors.surface2,
         borderRadius: BorderRadius.circular(radius),
       ),
     );

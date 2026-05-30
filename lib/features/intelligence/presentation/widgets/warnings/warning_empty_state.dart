@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Estado vacío para la página de advertencias inteligentes.
 class WarningEmptyState extends StatelessWidget {
@@ -10,7 +11,7 @@ class WarningEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -19,15 +20,15 @@ class WarningEmptyState extends StatelessWidget {
               size: 64,
               color: Colors.tealAccent.withValues(alpha: 0.4),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: DesignSpacing.lg),
             Text(
               'Sin advertencias activas',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               'El sistema de inteligencia artificial no ha detectado\nanomalías o predicciones de riesgo.',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
           ],

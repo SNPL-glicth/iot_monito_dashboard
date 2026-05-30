@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Helpers de formateo y widgets auxiliares para AlertsHubPage
 class AlertsHubHelpers {
@@ -19,12 +21,12 @@ class AlertsHubHelpers {
   static Color severityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'warning':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'info':
       case 'notice':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       default:
         return Colors.blueGrey;
     }
@@ -72,7 +74,7 @@ class AlertsHubHelpers {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(4),
@@ -82,7 +84,7 @@ class AlertsHubHelpers {
         children: [
           if (icon != null) ...[
             Icon(icon, size: 10, color: textColor),
-            const SizedBox(width: 3),
+            SizedBox(width: 3),
           ],
           Text(
             label,
@@ -114,10 +116,10 @@ class AlertCountChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
@@ -131,7 +133,7 @@ class AlertCountChip extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(
             '$count $label',
             style: TextStyle(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/chart_style.dart';
 import '../../../data/models/ml_features_model.dart';
 import 'mini_confidence_gauge.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Vista compacta del estado ML (gauge mini + patrón/tendencia).
 class MlModelCompact extends StatelessWidget {
@@ -29,10 +30,10 @@ class MlModelCompact extends StatelessWidget {
     final confidenceColor = ChartStyle.getConfidenceColor(features.confidence);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
       decoration: BoxDecoration(
         color: ChartStyle.backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(color: confidenceColor.withValues(alpha: 0.3)),
       ),
       child: Row(
@@ -46,7 +47,7 @@ class MlModelCompact extends StatelessWidget {
               color: confidenceColor,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -69,7 +70,7 @@ class MlModelCompact extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   Text(
                     features.confidencePercent,
                     style: TextStyle(
@@ -83,9 +84,9 @@ class MlModelCompact extends StatelessWidget {
             ],
           ),
           if (features.isAnomalous) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
                 color: ChartStyle.alertColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(4),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Step 3: Complete - show success and API key
 class CompleteStepWidget extends StatelessWidget {
@@ -18,60 +19,60 @@ class CompleteStepWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
         Container(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(DesignSpacing.xl),
           decoration: BoxDecoration(
-            color: DashboardColors.greenAccent15,
+            color: DesignColors.green.withValues(alpha: 0.15),
             shape: BoxShape.circle,
           ),
           child: const Icon(Icons.check_circle, size: 64, color: Colors.greenAccent),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: DesignSpacing.xl),
         const Text(
           '¡Sensor Activado!',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        const SizedBox(height: 12),
-        const Text(
+        SizedBox(height: DesignSpacing.md),
+        Text(
           'El sensor está listo para recibir datos.',
           textAlign: TextAlign.center,
-          style: TextStyle(color: DashboardColors.white70),
+          style: TextStyle(color: DesignColors.textPrimary),
         ),
         
         // Mostrar API Key si viene del flujo reserve → confirm
         if (confirmResult != null) ...[
-          const SizedBox(height: 24),
+          SizedBox(height: DesignSpacing.xl),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             decoration: BoxDecoration(
-              color: DashboardColors.orangeAccent15,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: DashboardColors.orangeAccent50),
+              color: DesignColors.amber.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.md),
+              border: Border.all(color: DesignColors.amber.withValues(alpha: 0.5)),
             ),
             child: Column(
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.warning_amber, color: Colors.orangeAccent, size: 20),
+                    Icon(Icons.warning_amber, color: DesignColors.amber, size: 20),
                     SizedBox(width: 8),
                     Text(
                       '⚠️ API Key del Sensor',
-                      style: TextStyle(color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: DesignColors.amber, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: DesignSpacing.sm),
+                Text(
                   'Guarde este API Key de forma segura. NO se mostrará de nuevo.',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  style: TextStyle(color: DesignColors.textPrimary, fontSize: 12),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: DesignSpacing.md),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(DesignSpacing.md),
                   decoration: BoxDecoration(
                     color: Colors.black26,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(DesignRadius.sm),
                   ),
                   child: SelectableText(
                     confirmResult.sensorApiKey,
@@ -87,7 +88,7 @@ class CompleteStepWidget extends StatelessWidget {
           ),
         ],
         
-        const SizedBox(height: 32),
+        SizedBox(height: 32),
 
         SizedBox(
           width: double.infinity,

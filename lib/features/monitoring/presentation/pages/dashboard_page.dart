@@ -1,8 +1,5 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../../core/notifications/notification_state_service.dart';
@@ -13,11 +10,14 @@ import '../../data/models/device_with_sensor_view_model.dart';
 import '../../data/models/reading/latest_reading_models.dart';
 import '../../data/models/sensor_consolidated_status_view_model.dart';
 import '../../data/monitoring_repository.dart';
-import '../styles/dashboard_styles.dart';
 import '../widgets/dashboard/dashboard_access_denied.dart';
 import '../widgets/dashboard/dashboard_body.dart';
 import '../widgets/dashboard/dashboard_notification_button.dart';
 import '../widgets/dashboard/dashboard_page_models.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
+
 
 /// Pantalla principal del dashboard legacy (solo admin).
 class DashboardPage extends StatefulWidget {
@@ -194,16 +194,16 @@ class _DashboardPageState extends State<DashboardPage> {
         titleSpacing: 0,
         title: Row(
           children: [
-            const SizedBox(width: 8),
-            const Text('IoT Monitoring', style: DashboardTextStyles.appBarTitle),
-            const SizedBox(width: 12),
+            SizedBox(width: DesignSpacing.sm),
+            Text('IoT Monitoring', style: DesignTextStyles.screenTitle),
+            SizedBox(width: DesignSpacing.md),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
               decoration: BoxDecoration(
                 color: Colors.white10,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
               ),
-              child: Text(roleLabel, style: DashboardTextStyles.appBarRoleChip),
+              child: Text(roleLabel, style: DesignTextStyles.timestamp),
             ),
           ],
         ),

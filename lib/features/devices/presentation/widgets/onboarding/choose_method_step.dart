@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 class ChooseMethodStep extends StatelessWidget {
   final VoidCallback onManualSelected;
@@ -17,13 +19,13 @@ class ChooseMethodStep extends StatelessWidget {
         const Text(
           'Selecciona el método de activación',
           style: TextStyle(
-            color: Colors.white70,
+            color: DesignColors.textPrimary,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         DefineSensorWidgets.methodCard(
           icon: Icons.settings,
           title: 'Configuración manual',
@@ -31,30 +33,30 @@ class ChooseMethodStep extends StatelessWidget {
           color: Colors.tealAccent,
           onTap: onManualSelected,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         InkWell(
           onTap: null,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           child: Opacity(
             opacity: 0.4,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
                 color: Colors.grey.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
                 border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(DesignSpacing.md),
                     decoration: BoxDecoration(
                       color: Colors.grey.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignRadius.sm),
                     ),
                     child: const Icon(Icons.qr_code, color: Colors.grey, size: 28),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +73,7 @@ class ChooseMethodStep extends StatelessWidget {
                         Text(
                           'Próximamente',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: DesignColors.textPrimary,
                             fontSize: 12,
                           ),
                         ),
@@ -84,7 +86,7 @@ class ChooseMethodStep extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
       ],
     );
   }

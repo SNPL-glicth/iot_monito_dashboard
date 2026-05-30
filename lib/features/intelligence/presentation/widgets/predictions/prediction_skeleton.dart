@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Skeleton que replica el layout de PredictionCard con placeholders.
 class PredictionSkeletonCard extends StatelessWidget {
@@ -10,7 +11,7 @@ class PredictionSkeletonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -18,16 +19,16 @@ class PredictionSkeletonCard extends StatelessWidget {
             Row(
               children: [
                 _placeholderBox(width: 24, height: 24, radius: 4),
-                const SizedBox(width: 8),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: _placeholderBox(width: 140, height: 14, radius: 4),
                 ),
                 _placeholderBox(width: 48, height: 48, radius: 24),
               ],
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: DesignSpacing.xs),
             _placeholderBox(width: 100, height: 10, radius: 4),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             // Valor esperado + Horizonte
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,7 +37,7 @@ class PredictionSkeletonCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _placeholderBox(width: 80, height: 10, radius: 4),
-                    const SizedBox(height: 4),
+                    SizedBox(height: DesignSpacing.xs),
                     _placeholderBox(width: 60, height: 18, radius: 4),
                   ],
                 ),
@@ -44,29 +45,29 @@ class PredictionSkeletonCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     _placeholderBox(width: 50, height: 10, radius: 4),
-                    const SizedBox(height: 4),
+                    SizedBox(height: DesignSpacing.xs),
                     _placeholderBox(width: 70, height: 12, radius: 4),
-                    const SizedBox(height: 4),
+                    SizedBox(height: DesignSpacing.xs),
                     _placeholderBox(width: 80, height: 10, radius: 4),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             // Tendencia
             Row(
               children: [
                 _placeholderBox(width: 20, height: 20, radius: 4),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 _placeholderBox(width: 120, height: 12, radius: 4),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             // Severidad chip + Anomalía barra
             Row(
               children: [
                 _placeholderBox(width: 80, height: 24, radius: 12),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,18 +79,18 @@ class PredictionSkeletonCard extends StatelessWidget {
                           _placeholderBox(width: 30, height: 10, radius: 4),
                         ],
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6),
                       _placeholderBox(height: 6, radius: 3),
-                      const SizedBox(height: 4),
+                      SizedBox(height: DesignSpacing.xs),
                       _placeholderBox(width: 80, height: 10, radius: 4),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             _placeholderBox(width: double.infinity, height: 12, radius: 4),
-            const SizedBox(height: 4),
+            SizedBox(height: DesignSpacing.xs),
             _placeholderBox(width: 180, height: 10, radius: 4),
           ],
         ),
@@ -102,7 +103,7 @@ class PredictionSkeletonCard extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: DashboardColors.surfaceElevated,
+        color: DesignColors.surface2,
         borderRadius: BorderRadius.circular(radius),
       ),
     );
@@ -119,7 +120,7 @@ class PredictionsSkeletonList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       itemCount: itemCount,
       itemBuilder: (context, index) => const PredictionSkeletonCard(),
     );

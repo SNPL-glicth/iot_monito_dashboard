@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 class RegistrationFormStep extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -52,7 +54,7 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
         children: [
           if (widget.error != null) ...[
             DefineSensorWidgets.errorWidget(widget.error!),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
           ],
           TextFormField(
             controller: widget.nameController,
@@ -67,7 +69,7 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           DropdownButtonFormField<String>(
             initialValue: widget.selectedType,
             dropdownColor: const Color(0xFF1E293B),
@@ -81,7 +83,7 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
             }).toList(),
             onChanged: widget.onTypeChanged,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           TextFormField(
             controller: widget.unitController,
             style: const TextStyle(color: Colors.white),
@@ -95,7 +97,7 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           TextFormField(
             controller: widget.intervalController,
             style: const TextStyle(color: Colors.white),
@@ -114,7 +116,7 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
               return null;
             },
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           DropdownButtonFormField<int>(
             initialValue: widget.selectedQos,
             dropdownColor: const Color(0xFF1E293B),
@@ -127,14 +129,14 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
             ],
             onChanged: widget.onQosChanged,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: widget.onSubmit,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.tealAccent,
               foregroundColor: const Color(0xFF1E293B),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              padding: EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
             ),
             child: const Text(
               'Registrar sensor',
@@ -155,16 +157,16 @@ class _RegistrationFormStepState extends State<RegistrationFormStep> {
       labelText: label,
       hintText: hint,
       helperText: helper,
-      helperStyle: const TextStyle(color: Colors.white38),
-      labelStyle: const TextStyle(color: Colors.white70),
+      helperStyle: const TextStyle(color: DesignColors.textDim),
+      labelStyle: const TextStyle(color: DesignColors.textPrimary),
       hintStyle: const TextStyle(color: Colors.white30),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         borderSide: const BorderSide(color: Colors.white24),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         borderSide: const BorderSide(color: Colors.tealAccent),
       ),
       filled: true,

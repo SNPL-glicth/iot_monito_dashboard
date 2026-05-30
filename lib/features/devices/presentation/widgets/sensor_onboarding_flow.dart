@@ -6,6 +6,7 @@ import '../../data/sensor_onboarding_service.dart';
 import 'onboarding/choose_method_step.dart';
 import 'onboarding/registration_form_step.dart';
 import 'onboarding/success_step.dart';
+import '../../../../core/theme/design_colors.dart';
 
 class SensorOnboardingFlow extends StatefulWidget {
   final String deviceUuid;
@@ -121,7 +122,7 @@ class _SensorOnboardingFlowState extends State<SensorOnboardingFlow> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildHeader(),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               _buildCurrentStep(),
             ],
           ),
@@ -143,11 +144,11 @@ class _SensorOnboardingFlowState extends State<SensorOnboardingFlow> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Row(
           children: [
             const Icon(Icons.sensors, color: Colors.tealAccent, size: 24),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               _currentStep == 3 ? 'Sensor Registrado' : 'Aprovisionar Sensor',
               style: const TextStyle(
@@ -160,7 +161,7 @@ class _SensorOnboardingFlowState extends State<SensorOnboardingFlow> {
             if (_currentStep != 2)
               IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.close, color: Colors.white54),
+                icon: const Icon(Icons.close, color: DesignColors.textSecondary),
                 constraints: const BoxConstraints(),
                 padding: EdgeInsets.zero,
               ),
@@ -212,13 +213,13 @@ class _SensorOnboardingFlowState extends State<SensorOnboardingFlow> {
           },
         );
       default:
-        return const SizedBox(height: 100);
+        return SizedBox(height: 100);
     }
   }
 
   Widget _buildLoadingStep() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 40),
+      padding: EdgeInsets.symmetric(vertical: 40),
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

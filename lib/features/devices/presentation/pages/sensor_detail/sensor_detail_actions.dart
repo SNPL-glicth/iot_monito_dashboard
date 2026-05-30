@@ -10,6 +10,7 @@ import '../../../../monitoring/presentation/pages/sensor_week_readings_page.dart
 import '../sensor_thresholds_page.dart';
 import 'sensor_delete_dialog.dart';
 import 'sensor_edit_dialog.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Actions for sensor detail page (navigation, dialogs, etc.)
 class SensorDetailActions {
@@ -59,7 +60,7 @@ class SensorDetailActions {
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: Colors.redAccent),
+        SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: DesignColors.red),
       );
     }
   }
@@ -87,7 +88,7 @@ class SensorDetailActions {
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: Colors.redAccent),
+        SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: DesignColors.red),
       );
     }
   }

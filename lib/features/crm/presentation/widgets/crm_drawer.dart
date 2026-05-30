@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../../core/auth/auth_storage.dart';
 import '../../../../core/auth/token_manager.dart';
@@ -7,13 +6,16 @@ import '../../../../core/network/api_client.dart';
 import '../../../admin/presentation/pages/admin_panel_page.dart';
 import '../../../devices/presentation/pages/devices_hub_page.dart';
 import '../../../auth/presentation/pages/login_page.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../intelligence/presentation/pages/intelligence_predictions_page.dart';
 import '../../../intelligence/presentation/pages/intelligence_health_page.dart';
 import '../../../intelligence/presentation/pages/intelligence_decisions_page.dart';
 import '../../../intelligence/data/intelligence_prefetch_service.dart';
 import '../pages/crm_devices_page.dart';
 import '../pages/crm_account_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// Drawer del CRM con navegación y perfil de usuario.
 class CrmDrawer extends StatelessWidget {
@@ -66,14 +68,14 @@ class CrmDrawer extends StatelessWidget {
     final currentRoute = _currentRoute(context);
 
     return Drawer(
-      backgroundColor: DashboardColors.background,
+      backgroundColor: DesignColors.background,
       child: SafeArea(
         child: Column(
           children: [
             _buildHeader(),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
                 children: [
                   _modernDrawerItem(
                     icon: Icons.dashboard_rounded,
@@ -123,13 +125,13 @@ class CrmDrawer extends StatelessWidget {
                         );
                       },
                     ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: DesignSpacing.lg),
                   _drawerSectionTitle('Inteligencia'),
                   _modernDrawerItem(
                     icon: Icons.auto_awesome,
                     title: 'Análisis ML',
                     subtitle: 'Tendencias y proyecciones',
-                    iconColor: DashboardColors.secondary,
+                    iconColor: DesignColors.cyanDim,
                     isSelected: currentRoute == '/intelligence/predictions',
                     onTap: () => _navigateToIntelligence(context, const IntelligencePredictionsPage(), '/intelligence/predictions'),
                   ),
@@ -137,7 +139,7 @@ class CrmDrawer extends StatelessWidget {
                     icon: Icons.insights_rounded,
                     title: 'Estado del modelo',
                     subtitle: 'Salud y actualizaciones',
-                    iconColor: DashboardColors.accent,
+                    iconColor: DesignColors.green,
                     isSelected: currentRoute == '/intelligence/health',
                     onTap: () => _navigateToIntelligence(context, const IntelligenceHealthPage(), '/intelligence/health'),
                   ),
@@ -153,7 +155,7 @@ class CrmDrawer extends StatelessWidget {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
@@ -176,11 +178,11 @@ class CrmDrawer extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: DesignSpacing.xs),
                   _modernDrawerItem(
                     icon: Icons.logout_rounded,
                     title: 'Cerrar sesión',
-                    iconColor: DashboardColors.error,
+                    iconColor: DesignColors.red,
                     isDestructive: true,
                     onTap: () {
                       Navigator.pop(context);
@@ -198,45 +200,43 @@ class CrmDrawer extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            DashboardColors.primary.withValues(alpha: 0.3),
-            DashboardColors.background,
+            DesignColors.cyan.withValues(alpha: 0.3),
+            DesignColors.background,
           ],
         ),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              gradient: DashboardColors.gradientPrimary,
-              borderRadius: BorderRadius.circular(14),
+              gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]),
+              borderRadius: BorderRadius.circular(DesignRadius.md),
             ),
             child: const Icon(Icons.sensors, color: Colors.white, size: 28),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('IoT System', style: DashboardTextStyles.drawerHeaderTitle),
-                const SizedBox(height: 4),
+                Text('IoT System', style: DesignTextStyles.screenTitle),
+                SizedBox(height: DesignSpacing.xs),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                   decoration: BoxDecoration(
-                    color: DashboardColors.primaryAccent20,
-                    borderRadius: BorderRadius.circular(12),
+                    color: DesignColors.cyan.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(DesignRadius.md),
                   ),
                   child: Text(
                     roleLabel,
-                    style: DashboardTextStyles.smallLabel.copyWith(
-                      color: DashboardColors.primaryLight,
-                    ),
+                    style: DesignTextStyles.badgeText(color: DesignColors.cyan),
                   ),
                 ),
               ],
@@ -249,13 +249,10 @@ class CrmDrawer extends StatelessWidget {
 
   Widget _drawerSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, bottom: 8),
+      padding: EdgeInsets.only(left: 16, bottom: 8),
       child: Text(
         title.toUpperCase(),
-        style: DashboardTextStyles.smallLabel.copyWith(
-          color: Colors.white38,
-          letterSpacing: 1.2,
-        ),
+        style: DesignTextStyles.sectionTitle,
       ),
     );
   }
@@ -269,36 +266,36 @@ class CrmDrawer extends StatelessWidget {
     bool isDestructive = false,
     required VoidCallback onTap,
   }) {
-    final color = iconColor ?? DashboardColors.primary;
+    final color = iconColor ?? DesignColors.cyan;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4),
       child: Material(
         color: isSelected
-            ? DashboardColors.primaryAccent10
+            ? DesignColors.cyan.withValues(alpha: 0.1)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(DesignSpacing.sm),
                   decoration: BoxDecoration(
-                    color: (isDestructive ? DashboardColors.error : color)
+                    color: (isDestructive ? DesignColors.red : color)
                         .withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(DesignRadius.sm),
                   ),
                   child: Icon(
                     icon,
-                    color: isDestructive ? DashboardColors.error : color,
+                    color: isDestructive ? DesignColors.red : color,
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,17 +304,17 @@ class CrmDrawer extends StatelessWidget {
                         title,
                         style: TextStyle(
                           color: isDestructive
-                              ? DashboardColors.error
+                              ? DesignColors.red
                               : Colors.white,
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
                         ),
                       ),
                       if (subtitle != null) ...[
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           subtitle,
-                          style: DashboardTextStyles.sensorMeta,
+                          style: DesignTextStyles.bodyText,
                         ),
                       ],
                     ],
@@ -328,7 +325,7 @@ class CrmDrawer extends StatelessWidget {
                     width: 4,
                     height: 24,
                     decoration: BoxDecoration(
-                      color: DashboardColors.primary,
+                      color: DesignColors.cyan,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),

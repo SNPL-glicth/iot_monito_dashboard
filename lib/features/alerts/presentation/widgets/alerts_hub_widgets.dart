@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'alerts_hub_helpers.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Widget para mostrar el filtro por sensor activo
 class AlertSensorFilter extends StatelessWidget {
@@ -16,12 +18,12 @@ class AlertSensorFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       color: Colors.tealAccent.withValues(alpha: 0.1),
       child: Row(
         children: [
           Icon(Icons.filter_alt, size: 16, color: Colors.tealAccent),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: Text(
               'Filtrando: $sensorName',
@@ -39,7 +41,7 @@ class AlertSensorFilter extends StatelessWidget {
             label: const Text('Ver todas'),
             style: TextButton.styleFrom(
               foregroundColor: Colors.tealAccent,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(horizontal: 8),
             ),
           ),
         ],
@@ -63,16 +65,16 @@ class AlertEmptyState extends StatelessWidget {
             size: 64,
             color: Colors.green.withValues(alpha: 0.5),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           const Text(
             'No hay alertas activas',
             style: TextStyle(
-              color: Colors.white70,
+              color: DesignColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             'El sistema está funcionando normalmente',
             style: TextStyle(
@@ -102,7 +104,7 @@ class AlertSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.sm),
       color: Colors.black12,
       child: Row(
         children: [
@@ -110,15 +112,15 @@ class AlertSummary extends StatelessWidget {
             AlertCountChip(
               count: criticalCount,
               label: 'Críticas',
-              color: Colors.redAccent,
+              color: DesignColors.red,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
           ],
           if (warningCount > 0)
             AlertCountChip(
               count: warningCount,
               label: 'Advertencias',
-              color: Colors.orangeAccent,
+              color: DesignColors.amber,
             ),
           const Spacer(),
           Text(

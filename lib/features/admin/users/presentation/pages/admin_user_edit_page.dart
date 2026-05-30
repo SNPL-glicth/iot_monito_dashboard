@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/auth/user_role.dart';
 import '../../data/admin_users_repository.dart';
 import '../../data/models/admin_user.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 class AdminUserEditPage extends StatefulWidget {
   const AdminUserEditPage({
@@ -103,7 +104,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
           TextButton(
             onPressed: canEdit ? _save : null,
             child: _isSaving
-                ? const SizedBox(
+                ? SizedBox(
                     width: 18,
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
@@ -115,11 +116,11 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           children: [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(DesignSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -127,7 +128,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                       'Datos del usuario',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     TextFormField(
                       controller: _usernameController,
                       enabled: canEdit,
@@ -140,7 +141,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     TextFormField(
                       controller: _emailController,
                       enabled: canEdit,
@@ -153,7 +154,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12),
                     DropdownButtonFormField<String>(
                       // ignore: deprecated_member_use
                       value: _role,
@@ -173,7 +174,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                               setState(() => _role = value);
                             },
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     SwitchListTile(
                       value: _isActive,
                       onChanged: !canEdit ? null : (v) => setState(() => _isActive = v),
@@ -185,10 +186,10 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(DesignSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -196,7 +197,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                       'Seguridad',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     SwitchListTile(
                       value: _changePassword,
                       onChanged: !canEdit ? null : (v) => setState(() => _changePassword = v),
@@ -206,7 +207,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                       contentPadding: EdgeInsets.zero,
                     ),
                     if (_changePassword) ...[
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       TextFormField(
                         controller: _passwordController,
                         enabled: canEdit,
@@ -226,7 +227,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       TextFormField(
                         controller: _confirmPasswordController,
                         enabled: canEdit,
@@ -254,7 +255,7 @@ class _AdminUserEditPageState extends State<AdminUserEditPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             if (!canEdit)
               const Text('Acceso de solo lectura para tu rol.'),
             if (canEdit)

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_helpers.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Pattern analysis section widget showing detected patterns
 class PatternAnalysisSectionWidget extends StatelessWidget {
@@ -20,28 +22,28 @@ class PatternAnalysisSectionWidget extends StatelessWidget {
     final hasPatterns = patternsDetected.isNotEmpty;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IntelligenceHealthWidgets.sectionHeader(Icons.pattern_rounded, 'Patrones Detectados', Colors.indigo),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           if (!hasPatterns)
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
                 color: Colors.grey.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               child: Row(
                 children: [
                   Icon(Icons.info_outline_rounded, color: Colors.grey, size: 18),
-                  const SizedBox(width: 8),
-                  const Expanded(
+                  SizedBox(width: DesignSpacing.sm),
+                  Expanded(
                     child: Text(
                       'Sin patrones detectados en la ventana de análisis',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 ],
@@ -50,11 +52,11 @@ class PatternAnalysisSectionWidget extends StatelessWidget {
           else ...[
             if (dominantPattern != null)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                margin: const EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
+                margin: EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
                   color: IntelligenceHealthHelpers.getPatternColor(dominantPattern!).withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(DesignRadius.sm),
                   border: Border.all(
                     color: IntelligenceHealthHelpers.getPatternColor(dominantPattern!).withValues(alpha: 0.3),
                   ),
@@ -66,11 +68,11 @@ class PatternAnalysisSectionWidget extends StatelessWidget {
                       color: IntelligenceHealthHelpers.getPatternColor(dominantPattern!),
                       size: 20,
                     ),
-                    const SizedBox(width: 8),
-                    const Text('Patrón dominante: ', style: DashboardTextStyles.sensorMeta),
+                    SizedBox(width: DesignSpacing.sm),
+                    Text('Patrón dominante: ', style: DesignTextStyles.bodyText),
                     Text(
                       IntelligenceHealthHelpers.getPatternLabel(dominantPattern!),
-                      style: DashboardTextStyles.smallLabel.copyWith(
+                      style: DesignTextStyles.timestamp.copyWith(
                         color: IntelligenceHealthHelpers.getPatternColor(dominantPattern!),
                         fontWeight: FontWeight.bold,
                       ),

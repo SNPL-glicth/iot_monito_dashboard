@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/auth/user_role.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/crm_repository.dart';
 import '../../data/models/crm_devices_models.dart';
 import 'crm_device_details_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class CrmDeviceTypePage extends StatefulWidget {
   const CrmDeviceTypePage({
@@ -76,13 +78,13 @@ class _CrmDeviceTypePageState extends State<CrmDeviceTypePage> {
       case 'online':
         return Colors.greenAccent;
       case 'offline':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'maintenance':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'error':
         return Colors.red;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 
@@ -121,7 +123,7 @@ class _CrmDeviceTypePageState extends State<CrmDeviceTypePage> {
         titleSpacing: 0,
         title: _searchMode
             ? Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: EdgeInsets.only(right: DesignSpacing.sm),
                 child: TextField(
                   controller: _searchController,
                   autofocus: true,
@@ -133,13 +135,13 @@ class _CrmDeviceTypePageState extends State<CrmDeviceTypePage> {
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.only(left: 8),
+                padding: EdgeInsets.only(left: DesignSpacing.sm),
                 child: Row(
                   children: [
                     Icon(_typeIcon(widget.deviceType), color: Colors.tealAccent),
-                    const SizedBox(width: 10),
+                    SizedBox(width: DesignSpacing.sm),
                     Expanded(
-                      child: Text(_title, style: DashboardTextStyles.appBarTitle),
+                      child: Text(_title, style: DesignTextStyles.screenTitle),
                     ),
                   ],
                 ),
@@ -192,16 +194,16 @@ class _CrmDeviceTypePageState extends State<CrmDeviceTypePage> {
           }
 
           return ListView(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             children: [
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(DesignSpacing.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Resumen', style: DashboardTextStyles.deviceTitle),
-                      const SizedBox(height: 8),
+                      Text('Resumen', style: DesignTextStyles.cardTitle),
+                      SizedBox(height: DesignSpacing.sm),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
@@ -223,16 +225,16 @@ class _CrmDeviceTypePageState extends State<CrmDeviceTypePage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: DesignSpacing.sm),
                       Text(
                         'Toca un dispositivo para ver sus sensores y métricas específicas.',
-                        style: DashboardTextStyles.sensorMeta,
+                        style: DesignTextStyles.bodyText,
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               ...items.map((d) {
                 final statusColor = _statusColor(d.status);
                 final id = int.tryParse(d.deviceId);
@@ -240,11 +242,11 @@ class _CrmDeviceTypePageState extends State<CrmDeviceTypePage> {
                 return Card(
                   child: ListTile(
                     leading: Icon(_typeIcon(d.deviceType), color: statusColor),
-                    title: Text(d.deviceName, style: DashboardTextStyles.deviceTitle),
+                    title: Text(d.deviceName, style: DesignTextStyles.cardTitle),
                     subtitle: Text(
                       'Tipo: ${typeLabel(d.deviceType)} · Estado: ${d.status} · Sensores: ${d.sensorCount} · Alertas activas: ${d.activeAlerts}\n'
                       'Última conexión: ${_formatDateTime(d.lastConnection)}',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: id == null

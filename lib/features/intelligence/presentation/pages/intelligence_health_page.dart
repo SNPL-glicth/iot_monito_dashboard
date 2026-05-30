@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import '../../../../core/lifecycle/app_lifecycle_service.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/presentation/widgets/app_loading_widget.dart';
@@ -9,10 +7,14 @@ import '../../../devices/data/models/ml_features_model.dart';
 import '../../../devices/data/ml_features_service.dart';
 import '../../data/intelligence_models.dart';
 import '../../data/intelligence_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../widgets/intelligence_health_widgets.dart';
 import 'intelligence_health/orchestrator_error_widget.dart';
 import 'intelligence_health/intelligence_health_body_widget.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
+
 
 /// Página de Estado del Modelo ML
 /// 
@@ -130,7 +132,7 @@ class _IntelligenceHealthPageState extends State<IntelligenceHealthPage> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: SafeArea(child: _buildBody()),
     );
   }
 
@@ -156,25 +158,25 @@ class _IntelligenceHealthPageState extends State<IntelligenceHealthPage> {
       onRefresh: _loadDiagnostic,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         children: [
           if (_error != null)
             Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.all(12),
+              margin: EdgeInsets.only(bottom: DesignSpacing.lg),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
-                color: DashboardColors.error.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: DashboardColors.error.withValues(alpha: 0.5)),
+                color: DesignColors.red.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
+                border: Border.all(color: DesignColors.red.withValues(alpha: 0.5)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.warning_amber_rounded, color: DashboardColors.error, size: 20),
-                  const SizedBox(width: 8),
+                  Icon(Icons.warning_amber_rounded, color: DesignColors.red, size: 20),
+                  SizedBox(width: DesignSpacing.sm),
                   Expanded(
                     child: Text(
                       'Datos desactualizados. Error: $_error',
-                      style: DashboardTextStyles.sensorMeta.copyWith(color: DashboardColors.error),
+                      style: DesignTextStyles.bodyText.copyWith(color: DesignColors.red),
                     ),
                   ),
                   TextButton(

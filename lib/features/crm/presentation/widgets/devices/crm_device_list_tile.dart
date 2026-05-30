@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/models/crm_devices_models.dart';
 import '../../pages/crm_device_details_page.dart';
 import '../../pages/crm_device_type_page.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Tile de dispositivo en la lista CRM.
 class CrmDeviceListTile extends StatelessWidget {
@@ -23,13 +24,13 @@ class CrmDeviceListTile extends StatelessWidget {
       case 'online':
         return Colors.greenAccent;
       case 'offline':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'maintenance':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'error':
         return Colors.red;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 
@@ -55,11 +56,11 @@ class CrmDeviceListTile extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: Icon(Icons.memory, color: color),
-        title: Text(deviceType, style: DashboardTextStyles.deviceTitle),
+        title: Text(deviceType, style: DesignTextStyles.cardTitle),
         subtitle: Text(
           'Nombre: ${device.deviceName} · Estado: ${device.status} · Sensores: ${device.sensorCount} · Alertas activas: ${device.activeAlerts}\n'
           'Última conexión: ${formatDateTime(device.lastConnection)}',
-          style: DashboardTextStyles.sensorMeta,
+          style: DesignTextStyles.bodyText,
         ),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {

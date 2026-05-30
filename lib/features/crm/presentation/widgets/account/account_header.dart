@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/auth/current_user.dart';
 import '../../../../../core/auth/user_role.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Header de la página de cuenta con avatar, nombre, email y rol.
 class AccountHeader extends StatelessWidget {
@@ -43,8 +45,8 @@ class AccountHeader extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            DashboardColors.primary.withValues(alpha: 0.3),
-            DashboardColors.background,
+            DesignColors.cyan.withValues(alpha: 0.3),
+            DesignColors.background,
           ],
         ),
       ),
@@ -52,10 +54,10 @@ class AccountHeader extends StatelessWidget {
           ? Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(DesignSpacing.lg),
                   decoration: BoxDecoration(
-                    gradient: DashboardColors.gradientPrimary,
-                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]),
+                    borderRadius: BorderRadius.circular(DesignRadius.xl),
                   ),
                   child: Text(
                     initial,
@@ -66,7 +68,7 @@ class AccountHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: DesignSpacing.md),
                 Text(
                   username.isEmpty ? 'Usuario' : username,
                   style: const TextStyle(
@@ -77,14 +79,14 @@ class AccountHeader extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: DesignSpacing.xs),
                 Text(
                   email.isEmpty ? '—' : email,
-                  style: DashboardTextStyles.drawerHeaderSubtitle,
+                  style: DesignTextStyles.bodyText,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
                 OutlinedButton.icon(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -95,7 +97,7 @@ class AccountHeader extends StatelessWidget {
                     foregroundColor: Colors.white,
                     side: const BorderSide(color: Colors.white24),
                     backgroundColor: Colors.white10,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
@@ -103,18 +105,16 @@ class AccountHeader extends StatelessWidget {
                   icon: const Icon(Icons.manage_accounts_outlined, size: 18),
                   label: const Text('Administrar cuenta'),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: DesignSpacing.md),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
-                    color: DashboardColors.primaryAccent20,
-                    borderRadius: BorderRadius.circular(20),
+                    color: DesignColors.cyan.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(DesignRadius.xl),
                   ),
                   child: Text(
                     _roleLabel,
-                    style: DashboardTextStyles.smallLabel.copyWith(
-                      color: DashboardColors.primaryLight,
-                    ),
+                    style: DesignTextStyles.badgeText(color: DesignColors.cyan),
                   ),
                 ),
               ],
@@ -133,7 +133,7 @@ class AccountHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,21 +147,21 @@ class AccountHeader extends StatelessWidget {
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: DesignSpacing.xs),
                       Text(
                         email.isEmpty ? '—' : email,
-                        style: DashboardTextStyles.drawerHeaderSubtitle,
+                        style: DesignTextStyles.bodyText,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: DesignSpacing.sm),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                         decoration: BoxDecoration(
                           color: Colors.white10,
                           borderRadius: BorderRadius.circular(999),
                           border: Border.all(color: Colors.white24),
                         ),
-                        child: Text(_roleLabel, style: DashboardTextStyles.appBarRoleChip),
+                        child: Text(_roleLabel, style: DesignTextStyles.badgeText()),
                       ),
                     ],
                   ),

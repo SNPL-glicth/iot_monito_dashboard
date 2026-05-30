@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_helpers.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Error metrics section widget showing MAE, RMSE, MAPE, std dev
 class ErrorMetricsSectionWidget extends StatelessWidget {
@@ -26,28 +28,28 @@ class ErrorMetricsSectionWidget extends StatelessWidget {
     final hasData = sampleSize > 0;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IntelligenceHealthWidgets.sectionHeader(Icons.analytics_rounded, 'Métricas de Error', DashboardColors.secondary),
-          const SizedBox(height: 16),
+          IntelligenceHealthWidgets.sectionHeader(Icons.analytics_rounded, 'Métricas de Error', DesignColors.cyanDim),
+          SizedBox(height: DesignSpacing.lg),
           if (!hasData)
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
                 color: Colors.grey.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               child: Row(
                 children: [
                   Icon(Icons.info_outline_rounded, color: Colors.grey, size: 18),
-                  const SizedBox(width: 8),
-                  const Expanded(
+                  SizedBox(width: DesignSpacing.sm),
+                  Expanded(
                     child: Text(
                       'Sin datos suficientes para calcular métricas de error',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 ],
@@ -59,28 +61,28 @@ class ErrorMetricsSectionWidget extends StatelessWidget {
                 Expanded(
                   child: IntelligenceHealthWidgets.errorMetricTile('MAE', IntelligenceHealthHelpers.formatDecimal(mae), 'Error Absoluto Medio'),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: IntelligenceHealthWidgets.errorMetricTile('RMSE', IntelligenceHealthHelpers.formatDecimal(rmse), 'Raíz del Error Cuadrático'),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             Row(
               children: [
                 Expanded(
                   child: IntelligenceHealthWidgets.errorMetricTile('MAPE', mape != null ? IntelligenceHealthHelpers.formatPercent(mape!) : '-', 'Error Porcentual Medio'),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: IntelligenceHealthWidgets.errorMetricTile('σ', IntelligenceHealthHelpers.formatDecimal(stdDev), 'Desviación Estándar'),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             Text(
               'Basado en $sampleSize muestras evaluadas',
-              style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11),
+              style: DesignTextStyles.bodyText.copyWith(fontSize: 11),
             ),
           ],
         ],

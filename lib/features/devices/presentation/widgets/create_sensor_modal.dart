@@ -4,6 +4,8 @@ import '../../data/provisioning_repository.dart';
 import '../../data/models/sensor_responses.dart';
 import 'create_sensor/sensor_types_data.dart';
 import 'create_sensor/threshold_section.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 class CreateSensorModal extends StatefulWidget {
   final String deviceUuid;
@@ -139,7 +141,7 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
         builder: (context, scrollController) {
           return SingleChildScrollView(
             controller: scrollController,
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             child: Form(
               key: _formKey,
               child: Column(
@@ -155,11 +157,11 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Row(
                     children: [
                       const Icon(Icons.sensors, color: Colors.tealAccent),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +177,7 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                               widget.deviceName,
                               style: const TextStyle(
                                 fontSize: 13,
-                                color: Colors.white54,
+                                color: DesignColors.textSecondary,
                               ),
                             ),
                           ],
@@ -183,14 +185,14 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   
                   // Tipo de sensor
                   const Text(
                     'Tipo de sensor',
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -203,9 +205,9 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                             Icon(
                               type['icon'] as IconData,
                               size: 16,
-                              color: isSelected ? Colors.black : Colors.white70,
+                              color: isSelected ? Colors.black : DesignColors.textPrimary,
                             ),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                             Text(
                               type['label'] as String,
                               style: const TextStyle(fontSize: 12),
@@ -228,46 +230,46 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   
                   ThresholdSection(
                     title: 'Umbral de Advertencia',
-                    color: Colors.orangeAccent,
+                    color: DesignColors.amber,
                     icon: Icons.warning_amber,
                     minController: _warningMinController,
                     maxController: _warningMaxController,
                     unit: _currentType['unit'] as String,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   ThresholdSection(
                     title: 'Umbral de Alerta',
-                    color: Colors.redAccent,
+                    color: DesignColors.red,
                     icon: Icons.error_outline,
                     minController: _alertMinController,
                     maxController: _alertMaxController,
                     unit: _currentType['unit'] as String,
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24),
                   
                   if (_error != null)
                     Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.all(DesignSpacing.md),
+                      margin: EdgeInsets.only(bottom: DesignSpacing.lg),
                       decoration: BoxDecoration(
                         color: Colors.red.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.redAccent),
+                        borderRadius: BorderRadius.circular(DesignRadius.sm),
+                        border: Border.all(color: DesignColors.red),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.error_outline, color: Colors.redAccent, size: 20),
-                          const SizedBox(width: 10),
+                          const Icon(Icons.error_outline, color: DesignColors.red, size: 20),
+                          SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               _error!,
-                              style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+                              style: const TextStyle(color: DesignColors.red, fontSize: 13),
                             ),
                           ),
                         ],
@@ -279,7 +281,7 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                     child: ElevatedButton.icon(
                       onPressed: _isLoading ? null : _createSensor,
                       icon: _isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
@@ -290,12 +292,12 @@ class _CreateSensorModalState extends State<CreateSensorModal> {
                         backgroundColor: Colors.tealAccent,
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(DesignRadius.md),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                 ],
               ),
             ),

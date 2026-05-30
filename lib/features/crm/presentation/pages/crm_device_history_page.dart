@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/auth/user_role.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../monitoring/presentation/pages/sensor_readings_page.dart';
 import '../../data/crm_repository.dart';
 import '../../data/models/crm_devices_models.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class CrmDeviceHistoryPage extends StatefulWidget {
   const CrmDeviceHistoryPage({
@@ -54,9 +56,9 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
     final t = (raw ?? '').toLowerCase();
     switch (t) {
       case 'temperature':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'humidity':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       case 'air_quality':
         return Colors.tealAccent;
       case 'power':
@@ -64,7 +66,7 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
       case 'voltage':
         return Colors.amberAccent;
       default:
-        return DashboardColors.sensorIcon;
+        return DesignColors.cyan;
     }
   }
 
@@ -105,7 +107,7 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
         onRefresh: _refresh,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           child: FutureBuilder<CrmDeviceProfileFullResponse>(
             future: _future,
             builder: (context, snapshot) {
@@ -116,12 +118,12 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
                 );
               }
               if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}', style: DashboardTextStyles.error));
+                return Center(child: Text('Error: ${snapshot.error}', style: DesignTextStyles.bodyText));
               }
 
               final data = snapshot.data;
               if (data == null) {
-                return const Center(child: Text('Sin datos.', style: DashboardTextStyles.sensorMeta));
+                return Center(child: Text('Sin datos.', style: DesignTextStyles.bodyText));
               }
 
               final latestBySensorId = <String, CrmLatestReading>{
@@ -133,15 +135,15 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
                 children: [
                   Text(
                     'Rango: ${_formatDateTime(data.from)} → ${_formatDateTime(data.to)} (bucket: ${data.bucket})',
-                    style: DashboardTextStyles.sensorMeta,
+                    style: DesignTextStyles.bodyText,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: DesignSpacing.md),
 
-                  Text('Sensores (series agregadas)', style: DashboardTextStyles.sectionHeader),
-                  const SizedBox(height: 8),
+                  Text('Sensores (series agregadas)', style: DesignTextStyles.screenTitle),
+                  SizedBox(height: DesignSpacing.sm),
 
                   if (data.sensors.isEmpty)
-                    const Text('No hay sensores.', style: DashboardTextStyles.sensorMeta)
+                    Text('No hay sensores.', style: DesignTextStyles.bodyText)
                   else
                     ...data.sensors.map((sensor) {
                       final latest = latestBySensorId[sensor.id];
@@ -158,7 +160,7 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
 
                       return Card(
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(DesignSpacing.md),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -170,7 +172,7 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
                                     height: 40,
                                     decoration: BoxDecoration(
                                       color: accent.withValues(alpha: 0.18),
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(DesignRadius.md),
                                       border: Border.all(color: accent.withValues(alpha: 0.35)),
                                     ),
                                     child: Icon(
@@ -179,7 +181,7 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
                                       size: 20,
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: DesignSpacing.md),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,40 +191,40 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
                                             Expanded(
                                               child: Text(
                                                 sensor.name,
-                                                style: DashboardTextStyles.sensorTitle,
+                                                style: DesignTextStyles.bodyText,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
-                                            const SizedBox(width: 8),
+                                            SizedBox(width: DesignSpacing.sm),
                                             Chip(
                                               label: Text(
                                                 isActive ? 'ACTIVO' : 'INACTIVO',
                                                 style: isActive
-                                                    ? DashboardTextStyles.chipActive
-                                                    : DashboardTextStyles.chipInactive,
+                                                    ? DesignTextStyles.timestamp.copyWith(color: DesignColors.green)
+                                                    : DesignTextStyles.timestamp.copyWith(color: DesignColors.red),
                                               ),
                                               backgroundColor: isActive
                                                   ? Colors.green.withValues(alpha: 0.18)
                                                   : Colors.red.withValues(alpha: 0.18),
                                               side: BorderSide(
                                                 color: isActive
-                                                    ? DashboardTextStyles.chipActive.color!
-                                                    : DashboardTextStyles.chipInactive.color!,
+                                                    ? DesignTextStyles.timestamp.copyWith(color: DesignColors.green).color!
+                                                    : DesignTextStyles.timestamp.copyWith(color: DesignColors.red).color!,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 4),
+                                        SizedBox(height: DesignSpacing.xs),
                                         Text(
                                           'Tipo: ${sensor.sensorType} · Unidad: ${sensor.unit}',
-                                          style: DashboardTextStyles.sensorMeta,
+                                          style: DesignTextStyles.bodyText,
                                         ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
+                              SizedBox(height: DesignSpacing.sm),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -237,17 +239,17 @@ class _CrmDeviceHistoryPageState extends State<CrmDeviceHistoryPage> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(tsText, style: DashboardTextStyles.smallLabel),
+                                  SizedBox(width: DesignSpacing.sm),
+                                  Text(tsText, style: DesignTextStyles.timestamp),
                                 ],
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: DesignSpacing.sm),
                               Text(
                                 'Serie: ${points.length} puntos · avg(min/max): '
                                 '${lastPoint == null ? '-' : '${lastPoint.avg} (${lastPoint.min}/${lastPoint.max})'}',
-                                style: DashboardTextStyles.sensorMeta,
+                                style: DesignTextStyles.bodyText,
                               ),
-                              const SizedBox(height: 10),
+                              SizedBox(height: DesignSpacing.sm),
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton.icon(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Warnings section widget showing model warnings
 class WarningsSectionWidget extends StatelessWidget {
@@ -14,43 +16,43 @@ class WarningsSectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       decoration: BoxDecoration(
-        color: DashboardColors.warning.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: DashboardColors.warning.withValues(alpha: 0.3)),
+        color: DesignColors.amber.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+        border: Border.all(color: DesignColors.amber.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.warning_rounded, color: DashboardColors.warning, size: 20),
-              const SizedBox(width: 8),
+              Icon(Icons.warning_rounded, color: DesignColors.amber, size: 20),
+              SizedBox(width: DesignSpacing.sm),
               Text(
                 'Advertencias',
-                style: DashboardTextStyles.deviceTitle.copyWith(color: DashboardColors.warning),
+                style: DesignTextStyles.cardTitle.copyWith(color: DesignColors.amber),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           ...warnings.map(
             (w) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.only(bottom: DesignSpacing.sm),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 6,
                     height: 6,
-                    margin: const EdgeInsets.only(top: 6),
+                    margin: EdgeInsets.only(top: 6),
                     decoration: BoxDecoration(
-                      color: DashboardColors.warning,
+                      color: DesignColors.amber,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(w, style: DashboardTextStyles.sensorMeta)),
+                  SizedBox(width: DesignSpacing.sm),
+                  Expanded(child: Text(w, style: DesignTextStyles.bodyText)),
                 ],
               ),
             ),
@@ -73,43 +75,43 @@ class RecommendationsSectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       decoration: BoxDecoration(
-        color: DashboardColors.info.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: DashboardColors.info.withValues(alpha: 0.3)),
+        color: DesignColors.cyan.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+        border: Border.all(color: DesignColors.cyan.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.lightbulb_outline_rounded, color: DashboardColors.info, size: 20),
-              const SizedBox(width: 8),
+              Icon(Icons.lightbulb_outline_rounded, color: DesignColors.cyan, size: 20),
+              SizedBox(width: DesignSpacing.sm),
               Text(
                 'Recomendaciones',
-                style: DashboardTextStyles.deviceTitle.copyWith(color: DashboardColors.info),
+                style: DesignTextStyles.cardTitle.copyWith(color: DesignColors.cyan),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           ...recommendations.map(
             (r) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.only(bottom: DesignSpacing.sm),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 6,
                     height: 6,
-                    margin: const EdgeInsets.only(top: 6),
+                    margin: EdgeInsets.only(top: 6),
                     decoration: BoxDecoration(
-                      color: DashboardColors.info,
+                      color: DesignColors.cyan,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(r, style: DashboardTextStyles.sensorMeta)),
+                  SizedBox(width: DesignSpacing.sm),
+                  Expanded(child: Text(r, style: DesignTextStyles.bodyText)),
                 ],
               ),
             ),

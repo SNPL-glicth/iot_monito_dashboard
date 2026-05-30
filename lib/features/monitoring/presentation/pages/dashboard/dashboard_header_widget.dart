@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-
 import '../../../../devices/presentation/pages/sensor_details_route_page.dart';
 import '../../../../notifications/data/notifications_repository.dart';
-import '../../styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
+
 
 /// Header widget with notification bell for dashboard
 class DashboardHeaderWidget extends StatefulWidget {
@@ -101,7 +103,7 @@ class _DashboardHeaderWidgetState extends State<DashboardHeaderWidget>
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.redAccent.withValues(alpha: glow * 0.12),
+                color: DesignColors.red.withValues(alpha: glow * 0.12),
                 shape: BoxShape.circle,
               ),
               child: Transform.rotate(
@@ -116,7 +118,7 @@ class _DashboardHeaderWidgetState extends State<DashboardHeaderWidget>
                       if (!mounted) return;
                       await showModalBottomSheet<void>(
                         context: context,
-                        backgroundColor: DashboardColors.cardBackground,
+                        backgroundColor: DesignColors.surface,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
                         ),
@@ -141,9 +143,9 @@ class _DashboardHeaderWidgetState extends State<DashboardHeaderWidget>
                   child: Transform.scale(
                     scale: 1.0 + (0.08 * t),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                      decoration: const BoxDecoration(
-                        color: Colors.redAccent,
+                      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: DesignColors.red,
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                       constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
@@ -180,37 +182,37 @@ class _NotificationsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const Icon(Icons.notifications_none, color: Colors.white70),
-                const SizedBox(width: 10),
+                Icon(Icons.notifications_none, color: DesignColors.textPrimary),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     'Notificaciones (por sensor)',
-                    style: DashboardTextStyles.sectionHeader,
+                    style: DesignTextStyles.screenTitle,
                   ),
                 ),
                 Text(
                   notifications.length.toString(),
-                  style: const TextStyle(
-                    color: Colors.white70,
+                  style: TextStyle(
+                    color: DesignColors.textPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: DesignSpacing.md),
             if (notifications.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(bottom: 10),
+              Padding(
+                padding: EdgeInsets.only(bottom: DesignSpacing.sm),
                 child: Text(
                   'Sin eventos activos.',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
               )
             else
@@ -226,13 +228,13 @@ class _NotificationsSheet extends StatelessWidget {
                     Color color;
                     IconData icon;
                     if (sev.contains('critical') || sev.contains('alert')) {
-                      color = Colors.redAccent;
+                      color = DesignColors.red;
                       icon = Icons.error;
                     } else if (source == 'ml_event') {
-                      color = Colors.lightBlueAccent;
+                      color = DesignColors.cyan;
                       icon = Icons.psychology;
                     } else {
-                      color = Colors.orangeAccent;
+                      color = DesignColors.amber;
                       icon = Icons.warning_amber;
                     }
                     final ts = formatDateTime(n.createdAt.toIso8601String());
@@ -244,14 +246,14 @@ class _NotificationsSheet extends StatelessWidget {
                         leading: Icon(icon, color: color, size: 20),
                         title: Text(
                           sensorName,
-                          style: DashboardTextStyles.sensorTitle,
+                          style: DesignTextStyles.bodyText,
                           overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
                           '${deviceName.isEmpty ? '-' : deviceName}\n${n.title} · $ts',
-                          style: DashboardTextStyles.sensorMeta,
+                          style: DesignTextStyles.bodyText,
                         ),
-                        trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+                        trailing: Icon(Icons.chevron_right, color: DesignColors.textSecondary),
                         onTap: () {
                           final sensorId = (n.sensorId ?? '').trim();
                           final nav = Navigator.of(context, rootNavigator: true);
@@ -270,7 +272,7 @@ class _NotificationsSheet extends StatelessWidget {
                   },
                 ),
               ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/auth/user_role.dart';
 import '../../../crm/data/crm_repository.dart';
+import '../../../../core/theme/design_colors.dart';
 
 /// Acciones para AlertDetailPage con optimistic update y revert.
 class AlertDetailActions {
@@ -135,7 +136,7 @@ class AlertDetailActions {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: isError ? Colors.redAccent : Colors.green,
+        backgroundColor: isError ? DesignColors.red : Colors.green,
       ),
     );
   }

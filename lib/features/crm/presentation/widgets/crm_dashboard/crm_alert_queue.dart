@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 import '../crm_dashboard_helpers.dart';
 import '../../../data/models/crm_dashboard_models.dart';
 
@@ -16,10 +18,8 @@ class CrmAlertQueue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) {
-      return const Text(
-        'No hay alertas activas/ack en el rango.',
-        style: DashboardTextStyles.sensorMeta,
-      );
+      return Text('No hay alertas activas/ack en el rango.',
+          style: DesignTextStyles.bodyText);
     }
 
     return ListView.builder(
@@ -30,19 +30,25 @@ class CrmAlertQueue extends StatelessWidget {
         final a = items[index];
         final color = CrmDashboardHelpers.severityColor(a.severity);
 
-        return Card(
+        return Container(
+          margin: EdgeInsets.only(bottom: DesignSpacing.sm),
+          decoration: BoxDecoration(
+            color: DesignColors.surface,
+            border: Border.all(color: DesignColors.border, width: 0.5),
+            borderRadius: BorderRadius.circular(DesignRadius.lg),
+          ),
           child: ListTile(
             leading: Icon(Icons.warning_amber_rounded, color: color),
             title: Text(
               '${a.thresholdName} (${a.severity.toUpperCase()})',
-              style: DashboardTextStyles.alertTitle,
+              style: DesignTextStyles.bodyText,
             ),
             subtitle: Text(
               'Dispositivo: ${a.deviceName}\n'
               'Sensor: ${a.sensorName ?? '-'}\n'
               'Valor: ${a.triggeredValue} · Estado: ${a.status}\n'
               'Fecha: ${CrmDashboardHelpers.formatDateTime(a.triggeredAt)}',
-              style: DashboardTextStyles.alertText,
+              style: DesignTextStyles.bodyText,
             ),
           ),
         );

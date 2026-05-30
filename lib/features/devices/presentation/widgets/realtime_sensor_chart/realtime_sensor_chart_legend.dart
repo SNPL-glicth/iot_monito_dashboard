@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Leyenda del realtime sensor chart.
 class RealtimeSensorChartLegend extends StatelessWidget {
@@ -10,10 +11,10 @@ class RealtimeSensorChartLegend extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _LegendItem(const Color(0xFF00E676), 'Normal'),
-        const SizedBox(width: 16),
-        _LegendItem(Colors.orangeAccent, 'Advertencia'),
-        const SizedBox(width: 16),
-        _LegendItem(Colors.redAccent, 'Alerta'),
+        SizedBox(width: 16),
+        _LegendItem(DesignColors.amber, 'Advertencia'),
+        SizedBox(width: 16),
+        _LegendItem(DesignColors.red, 'Alerta'),
       ],
     );
   }
@@ -39,7 +40,7 @@ class _LegendItem extends StatelessWidget {
             border: Border.all(color: Colors.white30, width: 1),
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           label,
           style: TextStyle(

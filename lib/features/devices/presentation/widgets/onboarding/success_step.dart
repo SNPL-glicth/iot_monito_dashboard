@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/models/sensor_provisioning_response.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
 
 class SuccessStep extends StatelessWidget {
   final SensorProvisioningResponse response;
@@ -19,11 +20,11 @@ class SuccessStep extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           decoration: BoxDecoration(
-            color: DashboardColors.greenAccent10,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: DashboardColors.greenAccent30),
+            color: DesignColors.green.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(DesignRadius.md),
+            border: Border.all(color: DesignColors.green.withValues(alpha: 0.3)),
           ),
           child: const Row(
             children: [
@@ -38,17 +39,17 @@ class SuccessStep extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 20),
-        const Text(
+        SizedBox(height: DesignSpacing.lg),
+        Text(
           'API KEY DEL SENSOR',
-          style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
+          style: TextStyle(color: DesignColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: Colors.black.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
             border: Border.all(color: Colors.white10),
           ),
           child: Row(
@@ -64,7 +65,7 @@ class SuccessStep extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: DesignSpacing.sm),
               IconButton(
                 icon: const Icon(Icons.copy, color: Colors.tealAccent, size: 20),
                 onPressed: () {
@@ -84,22 +85,22 @@ class SuccessStep extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: DesignSpacing.xs),
         const Text(
           'Guarda esta API key ahora. Por motivos de seguridad, no podrás volver a verla.',
           style: TextStyle(color: Colors.amberAccent, fontSize: 11, height: 1.4),
         ),
-        const SizedBox(height: 20),
-        const Text(
+        SizedBox(height: DesignSpacing.lg),
+        Text(
           'TOPIC MQTT DE INGESTA',
-          style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
+          style: TextStyle(color: DesignColors.textPrimary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         Container(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(DesignSpacing.md),
           decoration: BoxDecoration(
             color: Colors.black.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
             border: Border.all(color: Colors.white10),
           ),
           child: SelectableText(
@@ -111,14 +112,14 @@ class SuccessStep extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: DesignSpacing.xl),
         ElevatedButton(
           onPressed: onDone,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.tealAccent,
             foregroundColor: const Color(0xFF1E293B),
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            padding: EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
           ),
           child: const Text(
             'Listo',

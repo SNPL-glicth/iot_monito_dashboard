@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/network/api_client.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../widgets/clean_readings/delete_all_readings_card.dart';
 import '../widgets/clean_readings/delete_by_sensor_card.dart';
 import '../widgets/clean_readings/confirm_delete_dialog.dart';
 import '../widgets/clean_readings/result_message_banner.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+
 
 /// Pantalla de utilería para limpiar lecturas de sensores.
 /// Solo para administradores.
@@ -136,30 +137,30 @@ class _DevicesCleanReadingsPageState extends State<DevicesCleanReadingsPage> {
       body: AbsorbPointer(
         absorbing: _isBusy,
         child: ListView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           children: [
             // Header con advertencia
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
-                color: DashboardColors.orangeAccent15,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: DashboardColors.warning.withValues(alpha: 0.3)),
+                color: DesignColors.amber.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
+                border: Border.all(color: DesignColors.amber.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.warning_rounded, color: DashboardColors.warning, size: 24),
-                  const SizedBox(width: 12),
+                  Icon(Icons.warning_rounded, color: DesignColors.amber, size: 24),
+                  SizedBox(width: DesignSpacing.md),
                   Expanded(
                     child: Text(
                       'Esta herramienta permite eliminar lecturas históricas de sensores para tareas de mantenimiento. Úsala con cuidado.',
-                      style: TextStyle(color: DashboardColors.warning, fontSize: 13),
+                      style: TextStyle(color: DesignColors.amber, fontSize: 13),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: DesignSpacing.lg),
             
             DeleteAllReadingsCard(
               isBusy: _isBusy,
@@ -168,7 +169,7 @@ class _DevicesCleanReadingsPageState extends State<DevicesCleanReadingsPage> {
                 if (confirmed) await _deleteAllReadings();
               },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: DesignSpacing.lg),
             
             DeleteBySensorCard(
               sensorsFuture: _sensorsFuture,
@@ -179,7 +180,7 @@ class _DevicesCleanReadingsPageState extends State<DevicesCleanReadingsPage> {
             ),
             
             if (_message != null) ...[
-              const SizedBox(height: 20),
+              SizedBox(height: DesignSpacing.lg),
               ResultMessageBanner(message: _message!),
             ],
           ],

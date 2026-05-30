@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Sección de umbral (warning o alert) con inputs min/max.
 class ThresholdSection extends StatelessWidget {
@@ -23,10 +24,10 @@ class ThresholdSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(DesignRadius.md),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
@@ -35,7 +36,7 @@ class ThresholdSection extends StatelessWidget {
           Row(
             children: [
               Icon(icon, color: color, size: 18),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Text(
                 title,
                 style: TextStyle(
@@ -46,7 +47,7 @@ class ThresholdSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               Expanded(
@@ -61,7 +62,7 @@ class ThresholdSection extends StatelessWidget {
                     suffixText: unit,
                     isDense: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignRadius.sm),
                     ),
                     filled: true,
                     fillColor: Colors.grey[900],
@@ -69,7 +70,7 @@ class ThresholdSection extends StatelessWidget {
                   style: const TextStyle(fontSize: 14),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: TextFormField(
                   controller: maxController,
@@ -82,7 +83,7 @@ class ThresholdSection extends StatelessWidget {
                     suffixText: unit,
                     isDense: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(DesignRadius.sm),
                     ),
                     filled: true,
                     fillColor: Colors.grey[900],

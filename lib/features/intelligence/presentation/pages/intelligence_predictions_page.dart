@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_client.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/intelligence_models.dart';
 import '../../data/intelligence_repository.dart';
 import '../widgets/predictions/prediction_card.dart';
 import '../widgets/predictions/prediction_skeleton.dart';
+import '../../../../core/theme/design_spacing.dart';
+import '../../../../core/theme/design_text_styles.dart';
 
 class IntelligencePredictionsPage extends StatefulWidget {
   const IntelligencePredictionsPage({super.key});
@@ -48,8 +49,9 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
       appBar: AppBar(
         title: const Text('Predicciones del sistema'),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () async {
           setState(() {
             _future = _loadPredictions();
           });
@@ -64,10 +66,10 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
             if (snapshot.hasError) {
               return Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(DesignSpacing.lg),
                   child: Text(
                     'Error cargando predicciones: ${snapshot.error}',
-                    style: DashboardTextStyles.error,
+                    style: DesignTextStyles.bodyText,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -75,12 +77,12 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
             }
             final items = snapshot.data ?? const <PredictionSummaryViewModel>[];
             if (items.isEmpty) {
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(DesignSpacing.lg),
                   child: Text(
                     'No hay predicciones disponibles en este momento.',
-                    style: DashboardTextStyles.sensorMeta,
+                    style: DesignTextStyles.bodyText,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -89,7 +91,7 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
 
             return ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               itemCount: items.length,
               itemBuilder: (context, index) => PredictionCard(
                 prediction: items[index],
@@ -99,6 +101,7 @@ class _IntelligencePredictionsPageState extends State<IntelligencePredictionsPag
           },
         ),
       ),
+    ),
     );
   }
 }

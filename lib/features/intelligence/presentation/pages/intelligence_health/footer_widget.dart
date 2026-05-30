@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_helpers.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Footer widget showing diagnostic timestamp
 class FooterWidget extends StatelessWidget {
@@ -17,7 +17,7 @@ class FooterWidget extends StatelessWidget {
     return Center(
       child: Text(
         'Diagnóstico generado: ${IntelligenceHealthHelpers.formatDateTime(timestamp)}',
-        style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11),
+        style: DesignTextStyles.bodyText.copyWith(fontSize: 11),
       ),
     );
   }

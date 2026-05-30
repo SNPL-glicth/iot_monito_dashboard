@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/intelligence_models.dart';
 import 'prediction_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Tarjeta de predicción del sistema.
 class PredictionCard extends StatelessWidget {
@@ -24,47 +26,47 @@ class PredictionCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const Icon(Icons.analytics_outlined, color: Colors.white70),
-                const SizedBox(width: 8),
+                Icon(Icons.analytics_outlined, color: DesignColors.textPrimary),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     p.sensorName.isNotEmpty ? p.sensorName : p.sensorType,
-                    style: DashboardTextStyles.deviceTitle,
+                    style: DesignTextStyles.cardTitle,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
             if (p.sensorId.isNotEmpty && p.sensorId != '0') ...[
-              const SizedBox(height: 2),
+              SizedBox(height: 2),
               Text(
                 'Sensor ID: ${p.sensorId}',
-                style: DashboardTextStyles.smallLabel,
+                style: DesignTextStyles.timestamp,
               ),
             ],
-            const SizedBox(height: 4),
+            SizedBox(height: DesignSpacing.xs),
             Text(
               p.deviceName,
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Valor esperado',
-                      style: DashboardTextStyles.smallLabel,
+                      style: DesignTextStyles.timestamp,
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       '${p.predictedValue} ${p.unit}',
                       style: const TextStyle(
@@ -78,44 +80,44 @@ class PredictionCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text('Horizonte', style: DashboardTextStyles.smallLabel),
-                    const SizedBox(height: 2),
+                    Text('Horizonte', style: DesignTextStyles.timestamp),
+                    SizedBox(height: 2),
                     Text(
                       'en ${p.horizonMinutes} min',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       formatDateTime(p.targetTimestamp),
-                      style: DashboardTextStyles.smallLabel,
+                      style: DesignTextStyles.timestamp,
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Row(
               children: [
                 Icon(trendIcon, color: trendColor, size: 20),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 Text(
                   p.trend.toLowerCase() == 'up'
                       ? 'Tendencia al alza'
                       : p.trend.toLowerCase() == 'down'
                           ? 'Tendencia a la baja'
                           : 'Tendencia estable',
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                   decoration: BoxDecoration(
                     color: severityColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(DesignRadius.md),
                     border: Border.all(color: severityColor),
                   ),
                   child: Row(
@@ -125,17 +127,17 @@ class PredictionCard extends StatelessWidget {
                         size: 16,
                         color: severityColor,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         PredictionHelpers.severityLabel(p.severity),
-                        style: DashboardTextStyles.smallLabel.copyWith(
+                        style: DesignTextStyles.timestamp.copyWith(
                           color: severityColor,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,14 +145,14 @@ class PredictionCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Anomalía', style: DashboardTextStyles.smallLabel),
+                          Text('Anomalía', style: DesignTextStyles.timestamp),
                           Text(
                             '${(p.anomalyScore.clamp(0.0, 1.0) * 100).toStringAsFixed(0)}%',
-                            style: DashboardTextStyles.sensorMeta,
+                            style: DesignTextStyles.bodyText,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: DesignSpacing.xs),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
@@ -160,28 +162,28 @@ class PredictionCard extends StatelessWidget {
                           minHeight: 6,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       Text(
                         PredictionHelpers.anomalyLabel(p),
-                        style: DashboardTextStyles.smallLabel,
+                        style: DesignTextStyles.timestamp,
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             if (p.shortExplanation.isNotEmpty)
               Text(
                 p.shortExplanation,
-                style: DashboardTextStyles.alertText,
+                style: DesignTextStyles.bodyText,
               ),
             if (p.recommendedAction.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: EdgeInsets.only(top: DesignSpacing.xs),
                 child: Text(
                   p.recommendedAction,
-                  style: DashboardTextStyles.sensorMeta,
+                  style: DesignTextStyles.bodyText,
                 ),
               ),
           ],

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../monitoring/data/models/device_with_sensor_view_model.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Dialog for deleting a sensor
 class SensorDeleteDialog extends StatelessWidget {
@@ -15,20 +17,20 @@ class SensorDeleteDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: DashboardColors.cardBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: DesignColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
       title: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(DesignSpacing.sm),
             decoration: BoxDecoration(
-              color: DashboardColors.redAccent15,
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.red.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
-            child: Icon(Icons.delete_rounded, color: DashboardColors.error, size: 20),
+            child: Icon(Icons.delete_rounded, color: DesignColors.red, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Text('Eliminar Sensor', style: DashboardTextStyles.deviceTitle),
+          SizedBox(width: DesignSpacing.md),
+          Text('Eliminar Sensor', style: DesignTextStyles.cardTitle),
         ],
       ),
       content: Column(
@@ -39,22 +41,22 @@ class SensorDeleteDialog extends StatelessWidget {
             '¿Está seguro de eliminar el sensor "${row.sensorName ?? 'Sin nombre'}"?',
             style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.redAccent15,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: DashboardColors.error.withValues(alpha: 0.3)),
+              color: DesignColors.red.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
+              border: Border.all(color: DesignColors.red.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
-                Icon(Icons.warning_rounded, color: DashboardColors.error, size: 18),
-                const SizedBox(width: 10),
+                Icon(Icons.warning_rounded, color: DesignColors.red, size: 18),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     'Esta acción no se puede deshacer. Se perderán todos los datos históricos.',
-                    style: TextStyle(color: DashboardColors.error, fontSize: 12),
+                    style: TextStyle(color: DesignColors.red, fontSize: 12),
                   ),
                 ),
               ],
@@ -62,18 +64,18 @@ class SensorDeleteDialog extends StatelessWidget {
           ),
         ],
       ),
-      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          style: TextButton.styleFrom(foregroundColor: DashboardColors.white70),
+          style: TextButton.styleFrom(foregroundColor: DesignColors.textPrimary),
           child: const Text('Cancelar'),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: DashboardColors.error,
+            backgroundColor: DesignColors.red,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
           ),
           onPressed: () => Navigator.pop(context, true),
           child: const Text('Eliminar'),
@@ -90,34 +92,34 @@ class SensorCannotDeleteDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: DashboardColors.cardBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: DesignColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
       title: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(DesignSpacing.sm),
             decoration: BoxDecoration(
-              color: DashboardColors.orangeAccent15,
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.amber.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
-            child: Icon(Icons.warning_rounded, color: DashboardColors.warning, size: 20),
+            child: Icon(Icons.warning_rounded, color: DesignColors.amber, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Expanded(child: Text('No se puede eliminar', style: DashboardTextStyles.deviceTitle)),
+          SizedBox(width: DesignSpacing.md),
+          Expanded(child: Text('No se puede eliminar', style: DesignTextStyles.cardTitle)),
         ],
       ),
       content: Text(
         'Este sensor está activo y el dispositivo está online.\n\nPara eliminar el sensor, primero desactívelo o espere a que el dispositivo esté offline.',
-        style: DashboardTextStyles.sensorMeta,
+        style: DesignTextStyles.bodyText,
       ),
-      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
       actions: [
         ElevatedButton(
           onPressed: () => Navigator.pop(context),
           style: ElevatedButton.styleFrom(
-            backgroundColor: DashboardColors.primary,
+            backgroundColor: DesignColors.cyan,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
           ),
           child: const Text('Entendido'),
         ),

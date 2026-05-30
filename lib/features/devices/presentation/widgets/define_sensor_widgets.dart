@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widgets helper reutilizables para DefineSensorFlow
 class DefineSensorWidgets {
@@ -16,11 +17,11 @@ class DefineSensorWidgets {
         Row(
           children: [
             Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-            const SizedBox(width: 8),
+            SizedBox(width: DesignSpacing.sm),
             Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         Row(
           children: [
             Expanded(
@@ -30,14 +31,14 @@ class DefineSensorWidgets {
                 decoration: InputDecoration(
                   labelText: 'Mínimo',
                   hintText: 'Opcional',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
                   filled: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  contentPadding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: DesignSpacing.md),
             Expanded(
               child: TextFormField(
                 controller: maxController,
@@ -45,9 +46,9 @@ class DefineSensorWidgets {
                 decoration: InputDecoration(
                   labelText: 'Máximo',
                   hintText: 'Opcional',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
                   filled: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  contentPadding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
@@ -68,25 +69,25 @@ class DefineSensorWidgets {
   }) {
     return InkWell(
       onTap: isLoading ? null : onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(DesignRadius.md),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(DesignSpacing.lg),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               child: Icon(icon, color: color, size: 28),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: DesignSpacing.lg),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +96,7 @@ class DefineSensorWidgets {
                     title,
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: DesignSpacing.xs),
                   Text(
                     description,
                     style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 12),
@@ -112,11 +113,11 @@ class DefineSensorWidgets {
 
   static Widget usageOption(IconData icon, String title, String detail) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white54, size: 20),
-          const SizedBox(width: 12),
+          Icon(icon, color: DesignColors.textSecondary, size: 20),
+          SizedBox(width: DesignSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,17 +134,17 @@ class DefineSensorWidgets {
 
   static Widget errorWidget(String error) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.all(DesignSpacing.md),
+      margin: EdgeInsets.only(bottom: DesignSpacing.lg),
       decoration: BoxDecoration(
-        color: DashboardColors.redAccent15,
-        borderRadius: BorderRadius.circular(8),
+        color: DesignColors.red.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, color: Colors.redAccent, size: 20),
-          const SizedBox(width: 10),
-          Expanded(child: Text(error, style: const TextStyle(color: Colors.redAccent))),
+          Icon(Icons.error_outline, color: DesignColors.red, size: 20),
+          SizedBox(width: DesignSpacing.sm),
+          Expanded(child: Text(error, style: TextStyle(color: DesignColors.red))),
         ],
       ),
     );

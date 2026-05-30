@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/utils/date_utils.dart' as date_utils;
 import '../../../data/models/device_with_sensor_view_model.dart';
 import '../../../data/models/reading/latest_reading_models.dart';
 import '../../../data/models/sensor_consolidated_status_view_model.dart';
-import '../../styles/dashboard_styles.dart';
 import 'dashboard_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Sección de dispositivos y sensores del dashboard.
 class DashboardDevicesSection extends StatelessWidget {
@@ -43,9 +45,9 @@ class DashboardDevicesSection extends StatelessWidget {
         DashboardHelpers.sectionHeader(
           icon: Icons.devices_other,
           title: 'Dispositivos y sensores',
-          color: DashboardColors.sectionAccent,
+          color: DesignColors.cyan,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -60,41 +62,41 @@ class DashboardDevicesSection extends StatelessWidget {
               child: Theme(
                 data: Theme.of(context).copyWith(
                   dividerColor: Colors.transparent,
-                  listTileTheme: const ListTileThemeData(iconColor: Colors.white70),
+                  listTileTheme: ListTileThemeData(iconColor: DesignColors.textPrimary),
                 ),
                 child: ExpansionTile(
-                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  collapsedBackgroundColor: DashboardColors.cardBackground,
-                  backgroundColor: DashboardColors.cardBackground,
+                  tilePadding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.sm),
+                  collapsedBackgroundColor: DesignColors.surface,
+                  backgroundColor: DesignColors.surface,
                   leading: Icon(
                     Icons.memory,
                     color: isOnline
-                        ? DashboardColors.deviceOnline
-                        : DashboardColors.deviceOffline,
+                        ? DesignColors.green
+                        : DesignColors.red,
                   ),
                   title: Text(
                     first.deviceName,
-                    style: DashboardTextStyles.deviceTitle,
+                    style: DesignTextStyles.cardTitle,
                   ),
                   subtitle: Text(
                     '${DashboardHelpers.deviceTypeLabel(first.deviceType)}  ·  ${first.deviceStatus}',
-                    style: DashboardTextStyles.deviceSubtitle,
+                    style: DesignTextStyles.bodyText,
                   ),
-                  childrenPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  childrenPadding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.sm),
                   children: [
                     if (first.lastConnection != null)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: EdgeInsets.only(bottom: DesignSpacing.sm),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'ultima conexion',
-                              style: DashboardTextStyles.smallLabel,
+                              style: DesignTextStyles.timestamp,
                             ),
                             Text(
                               date_utils.formatDateTimeShared(first.lastConnection),
-                              style: DashboardTextStyles.sensorMeta,
+                              style: DesignTextStyles.bodyText,
                             ),
                           ],
                         ),
@@ -120,11 +122,11 @@ class DashboardDevicesSection extends StatelessWidget {
                       final timeText = date_utils.formatDateTimeShared(latestTime);
 
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.all(12),
+                        margin: EdgeInsets.only(bottom: DesignSpacing.sm),
+                        padding: EdgeInsets.all(DesignSpacing.md),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.03),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(DesignRadius.md),
                           border: Border.all(color: Colors.white10),
                         ),
                         child: Row(
@@ -135,7 +137,7 @@ class DashboardDevicesSection extends StatelessWidget {
                               height: 40,
                               decoration: BoxDecoration(
                                 color: accent.withValues(alpha: 0.18),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(DesignRadius.md),
                                 border: Border.all(color: accent.withValues(alpha: 0.35)),
                               ),
                               child: Icon(
@@ -144,7 +146,7 @@ class DashboardDevicesSection extends StatelessWidget {
                                 size: 20,
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: DesignSpacing.md),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,35 +156,35 @@ class DashboardDevicesSection extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           sensorTypeLabel,
-                                          style: DashboardTextStyles.sensorTitle,
+                                          style: DesignTextStyles.bodyText,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
+                                      SizedBox(width: DesignSpacing.sm),
                                       Chip(
                                         label: Text(
                                           isActive ? 'ACTIVO' : 'INACTIVO',
                                           style: isActive
-                                              ? DashboardTextStyles.chipActive
-                                              : DashboardTextStyles.chipInactive,
+                                              ? DesignTextStyles.timestamp.copyWith(color: DesignColors.green)
+                                              : DesignTextStyles.timestamp.copyWith(color: DesignColors.red),
                                         ),
                                         backgroundColor: isActive
                                             ? Colors.green.withValues(alpha: 0.18)
                                             : Colors.red.withValues(alpha: 0.18),
                                         side: BorderSide(
                                           color: isActive
-                                              ? DashboardTextStyles.chipActive.color!
-                                              : DashboardTextStyles.chipInactive.color!,
+                                              ? DesignTextStyles.timestamp.copyWith(color: DesignColors.green).color!
+                                              : DesignTextStyles.timestamp.copyWith(color: DesignColors.red).color!,
                                         ),
-                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(meta, style: DashboardTextStyles.sensorMeta),
+                                  SizedBox(height: DesignSpacing.xs),
+                                  Text(meta, style: DesignTextStyles.bodyText),
                                   if (latestValue != null || latestTime != null)
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 10),
+                                      padding: EdgeInsets.only(top: 10),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
@@ -198,10 +200,10 @@ class DashboardDevicesSection extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          const SizedBox(width: 8),
+                                          SizedBox(width: DesignSpacing.sm),
                                           Text(
                                             timeText,
-                                            style: DashboardTextStyles.smallLabel,
+                                            style: DesignTextStyles.timestamp,
                                             textAlign: TextAlign.right,
                                           ),
                                         ],

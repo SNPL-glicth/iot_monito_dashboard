@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../models/sensor_category.dart';
 import 'sensor_detail_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class DevicesByCategoryPage extends StatefulWidget {
   const DevicesByCategoryPage({
@@ -182,19 +184,19 @@ class _DevicesByCategoryPageState extends State<DevicesByCategoryPage> {
             ..sort((a, b) => a.value.first.deviceName.compareTo(b.value.first.deviceName));
 
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             children: [
               Card(
                 child: ListTile(
                   leading: Icon(_categoryIcon(widget.category), color: Colors.tealAccent),
-                  title: Text('Sensores disponibles', style: DashboardTextStyles.deviceTitle),
+                  title: Text('Sensores disponibles', style: DesignTextStyles.cardTitle),
                   subtitle: Text(
                     'Dispositivos: ${devices.length} · Sensores: ${sensors.length}',
-                    style: DashboardTextStyles.sensorMeta,
+                    style: DesignTextStyles.bodyText,
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: DesignSpacing.sm),
               ...devices.map((entry) {
                 final deviceRows = [...entry.value]
                   ..sort((a, b) => (a.sensorName ?? '').compareTo(b.sensorName ?? ''));
@@ -204,22 +206,22 @@ class _DevicesByCategoryPageState extends State<DevicesByCategoryPage> {
 
                 return Card(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: Column(
                       children: [
                         ListTile(
                           leading: Icon(
                             Icons.memory,
                             color: isOnline
-                                ? DashboardColors.deviceOnline
-                                : DashboardColors.deviceOffline,
+                                ? DesignColors.green
+                                : DesignColors.red,
                           ),
-                          title: Text(first.deviceName, style: DashboardTextStyles.deviceTitle),
+                          title: Text(first.deviceName, style: DesignTextStyles.cardTitle),
                           subtitle: Text(
                             'Tipo: ${_deviceTypeLabel(first.deviceType)} · Estado: ${first.deviceStatus}',
-                            style: DashboardTextStyles.sensorMeta,
+                            style: DesignTextStyles.bodyText,
                           ),
-                          trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+                          trailing: Icon(Icons.chevron_right, color: DesignColors.textSecondary),
                           onTap: () {
                             // Por ahora mantenemos el comportamiento: al tocar el device,
                             // se navega al primer sensor. (Se reemplazará por Device Details)
@@ -249,11 +251,11 @@ class _DevicesByCategoryPageState extends State<DevicesByCategoryPage> {
                           final latestTime = latest?.latestTimestamp ?? '-';
 
                           return ListTile(
-                            leading: const Icon(Icons.sensors, color: DashboardColors.sensorIcon),
-                            title: Text(row.sensorName ?? '(sin nombre)', style: DashboardTextStyles.sensorTitle),
+                            leading: Icon(Icons.sensors, color: DesignColors.cyan),
+                            title: Text(row.sensorName ?? '(sin nombre)', style: DesignTextStyles.bodyText),
                             subtitle: Text(
                               'Tipo: ${row.sensorType ?? '-'} · Último: $latestValue${unit.isEmpty ? '' : ' $unit'} · $latestTime',
-                              style: DashboardTextStyles.sensorMeta,
+                              style: DesignTextStyles.bodyText,
                             ),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () {

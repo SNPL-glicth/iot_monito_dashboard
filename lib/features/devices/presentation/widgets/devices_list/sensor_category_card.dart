@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/auth/user_role.dart';
 import '../../../../../features/monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../../../features/monitoring/data/models/monitoring_view_models.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../pages/sensor_detail_page.dart';
 import 'device_filter_helpers.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+import '../../../../../core/theme/design_colors.dart';
+
 
 /// Tarjeta representativa de una categoría de sensores.
 class SensorCategoryCard extends StatelessWidget {
@@ -46,16 +47,16 @@ class SensorCategoryCard extends StatelessWidget {
         leading: Icon(
           Icons.sensors,
           color: isOnline
-              ? DashboardColors.deviceOnline
-              : DashboardColors.deviceOffline,
+              ? DesignColors.green
+              : DesignColors.red,
         ),
         title: Text(
           category.title,
-          style: DashboardTextStyles.deviceTitle,
+          style: DesignTextStyles.cardTitle,
         ),
         subtitle: Text(
           subtitleLines.join('\n'),
-          style: DashboardTextStyles.sensorMeta,
+          style: DesignTextStyles.bodyText,
         ),
         trailing: const Icon(Icons.chevron_right),
         onTap: () async {

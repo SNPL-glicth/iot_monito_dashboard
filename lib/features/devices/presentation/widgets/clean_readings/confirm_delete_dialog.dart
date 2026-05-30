@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Diálogo de confirmación para eliminar todas las lecturas.
 Future<bool> showConfirmDeleteAllDialog(BuildContext context) async {
   final confirm = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
-      backgroundColor: DashboardColors.cardBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: DesignColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
       title: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(DesignSpacing.sm),
             decoration: BoxDecoration(
-              color: DashboardColors.redAccent15,
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.red.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
-            child: Icon(Icons.delete_forever_rounded, color: DashboardColors.error, size: 20),
+            child: Icon(Icons.delete_forever_rounded, color: DesignColors.red, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Text('Confirmar eliminación', style: DashboardTextStyles.deviceTitle),
+          SizedBox(width: DesignSpacing.md),
+          Text('Confirmar eliminación', style: DesignTextStyles.cardTitle),
         ],
       ),
       content: Column(
@@ -30,22 +32,22 @@ Future<bool> showConfirmDeleteAllDialog(BuildContext context) async {
             'Esto eliminará TODAS las lecturas de sensores del sistema.',
             style: TextStyle(color: Colors.white, fontSize: 15),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.redAccent15,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: DashboardColors.error.withValues(alpha: 0.3)),
+              color: DesignColors.red.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
+              border: Border.all(color: DesignColors.red.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
-                Icon(Icons.warning_rounded, color: DashboardColors.error, size: 18),
-                const SizedBox(width: 10),
+                Icon(Icons.warning_rounded, color: DesignColors.red, size: 18),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     'Esta acción no se puede deshacer.',
-                    style: TextStyle(color: DashboardColors.error, fontSize: 12),
+                    style: TextStyle(color: DesignColors.red, fontSize: 12),
                   ),
                 ),
               ],
@@ -53,19 +55,19 @@ Future<bool> showConfirmDeleteAllDialog(BuildContext context) async {
           ),
         ],
       ),
-      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          style: TextButton.styleFrom(foregroundColor: DashboardColors.white70),
+          style: TextButton.styleFrom(foregroundColor: DesignColors.textPrimary),
           child: const Text('Cancelar'),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(ctx, true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: DashboardColors.error,
+            backgroundColor: DesignColors.red,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
           ),
           child: const Text('Eliminar todo'),
         ),
@@ -83,20 +85,20 @@ Future<bool> showConfirmDeleteBySensorDialog(
   final confirm = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
-      backgroundColor: DashboardColors.cardBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: DesignColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
       title: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(DesignSpacing.sm),
             decoration: BoxDecoration(
-              color: DashboardColors.orangeAccent15,
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.amber.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
-            child: Icon(Icons.delete_outline_rounded, color: DashboardColors.warning, size: 20),
+            child: Icon(Icons.delete_outline_rounded, color: DesignColors.amber, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Text('Confirmar eliminación', style: DashboardTextStyles.deviceTitle),
+          SizedBox(width: DesignSpacing.md),
+          Text('Confirmar eliminación', style: DesignTextStyles.cardTitle),
         ],
       ),
       content: Column(
@@ -106,43 +108,43 @@ Future<bool> showConfirmDeleteBySensorDialog(
             'Se eliminarán permanentemente todas las lecturas del sensor:',
             style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: DashboardColors.white10),
+              color: DesignColors.surface2,
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
+              border: Border.all(color: DesignColors.border),
             ),
             child: Row(
               children: [
-                Icon(Icons.sensors_rounded, color: DashboardColors.primaryLight, size: 18),
-                const SizedBox(width: 10),
+                Icon(Icons.sensors_rounded, color: DesignColors.cyan, size: 18),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     sensorLabel,
-                    style: TextStyle(color: DashboardColors.primaryLight, fontSize: 14, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: DesignColors.cyan, fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.redAccent15,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: DashboardColors.error.withValues(alpha: 0.3)),
+              color: DesignColors.red.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
+              border: Border.all(color: DesignColors.red.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
-                Icon(Icons.warning_rounded, color: DashboardColors.error, size: 18),
-                const SizedBox(width: 10),
+                Icon(Icons.warning_rounded, color: DesignColors.red, size: 18),
+                SizedBox(width: DesignSpacing.sm),
                 Expanded(
                   child: Text(
                     'Esta acción no se puede deshacer.',
-                    style: TextStyle(color: DashboardColors.error, fontSize: 12),
+                    style: TextStyle(color: DesignColors.red, fontSize: 12),
                   ),
                 ),
               ],
@@ -150,19 +152,19 @@ Future<bool> showConfirmDeleteBySensorDialog(
           ),
         ],
       ),
-      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          style: TextButton.styleFrom(foregroundColor: DashboardColors.white70),
+          style: TextButton.styleFrom(foregroundColor: DesignColors.textPrimary),
           child: const Text('Cancelar'),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(ctx, true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: DashboardColors.error,
+            backgroundColor: DesignColors.red,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
           ),
           child: const Text('Eliminar lecturas'),
         ),

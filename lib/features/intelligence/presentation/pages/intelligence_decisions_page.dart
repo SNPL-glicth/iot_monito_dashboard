@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/network/api_client.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/intelligence_models.dart';
 import '../../data/intelligence_repository.dart';
 import '../../data/intelligence_prefetch_service.dart';
 import '../widgets/intelligence_decisions_helpers.dart';
 import '../widgets/decisions/decisions_filters_header.dart';
 import '../widgets/decisions/decisions_content.dart';
+import '../../../../../core/theme/design_colors.dart';
+
 
 class IntelligenceDecisionsPage extends StatefulWidget {
   const IntelligenceDecisionsPage({super.key});
@@ -85,7 +85,7 @@ class _IntelligenceDecisionsPageState extends State<IntelligenceDecisionsPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Decisión marcada como ${IntelligenceDecisionsHelpers.statusLabel(newStatus).toLowerCase()}'),
-            backgroundColor: DashboardColors.success,
+            backgroundColor: DesignColors.green,
           ),
         );
         _loadDecisions();
@@ -95,7 +95,7 @@ class _IntelligenceDecisionsPageState extends State<IntelligenceDecisionsPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: $e'),
-            backgroundColor: DashboardColors.error,
+            backgroundColor: DesignColors.red,
           ),
         );
       }

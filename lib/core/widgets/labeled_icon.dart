@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/design_colors.dart';
+import '../../../core/theme/design_spacing.dart';
 
-import '../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widget reutilizable para mostrar un icono con etiqueta al lado.
 ///
@@ -24,13 +25,13 @@ class LabeledIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = color ?? DashboardColors.white70;
+    final effectiveColor = color ?? DesignColors.textPrimary;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, color: effectiveColor, size: iconSize),
-        const SizedBox(width: 8),
+        SizedBox(width: DesignSpacing.sm),
         Text(
           label,
           style: TextStyle(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../../../data/intelligence_models.dart';
 import '../intelligence_decisions_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Tarjeta de decisión del sistema con severidad, estado, metadatos y acciones.
 class DecisionCard extends StatelessWidget {
@@ -21,13 +23,13 @@ class DecisionCard extends StatelessWidget {
     final statusColor = IntelligenceDecisionsHelpers.statusColor(decision.status);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: ModernCardDecoration.elevated(),
+      margin: EdgeInsets.only(bottom: DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -42,47 +44,47 @@ class DecisionCard extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: severityColor.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(DesignRadius.md),
                   ),
                   child: Icon(IntelligenceDecisionsHelpers.severityIcon(decision.severity), color: severityColor, size: 22),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         decision.title,
-                        style: DashboardTextStyles.deviceTitle,
+                        style: DesignTextStyles.cardTitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: DesignSpacing.xs),
                       Text(
                         IntelligenceDecisionsHelpers.formatAge(decision.ageMinutes),
-                        style: DashboardTextStyles.smallLabel,
+                        style: DesignTextStyles.timestamp,
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(DesignRadius.xl),
                     border: Border.all(color: statusColor.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(IntelligenceDecisionsHelpers.statusIcon(decision.status), size: 14, color: statusColor),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         IntelligenceDecisionsHelpers.statusLabel(decision.status),
-                        style: DashboardTextStyles.smallLabel.copyWith(color: statusColor),
+                        style: DesignTextStyles.timestamp.copyWith(color: statusColor),
                       ),
                     ],
                   ),
@@ -91,41 +93,41 @@ class DecisionCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   decision.summary,
-                  style: DashboardTextStyles.alertText,
+                  style: DesignTextStyles.bodyText,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: DesignSpacing.lg),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    IntelligenceDecisionsHelpers.buildMetaChip(Icons.devices_rounded, decision.deviceName, DashboardColors.secondary),
-                    IntelligenceDecisionsHelpers.buildMetaChip(Icons.sensors_rounded, '${decision.affectedSensorIds.length} sensores', DashboardColors.info),
-                    IntelligenceDecisionsHelpers.buildMetaChip(Icons.event_rounded, '${decision.eventCount} eventos', DashboardColors.warning),
+                    IntelligenceDecisionsHelpers.buildMetaChip(Icons.devices_rounded, decision.deviceName, DesignColors.cyanDim),
+                    IntelligenceDecisionsHelpers.buildMetaChip(Icons.sensors_rounded, '${decision.affectedSensorIds.length} sensores', DesignColors.cyan),
+                    IntelligenceDecisionsHelpers.buildMetaChip(Icons.event_rounded, '${decision.eventCount} eventos', DesignColors.amber),
                   ],
                 ),
                 if (decision.recommendedActions.isNotEmpty) ...[
-                  const SizedBox(height: 20),
+                  SizedBox(height: DesignSpacing.lg),
                   Row(
                     children: [
-                      const Icon(Icons.lightbulb_outline_rounded, color: DashboardColors.warning, size: 18),
-                      const SizedBox(width: 8),
-                      const Text('Acciones recomendadas', style: DashboardTextStyles.sensorTitle),
+                      Icon(Icons.lightbulb_outline_rounded, color: DesignColors.amber, size: 18),
+                      SizedBox(width: DesignSpacing.sm),
+                      Text('Acciones recomendadas', style: DesignTextStyles.bodyText),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: DesignSpacing.md),
                   ...decision.recommendedActions.take(3).map((action) => IntelligenceDecisionsHelpers.buildActionItem(action)),
                   if (decision.recommendedActions.length > 3)
                     Padding(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: EdgeInsets.only(top: DesignSpacing.sm),
                       child: Text(
                         '+ ${decision.recommendedActions.length - 3} acciones más',
-                        style: DashboardTextStyles.smallLabel,
+                        style: DesignTextStyles.timestamp,
                       ),
                     ),
                 ],
@@ -134,9 +136,9 @@ class DecisionCard extends StatelessWidget {
           ),
           if (decision.status != 'resolved')
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
-                color: DashboardColors.white05,
+                color: DesignColors.border,
                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
               ),
               child: Row(
@@ -148,24 +150,24 @@ class DecisionCard extends StatelessWidget {
                         icon: const Icon(Icons.visibility_rounded, size: 18),
                         label: const Text('Marcar visto'),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: DashboardColors.info,
-                          side: const BorderSide(color: DashboardColors.info),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          foregroundColor: DesignColors.cyan,
+                          side: BorderSide(color: DesignColors.cyan),
+                          padding: EdgeInsets.symmetric(vertical: DesignSpacing.md),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
                         ),
                       ),
                     ),
-                  if (decision.status == 'pending') const SizedBox(width: 12),
+                  if (decision.status == 'pending') SizedBox(width: DesignSpacing.md),
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () => onUpdateStatus('resolved'),
                       icon: const Icon(Icons.check_rounded, size: 18),
                       label: const Text('Resolver'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: DashboardColors.success,
+                        backgroundColor: DesignColors.green,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: EdgeInsets.symmetric(vertical: DesignSpacing.md),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
                       ),
                     ),
                   ),

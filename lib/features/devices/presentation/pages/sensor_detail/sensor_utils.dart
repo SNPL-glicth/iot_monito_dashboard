@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../core/theme/design_colors.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Utility functions for sensor display
 class SensorUtils {
@@ -29,9 +29,9 @@ class SensorUtils {
     final t = (raw ?? '').toLowerCase();
     switch (t) {
       case 'temperature':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'humidity':
-        return Colors.lightBlueAccent;
+        return DesignColors.cyan;
       case 'air_quality':
         return Colors.tealAccent;
       case 'power':
@@ -39,7 +39,7 @@ class SensorUtils {
       case 'voltage':
         return Colors.amberAccent;
       default:
-        return DashboardColors.sensorIcon;
+        return DesignColors.cyan;
     }
   }
 
@@ -76,9 +76,9 @@ class SensorUtils {
   static Color tradingStateColor(String raw) {
     switch (raw.toUpperCase()) {
       case 'ALERT':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'WARNING':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       default:
         return Colors.tealAccent;
     }

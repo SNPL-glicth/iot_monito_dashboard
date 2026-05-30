@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../define_sensor_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Header widget showing current step and progress
 class FlowHeaderWidget extends StatelessWidget {
@@ -24,7 +25,7 @@ class FlowHeaderWidget extends StatelessWidget {
         Container(
           width: 40,
           height: 4,
-          margin: const EdgeInsets.symmetric(vertical: 12),
+          margin: EdgeInsets.symmetric(vertical: DesignSpacing.md),
           decoration: BoxDecoration(
             color: Colors.white24,
             borderRadius: BorderRadius.circular(2),
@@ -32,14 +33,14 @@ class FlowHeaderWidget extends StatelessWidget {
         ),
         // Título con paso actual
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
               Icon(
                 DefineSensorWidgets.getStepIcon(currentStep, activationMethod),
                 color: Colors.tealAccent,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: DesignSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,22 +55,22 @@ class FlowHeaderWidget extends StatelessWidget {
                     ),
                     Text(
                       'Paso ${currentStep + 1} de 4',
-                      style: const TextStyle(color: DashboardColors.white54, fontSize: 12),
+                      style: TextStyle(color: DesignColors.textSecondary, fontSize: 12),
                     ),
                   ],
                 ),
               ),
               IconButton(
                 onPressed: onClose,
-                icon: const Icon(Icons.close, color: Colors.white54),
+                icon: Icon(Icons.close, color: DesignColors.textSecondary),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         // Indicador de progreso
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: List.generate(4, (i) {
               final isActive = i <= currentStep;
@@ -77,11 +78,11 @@ class FlowHeaderWidget extends StatelessWidget {
               return Expanded(
                 child: Container(
                   height: 4,
-                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  margin: EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
                     color: isActive
-                        ? (isCurrent ? Colors.tealAccent : DashboardColors.tealAccent50)
-                        : DashboardColors.white12,
+                        ? (isCurrent ? Colors.tealAccent : DesignColors.cyan.withValues(alpha: 0.5))
+                        : DesignColors.border,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -89,7 +90,7 @@ class FlowHeaderWidget extends StatelessWidget {
             }),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: DesignSpacing.lg),
       ],
     );
   }

@@ -4,6 +4,7 @@ import '../../../../../core/auth/auth_storage.dart';
 import '../../../../../core/network/api_client.dart';
 import '../../../../../core/realtime/realtime_service.dart';
 import '../../../../auth/presentation/pages/login_page.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 class DashboardAccessDenied extends StatelessWidget {
   const DashboardAccessDenied({super.key});
@@ -14,7 +15,7 @@ class DashboardAccessDenied extends StatelessWidget {
       appBar: AppBar(title: const Text('Acceso restringido')),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(DesignSpacing.lg),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -22,7 +23,7 @@ class DashboardAccessDenied extends StatelessWidget {
                 'Este dashboard es solo para administradores.',
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               ElevatedButton.icon(
                 onPressed: () async {
                   final navigator = Navigator.of(context);

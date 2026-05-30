@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import '../intelligence_decisions_helpers.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Header de la página de decisiones con filtros y última actualización.
 class DecisionsFiltersHeader extends StatelessWidget {
@@ -23,40 +25,40 @@ class DecisionsFiltersHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(DesignSpacing.sm),
                 decoration: BoxDecoration(
-                  color: DashboardColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  color: DesignColors.cyan.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(DesignRadius.sm),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.task_alt_rounded,
-                  color: DashboardColors.primary,
+                  color: DesignColors.cyan,
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
-              const Text('Decisiones', style: DashboardTextStyles.sectionHeader),
+              SizedBox(width: DesignSpacing.md),
+              Text('Decisiones', style: DesignTextStyles.screenTitle),
             ],
           ),
           if (lastUpdated != null)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: EdgeInsets.only(top: DesignSpacing.sm),
               child: Text(
                 IntelligenceDecisionsHelpers.formatLastUpdated(lastUpdated),
-                style: DashboardTextStyles.smallLabel,
+                style: DesignTextStyles.timestamp,
               ),
             ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: ModernCardDecoration.elevated(),
+            padding: EdgeInsets.all(DesignSpacing.md),
+            decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
             child: Row(
               children: [
                 Expanded(
@@ -72,7 +74,7 @@ class DecisionsFiltersHeader extends StatelessWidget {
                     onChanged: onStatusChanged,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: DesignSpacing.md),
                 Expanded(
                   child: IntelligenceDecisionsHelpers.buildFilterChip(
                     label: 'Severidad',

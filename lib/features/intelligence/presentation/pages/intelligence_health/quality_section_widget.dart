@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_helpers.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Quality section widget showing prediction quality metrics
 class QualitySectionWidget extends StatelessWidget {
@@ -22,46 +24,46 @@ class QualitySectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IntelligenceHealthWidgets.sectionHeader(Icons.verified_rounded, 'Calidad de Predicciones', DashboardColors.accent),
-          const SizedBox(height: 16),
-          IntelligenceHealthWidgets.confidenceBar('Confianza promedio', avgConfidence, DashboardColors.success),
-          const SizedBox(height: 12),
+          IntelligenceHealthWidgets.sectionHeader(Icons.verified_rounded, 'Calidad de Predicciones', DesignColors.green),
+          SizedBox(height: DesignSpacing.lg),
+          IntelligenceHealthWidgets.confidenceBar('Confianza promedio', avgConfidence, DesignColors.green),
+          SizedBox(height: DesignSpacing.md),
           Row(
             children: [
               Expanded(
                 child: IntelligenceHealthWidgets.qualityChip(
                   'Baja confianza',
                   IntelligenceHealthHelpers.formatPercent(lowConfidenceRate),
-                  DashboardColors.warning,
+                  DesignColors.amber,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: DesignSpacing.md),
               Expanded(
                 child: IntelligenceHealthWidgets.qualityChip(
                   'Alta confianza',
                   IntelligenceHealthHelpers.formatPercent(highConfidenceRate),
-                  DashboardColors.success,
+                  DesignColors.green,
                 ),
               ),
             ],
           ),
           if (confidenceDistribution.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            const Text('Distribución de confianza', style: DashboardTextStyles.sensorMeta),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.lg),
+            Text('Distribución de confianza', style: DesignTextStyles.bodyText),
+            SizedBox(height: DesignSpacing.sm),
             ...confidenceDistribution.entries.map(
               (e) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
+                padding: EdgeInsets.only(bottom: 6),
                 child: Row(
                   children: [
                     SizedBox(
                       width: 60,
-                      child: Text(e.key, style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11)),
+                      child: Text(e.key, style: DesignTextStyles.bodyText.copyWith(fontSize: 11)),
                     ),
                     Expanded(
                       child: ClipRRect(
@@ -69,17 +71,17 @@ class QualitySectionWidget extends StatelessWidget {
                         child: LinearProgressIndicator(
                           value: e.value / (confidenceDistribution.values.fold(0, (a, b) => a + b) + 1),
                           backgroundColor: Colors.white.withValues(alpha: 0.1),
-                          valueColor: AlwaysStoppedAnimation<Color>(DashboardColors.primary.withValues(alpha: 0.7)),
+                          valueColor: AlwaysStoppedAnimation<Color>(DesignColors.cyan.withValues(alpha: 0.7)),
                           minHeight: 8,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: DesignSpacing.sm),
                     SizedBox(
                       width: 30,
                       child: Text(
                         '${e.value}',
-                        style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11),
+                        style: DesignTextStyles.bodyText.copyWith(fontSize: 11),
                         textAlign: TextAlign.right,
                       ),
                     ),

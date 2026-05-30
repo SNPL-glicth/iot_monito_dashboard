@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
 
 /// Leyenda del candlestick chart.
 class CandlestickChartLegend extends StatelessWidget {
@@ -12,17 +14,17 @@ class CandlestickChartLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: EdgeInsets.only(top: DesignSpacing.sm),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _LegendItem(const Color(0xFF00E676), 'Normal'),
-          const SizedBox(width: 16),
-          _LegendItem(Colors.orangeAccent, 'Advertencia'),
-          const SizedBox(width: 16),
-          _LegendItem(Colors.redAccent, 'Alerta'),
+          SizedBox(width: 16),
+          _LegendItem(DesignColors.amber, 'Advertencia'),
+          SizedBox(width: 16),
+          _LegendItem(DesignColors.red, 'Alerta'),
           if (showHighlighted) ...[
-            const SizedBox(width: 16),
+            SizedBox(width: 16),
             _LegendItem(Colors.yellowAccent, 'Resaltado'),
           ],
         ],
@@ -51,7 +53,7 @@ class _LegendItem extends StatelessWidget {
             border: Border.all(color: Colors.white30, width: 1),
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Text(
           label,
           style: TextStyle(

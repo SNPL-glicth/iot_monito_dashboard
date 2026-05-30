@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../monitoring/data/models/device_with_sensor_view_model.dart';
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Dialog for editing sensor name
 class SensorEditDialog extends StatelessWidget {
@@ -17,68 +19,68 @@ class SensorEditDialog extends StatelessWidget {
     final nameCtrl = TextEditingController(text: row.sensorName ?? '');
 
     return AlertDialog(
-      backgroundColor: DashboardColors.cardBackground,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: DesignColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.lg)),
       title: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(DesignSpacing.sm),
             decoration: BoxDecoration(
-              color: DashboardColors.blueAccent10,
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.cyan.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
-            child: Icon(Icons.edit_rounded, color: DashboardColors.info, size: 20),
+            child: Icon(Icons.edit_rounded, color: DesignColors.cyan, size: 20),
           ),
-          const SizedBox(width: 12),
-          const Text('Editar Sensor', style: DashboardTextStyles.deviceTitle),
+          SizedBox(width: DesignSpacing.md),
+          Text('Editar Sensor', style: DesignTextStyles.cardTitle),
         ],
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Nombre del sensor', style: TextStyle(color: DashboardColors.white70, fontSize: 13, fontWeight: FontWeight.w500)),
-          const SizedBox(height: 8),
+          Text('Nombre del sensor', style: TextStyle(color: DesignColors.textPrimary, fontSize: 13, fontWeight: FontWeight.w500)),
+          SizedBox(height: DesignSpacing.sm),
           TextField(
             controller: nameCtrl,
             style: const TextStyle(color: Colors.white, fontSize: 15),
             decoration: InputDecoration(
               hintText: 'Ingrese el nombre',
-              hintStyle: TextStyle(color: DashboardColors.white54),
+              hintStyle: TextStyle(color: DesignColors.textSecondary),
               filled: true,
-              fillColor: DashboardColors.surfaceElevated,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: DashboardColors.white10)),
-              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: DashboardColors.primary, width: 1.5)),
+              fillColor: DesignColors.surface2,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide.none),
+              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide(color: DesignColors.border)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(DesignRadius.md), borderSide: BorderSide(color: DesignColors.cyan, width: 1.5)),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             decoration: BoxDecoration(
-              color: DashboardColors.white05,
-              borderRadius: BorderRadius.circular(10),
+              color: DesignColors.border,
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
             child: Text(
               'Tipo: ${row.sensorType ?? '-'} · Unidad: ${row.unit ?? '-'}',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
             ),
           ),
         ],
       ),
-      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      actionsPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          style: TextButton.styleFrom(foregroundColor: DashboardColors.white70),
+          style: TextButton.styleFrom(foregroundColor: DesignColors.textPrimary),
           child: const Text('Cancelar'),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: DashboardColors.primary,
+            backgroundColor: DesignColors.cyan,
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.sm)),
           ),
           child: const Text('Guardar'),
         ),

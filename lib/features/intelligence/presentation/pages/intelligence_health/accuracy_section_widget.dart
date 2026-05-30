@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Accuracy section widget showing threshold-based accuracy metrics
 class AccuracySectionWidget extends StatelessWidget {
@@ -23,43 +25,43 @@ class AccuracySectionWidget extends StatelessWidget {
     final hasData = totalEvaluated > 0;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IntelligenceHealthWidgets.sectionHeader(Icons.gps_fixed_rounded, 'Precisión por Umbral', Colors.teal),
-          const SizedBox(height: 16),
+          SizedBox(height: DesignSpacing.lg),
           if (!hasData)
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               decoration: BoxDecoration(
                 color: Colors.grey.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(DesignRadius.sm),
               ),
               child: Row(
                 children: [
                   Icon(Icons.info_outline_rounded, color: Colors.grey, size: 18),
-                  const SizedBox(width: 8),
-                  const Expanded(
+                  SizedBox(width: DesignSpacing.sm),
+                  Expanded(
                     child: Text(
                       'Sin datos suficientes para calcular precisión',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 ],
               ),
             )
           else ...[
-            IntelligenceHealthWidgets.accuracyBar('±5%', withinThreshold5pct, DashboardColors.success),
-            const SizedBox(height: 8),
-            IntelligenceHealthWidgets.accuracyBar('±10%', withinThreshold10pct, DashboardColors.info),
-            const SizedBox(height: 8),
-            IntelligenceHealthWidgets.accuracyBar('±20%', withinThreshold20pct, DashboardColors.warning),
-            const SizedBox(height: 12),
+            IntelligenceHealthWidgets.accuracyBar('±5%', withinThreshold5pct, DesignColors.green),
+            SizedBox(height: DesignSpacing.sm),
+            IntelligenceHealthWidgets.accuracyBar('±10%', withinThreshold10pct, DesignColors.cyan),
+            SizedBox(height: DesignSpacing.sm),
+            IntelligenceHealthWidgets.accuracyBar('±20%', withinThreshold20pct, DesignColors.amber),
+            SizedBox(height: DesignSpacing.md),
             Text(
               'Evaluadas: $totalEvaluated predicciones',
-              style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11),
+              style: DesignTextStyles.bodyText.copyWith(fontSize: 11),
             ),
           ],
         ],

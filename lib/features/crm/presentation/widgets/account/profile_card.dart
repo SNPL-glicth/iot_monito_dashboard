@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 import 'profile_tile.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+
 
 /// Card con información del perfil de usuario.
 class ProfileCard extends StatelessWidget {
@@ -21,26 +22,26 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: ModernCardDecoration.elevated(),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         children: [
           ProfileTile(
             icon: Icons.person_rounded,
-            iconColor: DashboardColors.primary,
+            iconColor: DesignColors.cyan,
             label: 'Usuario',
             value: username.isEmpty ? '-' : username,
           ),
           _buildDivider(),
           ProfileTile(
             icon: Icons.email_rounded,
-            iconColor: DashboardColors.secondary,
+            iconColor: DesignColors.cyanDim,
             label: 'Email',
             value: email.isEmpty ? '-' : email,
           ),
           _buildDivider(),
           ProfileTile(
             icon: Icons.verified_user_rounded,
-            iconColor: DashboardColors.accent,
+            iconColor: DesignColors.green,
             label: 'Rol',
             value: roleLabel,
           ),
@@ -48,7 +49,7 @@ class ProfileCard extends StatelessWidget {
             _buildDivider(),
             ProfileTile(
               icon: Icons.fingerprint_rounded,
-              iconColor: DashboardColors.warning,
+              iconColor: DesignColors.amber,
               label: 'ID',
               value: userId,
             ),

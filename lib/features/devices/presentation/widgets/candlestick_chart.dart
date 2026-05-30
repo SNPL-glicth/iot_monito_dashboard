@@ -7,6 +7,8 @@ import '../../../../core/utils/sensor_type_config.dart';
 import 'candlestick_chart/candlestick_chart_empty.dart';
 import 'candlestick_chart/candlestick_chart_legend.dart';
 import 'candlestick_chart/candlestick_chart_zoom_controls.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Punto de datos para la gráfica tipo candlestick/IQ Option
 class ChartDataPoint {
@@ -247,7 +249,7 @@ class _CandlestickChartState extends State<CandlestickChart>
           onZoomOut: _zoomOut,
           onReset: _resetZoom,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         SizedBox(
           height: 280,
           child: _buildMainChart(hourPoints),
@@ -316,10 +318,10 @@ class _CandlestickChartState extends State<CandlestickChart>
       child: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF1A1F2E),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           border: Border.all(color: Colors.white10),
         ),
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(DesignSpacing.md),
         child: LineChart(
           LineChartData(
             minX: viewMinT,
@@ -384,14 +386,14 @@ class _CandlestickChartState extends State<CandlestickChart>
                 if (widget.alertThresholdMin != null)
                   HorizontalLine(
                     y: widget.alertThresholdMin!,
-                    color: Colors.redAccent.withValues(alpha: 0.6),
+                    color: DesignColors.red.withValues(alpha: 0.6),
                     strokeWidth: 1.5,
                     dashArray: [5, 3],
                   ),
                 if (widget.alertThresholdMax != null)
                   HorizontalLine(
                     y: widget.alertThresholdMax!,
-                    color: Colors.redAccent.withValues(alpha: 0.6),
+                    color: DesignColors.red.withValues(alpha: 0.6),
                     strokeWidth: 1.5,
                     dashArray: [5, 3],
                   ),
@@ -399,14 +401,14 @@ class _CandlestickChartState extends State<CandlestickChart>
                 if (widget.warningThresholdMin != null)
                   HorizontalLine(
                     y: widget.warningThresholdMin!,
-                    color: Colors.orangeAccent.withValues(alpha: 0.6),
+                    color: DesignColors.amber.withValues(alpha: 0.6),
                     strokeWidth: 1.2,
                     dashArray: [4, 4],
                   ),
                 if (widget.warningThresholdMax != null)
                   HorizontalLine(
                     y: widget.warningThresholdMax!,
-                    color: Colors.orangeAccent.withValues(alpha: 0.6),
+                    color: DesignColors.amber.withValues(alpha: 0.6),
                     strokeWidth: 1.2,
                     dashArray: [4, 4],
                   ),
@@ -446,7 +448,7 @@ class _CandlestickChartState extends State<CandlestickChart>
                     getDotPainter: (spot, percent, barData, index) {
                       return FlDotCirclePainter(
                         radius: 6,
-                        color: Colors.redAccent,
+                        color: DesignColors.red,
                         strokeWidth: 2,
                         strokeColor: Colors.white,
                       );
@@ -465,7 +467,7 @@ class _CandlestickChartState extends State<CandlestickChart>
                     getDotPainter: (spot, percent, barData, index) {
                       return FlDotCirclePainter(
                         radius: 5,
-                        color: Colors.orangeAccent,
+                        color: DesignColors.amber,
                         strokeWidth: 2,
                         strokeColor: Colors.white,
                       );

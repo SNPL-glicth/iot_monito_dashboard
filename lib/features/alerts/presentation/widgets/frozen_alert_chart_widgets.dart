@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/alerts/alert_snapshot_service.dart';
+import '../../../../core/theme/design_spacing.dart';
 
 /// Estado vacío del gráfico
 class FrozenEmptyState extends StatelessWidget {
@@ -27,7 +28,7 @@ class FrozenEmptyState extends StatelessWidget {
               size: 48,
               color: Colors.white.withValues(alpha: 0.3),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               'Sin datos de contexto',
               style: TextStyle(
@@ -35,7 +36,7 @@ class FrozenEmptyState extends StatelessWidget {
                 fontSize: 13,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Text(
               'Puntos: $pointCount',
               style: TextStyle(
@@ -66,7 +67,7 @@ class FrozenChartHeader extends StatelessWidget {
     return Row(
       children: [
         Icon(Icons.lock_clock, color: severityColor, size: 16),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           'Snapshot congelado',
           style: TextStyle(
@@ -77,7 +78,7 @@ class FrozenChartHeader extends StatelessWidget {
         ),
         const Spacer(),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(
             color: severityColor.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(4),
@@ -111,16 +112,16 @@ class FrozenTriggerInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: severityColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(color: severityColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
           Icon(Icons.warning_amber, color: severityColor, size: 18),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +134,7 @@ class FrozenTriggerInfo extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2),
                 Text(
                   '${snapshot.triggeredValue.toStringAsFixed(2)} ${snapshot.unit}',
                   style: const TextStyle(

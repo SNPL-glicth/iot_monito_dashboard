@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
 
 /// Loading state widget for intelligence health page
 class LoadingStateWidget extends StatelessWidget {
@@ -14,7 +15,7 @@ class LoadingStateWidget extends StatelessWidget {
           SizedBox(height: 16),
           Text(
             'Cargando diagnóstico del modelo...',
-            style: TextStyle(color: Colors.white54),
+            style: TextStyle(color: DesignColors.textSecondary),
           ),
         ],
       ),

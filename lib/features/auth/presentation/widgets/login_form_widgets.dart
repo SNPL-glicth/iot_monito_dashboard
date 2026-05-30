@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Widgets helper para el formulario de login
 class LoginFormWidgets {
@@ -8,8 +10,8 @@ class LoginFormWidgets {
   static Widget buildInputLabel(String text) {
     return Text(
       text,
-      style: const TextStyle(
-        color: DashboardColors.white70,
+      style: TextStyle(
+        color: DesignColors.textPrimary,
         fontSize: 13,
         fontWeight: FontWeight.w500,
       ),
@@ -32,33 +34,33 @@ class LoginFormWidgets {
       validator: validator,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: DashboardColors.white54, fontSize: 14),
-        prefixIcon: Icon(prefixIcon, color: DashboardColors.white54, size: 20),
+        hintStyle: TextStyle(color: DesignColors.textSecondary, fontSize: 14),
+        prefixIcon: Icon(prefixIcon, color: DesignColors.textSecondary, size: 20),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: DashboardColors.surfaceElevated,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        fillColor: DesignColors.surface2,
+        contentPadding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.lg),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: DashboardColors.white10, width: 1),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
+          borderSide: BorderSide(color: DesignColors.border, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: DashboardColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
+          borderSide: BorderSide(color: DesignColors.cyan, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: DashboardColors.error, width: 1),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
+          borderSide: BorderSide(color: DesignColors.red, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: DashboardColors.error, width: 1.5),
+          borderRadius: BorderRadius.circular(DesignRadius.md),
+          borderSide: BorderSide(color: DesignColors.red, width: 1.5),
         ),
-        errorStyle: TextStyle(color: DashboardColors.error, fontSize: 12),
+        errorStyle: TextStyle(color: DesignColors.red, fontSize: 12),
       ),
     );
   }
@@ -66,26 +68,26 @@ class LoginFormWidgets {
   /// Construye widget de mensaje de error
   static Widget buildErrorMessage(String message) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(DesignSpacing.md),
       decoration: BoxDecoration(
-        color: DashboardColors.redAccent15,
-        borderRadius: BorderRadius.circular(10),
+        color: DesignColors.red.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
         border: Border.all(
-          color: DashboardColors.error.withValues(alpha: 0.3),
+          color: DesignColors.red.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
         children: [
           Icon(
             Icons.error_outline_rounded,
-            color: DashboardColors.error,
+            color: DesignColors.red,
             size: 18,
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: DesignSpacing.sm),
           Expanded(
             child: Text(
               message,
-              style: DashboardTextStyles.error,
+              style: DesignTextStyles.bodyText,
             ),
           ),
         ],
@@ -106,9 +108,9 @@ class LoginFormWidgets {
           child: Checkbox(
             value: value,
             onChanged: onChanged,
-            activeColor: DashboardColors.primary,
+            activeColor: DesignColors.cyan,
             side: BorderSide(
-              color: DashboardColors.white54,
+              color: DesignColors.textSecondary,
               width: 1.5,
             ),
             shape: RoundedRectangleBorder(
@@ -116,10 +118,10 @@ class LoginFormWidgets {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: DesignSpacing.sm),
         Text(
           'Mantener sesión iniciada',
-          style: DashboardTextStyles.sensorMeta,
+          style: DesignTextStyles.bodyText,
         ),
       ],
     );
@@ -136,16 +138,16 @@ class LoginFormWidgets {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: DashboardColors.primary,
+          backgroundColor: DesignColors.cyan,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: DashboardColors.primary.withValues(alpha: 0.5),
+          disabledBackgroundColor: DesignColors.cyan.withValues(alpha: 0.5),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(DesignRadius.md),
           ),
         ),
         child: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 22,
                 height: 22,
                 child: CircularProgressIndicator(

@@ -24,7 +24,7 @@ class DetailRow extends StatelessWidget {
           size: 14,
           color: Colors.white.withValues(alpha: 0.5),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           '$label:',
           style: TextStyle(
@@ -32,7 +32,7 @@ class DetailRow extends StatelessWidget {
             fontSize: 11,
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Expanded(
           child: Text(
             value,

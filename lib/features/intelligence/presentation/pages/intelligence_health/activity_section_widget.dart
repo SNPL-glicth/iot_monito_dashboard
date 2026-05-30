@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../widgets/intelligence_health_widgets.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Activity section widget showing model activity metrics
 class ActivitySectionWidget extends StatelessWidget {
@@ -21,13 +23,13 @@ class ActivitySectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(DesignSpacing.lg),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IntelligenceHealthWidgets.sectionHeader(Icons.timeline_rounded, 'Actividad del Modelo', DashboardColors.primary),
-          const SizedBox(height: 16),
+          IntelligenceHealthWidgets.sectionHeader(Icons.timeline_rounded, 'Actividad del Modelo', DesignColors.cyan),
+          SizedBox(height: DesignSpacing.lg),
           Row(
             children: [
               Expanded(
@@ -53,20 +55,20 @@ class ActivitySectionWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: DesignSpacing.md, vertical: DesignSpacing.sm),
             decoration: BoxDecoration(
-              color: DashboardColors.info.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: DesignColors.cyan.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(DesignRadius.sm),
             ),
             child: Row(
               children: [
-                Icon(Icons.speed_rounded, color: DashboardColors.info, size: 18),
-                const SizedBox(width: 8),
+                Icon(Icons.speed_rounded, color: DesignColors.cyan, size: 18),
+                SizedBox(width: DesignSpacing.sm),
                 Text(
                   'Promedio: ${avgPredictionsPerHour.toStringAsFixed(1)} predicciones/hora',
-                  style: DashboardTextStyles.sensorMeta.copyWith(color: DashboardColors.info),
+                  style: DesignTextStyles.bodyText.copyWith(color: DesignColors.cyan),
                 ),
               ],
             ),

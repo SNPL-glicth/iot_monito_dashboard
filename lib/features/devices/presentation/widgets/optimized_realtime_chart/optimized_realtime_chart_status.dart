@@ -15,7 +15,7 @@ class OptimizedRealtimeChartStatus extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: color, size: 10),
-        const SizedBox(width: 6),
+        SizedBox(width: 6),
         Text(
           label,
           style: TextStyle(

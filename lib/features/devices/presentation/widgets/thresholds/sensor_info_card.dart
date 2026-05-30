@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+import '../../../../../core/theme/design_colors.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Tarjeta con información básica del sensor.
 class SensorInfoCard extends StatelessWidget {
@@ -21,11 +22,11 @@ class SensorInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: const Icon(Icons.sensors, color: DashboardColors.sensorIcon),
-        title: Text(sensorName, style: DashboardTextStyles.deviceTitle),
+        leading: Icon(Icons.sensors, color: DesignColors.cyan),
+        title: Text(sensorName, style: DesignTextStyles.cardTitle),
         subtitle: Text(
           'Tipo: $sensorType · Unidad: ${unit.isEmpty ? '-' : unit}\nSensorId: $sensorId',
-          style: DashboardTextStyles.sensorMeta,
+          style: DesignTextStyles.bodyText,
         ),
       ),
     );

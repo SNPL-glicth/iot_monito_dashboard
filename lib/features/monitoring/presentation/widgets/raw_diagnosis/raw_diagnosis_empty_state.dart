@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../styles/dashboard_styles.dart';
 
 class RawDiagnosisEmptyState extends StatelessWidget {
   const RawDiagnosisEmptyState({super.key});
@@ -12,10 +13,10 @@ class RawDiagnosisEmptyState extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
-          const SizedBox(height: 16),
-          Text('Sin lecturas', style: DashboardTextStyles.deviceTitle),
-          const SizedBox(height: 8),
-          Text('No hay datos para este sensor aún.', style: DashboardTextStyles.sensorMeta),
+          SizedBox(height: DesignSpacing.lg),
+          Text('Sin lecturas', style: DesignTextStyles.cardTitle),
+          SizedBox(height: DesignSpacing.sm),
+          Text('No hay datos para este sensor aún.', style: DesignTextStyles.bodyText),
         ],
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'intelligence_health_helpers.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 /// Widgets auxiliares reutilizables para IntelligenceHealthPage
 class IntelligenceHealthWidgets {
@@ -9,33 +11,33 @@ class IntelligenceHealthWidgets {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: EdgeInsets.all(DesignSpacing.sm),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(DesignRadius.sm),
           ),
           child: Icon(icon, color: color, size: 20),
         ),
-        const SizedBox(width: 12),
-        Text(title, style: DashboardTextStyles.deviceTitle),
+        SizedBox(width: DesignSpacing.md),
+        Text(title, style: DesignTextStyles.cardTitle),
       ],
     );
   }
 
   static Widget miniMetric(String label, String value, IconData icon, {Color? color}) {
-    final c = color ?? DashboardColors.primary;
+    final c = color ?? DesignColors.cyan;
     return Column(
       children: [
         Icon(icon, color: c, size: 24),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         Text(
           value,
-          style: DashboardTextStyles.kpiValue.copyWith(fontSize: 18),
+          style: DesignTextStyles.kpiValue.copyWith(fontSize: 18),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: DesignSpacing.xs),
         Text(
           label,
-          style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11),
+          style: DesignTextStyles.bodyText.copyWith(fontSize: 11),
           textAlign: TextAlign.center,
         ),
       ],
@@ -44,10 +46,10 @@ class IntelligenceHealthWidgets {
 
   static Widget errorMetricTile(String acronym, String value, String description) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(DesignSpacing.md),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,18 +59,18 @@ class IntelligenceHealthWidgets {
             children: [
               Text(
                 acronym,
-                style: DashboardTextStyles.smallLabel.copyWith(
-                  color: DashboardColors.secondary,
+                style: DesignTextStyles.timestamp.copyWith(
+                  color: DesignColors.cyanDim,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(value, style: DashboardTextStyles.kpiValue.copyWith(fontSize: 16)),
+              Text(value, style: DesignTextStyles.kpiValue.copyWith(fontSize: 16)),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: DesignSpacing.xs),
           Text(
             description,
-            style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 10),
+            style: DesignTextStyles.bodyText.copyWith(fontSize: 10),
           ),
         ],
       ),
@@ -82,11 +84,11 @@ class IntelligenceHealthWidgets {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: DashboardTextStyles.sensorMeta),
-            Text(IntelligenceHealthHelpers.formatPercent(value * 100), style: DashboardTextStyles.smallLabel),
+            Text(label, style: DesignTextStyles.bodyText),
+            Text(IntelligenceHealthHelpers.formatPercent(value * 100), style: DesignTextStyles.timestamp),
           ],
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6),
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
@@ -102,16 +104,16 @@ class IntelligenceHealthWidgets {
 
   static Widget qualityChip(String label, String value, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(DesignRadius.sm),
       ),
       child: Column(
         children: [
-          Text(value, style: DashboardTextStyles.kpiValue.copyWith(fontSize: 16, color: color)),
-          const SizedBox(height: 2),
-          Text(label, style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11)),
+          Text(value, style: DesignTextStyles.kpiValue.copyWith(fontSize: 16, color: color)),
+          SizedBox(height: 2),
+          Text(label, style: DesignTextStyles.bodyText.copyWith(fontSize: 11)),
         ],
       ),
     );
@@ -122,7 +124,7 @@ class IntelligenceHealthWidgets {
       children: [
         SizedBox(
           width: 40,
-          child: Text(threshold, style: DashboardTextStyles.smallLabel),
+          child: Text(threshold, style: DesignTextStyles.timestamp),
         ),
         Expanded(
           child: ClipRRect(
@@ -135,12 +137,12 @@ class IntelligenceHealthWidgets {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: DesignSpacing.sm),
         SizedBox(
           width: 50,
           child: Text(
             IntelligenceHealthHelpers.formatPercent(percent),
-            style: DashboardTextStyles.smallLabel,
+            style: DesignTextStyles.timestamp,
             textAlign: TextAlign.right,
           ),
         ),
@@ -151,27 +153,27 @@ class IntelligenceHealthWidgets {
   static Widget errorState(String error) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
-                color: DashboardColors.error.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(16),
+                color: DesignColors.red.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(DesignRadius.lg),
               ),
-              child: Icon(Icons.cloud_off_rounded, color: DashboardColors.error, size: 48),
+              child: Icon(Icons.cloud_off_rounded, color: DesignColors.red, size: 48),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: DesignSpacing.lg),
+            Text(
               'Error al cargar diagnóstico',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               error,
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
           ],
@@ -183,27 +185,27 @@ class IntelligenceHealthWidgets {
   static Widget emptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(DesignSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(DesignSpacing.lg),
               decoration: BoxDecoration(
                 color: Colors.grey.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(DesignRadius.lg),
               ),
               child: const Icon(Icons.analytics_outlined, color: Colors.grey, size: 48),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            SizedBox(height: DesignSpacing.lg),
+            Text(
               'Sin datos de diagnóstico',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
             ),
-            const SizedBox(height: 8),
-            const Text(
+            SizedBox(height: DesignSpacing.sm),
+            Text(
               'El modelo ML aún no ha generado suficientes predicciones para calcular métricas.',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
           ],

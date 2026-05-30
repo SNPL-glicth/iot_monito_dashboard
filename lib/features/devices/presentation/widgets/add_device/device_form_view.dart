@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Vista del formulario para crear un nuevo dispositivo.
 class DeviceFormView extends StatelessWidget {
@@ -22,7 +24,7 @@ class DeviceFormView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(DesignSpacing.xl),
       child: Form(
         key: formKey,
         child: Column(
@@ -30,13 +32,13 @@ class DeviceFormView extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(DesignSpacing.xl),
                 decoration: BoxDecoration(
-                  gradient: DashboardColors.gradientPrimary,
-                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]),
+                  borderRadius: BorderRadius.circular(DesignRadius.xl),
                   boxShadow: [
                     BoxShadow(
-                      color: DashboardColors.primary.withValues(alpha: 0.3),
+                      color: DesignColors.cyan.withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -45,34 +47,34 @@ class DeviceFormView extends StatelessWidget {
                 child: const Icon(Icons.devices_rounded, size: 48, color: Colors.white),
               ),
             ),
-            const SizedBox(height: 32),
-            const Text(
+            SizedBox(height: 32),
+            Text(
               'Nuevo Dispositivo IoT',
-              style: DashboardTextStyles.sectionHeader,
+              style: DesignTextStyles.screenTitle,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               'Ingresa el nombre para identificar tu dispositivo',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
             Container(
-              padding: const EdgeInsets.all(24),
-              decoration: ModernCardDecoration.elevated(),
+              padding: EdgeInsets.all(DesignSpacing.xl),
+              decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Nombre del dispositivo',
                     style: TextStyle(
-                      color: DashboardColors.white70,
+                      color: DesignColors.textPrimary,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: DesignSpacing.sm),
                   TextFormField(
                     controller: nameController,
                     style: const TextStyle(color: Colors.white, fontSize: 15),
@@ -80,28 +82,28 @@ class DeviceFormView extends StatelessWidget {
                     onFieldSubmitted: (_) => onSubmit(),
                     decoration: InputDecoration(
                       hintText: 'Ej: Bodega Norte, Refrigerador #3',
-                      hintStyle: TextStyle(color: DashboardColors.white54, fontSize: 14),
-                      prefixIcon: Icon(Icons.label_outline_rounded, color: DashboardColors.white54, size: 20),
+                      hintStyle: TextStyle(color: DesignColors.textSecondary, fontSize: 14),
+                      prefixIcon: Icon(Icons.label_outline_rounded, color: DesignColors.textSecondary, size: 20),
                       filled: true,
-                      fillColor: DashboardColors.surfaceElevated,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      fillColor: DesignColors.surface2,
+                      contentPadding: EdgeInsets.symmetric(horizontal: DesignSpacing.lg, vertical: DesignSpacing.lg),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(DesignRadius.md),
                         borderSide: BorderSide.none,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: DashboardColors.white10, width: 1),
+                        borderRadius: BorderRadius.circular(DesignRadius.md),
+                        borderSide: BorderSide(color: DesignColors.border, width: 1),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: DashboardColors.primary, width: 1.5),
+                        borderRadius: BorderRadius.circular(DesignRadius.md),
+                        borderSide: BorderSide(color: DesignColors.cyan, width: 1.5),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: DashboardColors.error, width: 1),
+                        borderRadius: BorderRadius.circular(DesignRadius.md),
+                        borderSide: BorderSide(color: DesignColors.red, width: 1),
                       ),
-                      errorStyle: TextStyle(color: DashboardColors.error, fontSize: 12),
+                      errorStyle: TextStyle(color: DesignColors.red, fontSize: 12),
                     ),
                     validator: (v) {
                       if (v == null || v.trim().isEmpty) {
@@ -113,22 +115,22 @@ class DeviceFormView extends StatelessWidget {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: DesignSpacing.xl),
                   if (error != null)
                     Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.all(DesignSpacing.md),
+                      margin: EdgeInsets.only(bottom: DesignSpacing.lg),
                       decoration: BoxDecoration(
-                        color: DashboardColors.redAccent15,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: DashboardColors.error.withValues(alpha: 0.3)),
+                        color: DesignColors.red.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(DesignRadius.sm),
+                        border: Border.all(color: DesignColors.red.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.error_outline_rounded, color: DashboardColors.error, size: 18),
-                          const SizedBox(width: 10),
+                          Icon(Icons.error_outline_rounded, color: DesignColors.red, size: 18),
+                          SizedBox(width: DesignSpacing.sm),
                           Expanded(
-                            child: Text(error!, style: DashboardTextStyles.error),
+                            child: Text(error!, style: DesignTextStyles.bodyText),
                           ),
                         ],
                       ),
@@ -139,16 +141,16 @@ class DeviceFormView extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: isLoading ? null : onSubmit,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: DashboardColors.primary,
+                        backgroundColor: DesignColors.cyan,
                         foregroundColor: Colors.white,
-                        disabledBackgroundColor: DashboardColors.primary.withValues(alpha: 0.5),
+                        disabledBackgroundColor: DesignColors.cyan.withValues(alpha: 0.5),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(DesignRadius.md),
                         ),
                       ),
                       child: isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 22,
                               height: 22,
                               child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white),

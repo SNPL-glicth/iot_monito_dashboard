@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../styles/dashboard_styles.dart';
 
 class RawDiagnosisErrorWidget extends StatelessWidget {
   const RawDiagnosisErrorWidget({
@@ -18,45 +20,45 @@ class RawDiagnosisErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(DesignSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(14),
+              padding: EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: DashboardColors.redAccent15,
-                borderRadius: BorderRadius.circular(12),
+                color: DesignColors.red.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
               ),
-              child: Icon(Icons.error_outline, size: 40, color: DashboardColors.error),
+              child: Icon(Icons.error_outline, size: 40, color: DesignColors.red),
             ),
-            const SizedBox(height: 20),
-            Text('Error al cargar datos', style: DashboardTextStyles.deviceTitle),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.lg),
+            Text('Error al cargar datos', style: DesignTextStyles.cardTitle),
+            SizedBox(height: DesignSpacing.sm),
             if (statusCode != null)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                 decoration: BoxDecoration(
-                  color: DashboardColors.redAccent15,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: DashboardColors.error.withValues(alpha: 0.3)),
+                  color: DesignColors.red.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(DesignRadius.sm),
+                  border: Border.all(color: DesignColors.red.withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   'HTTP $statusCode',
-                  style: TextStyle(color: DashboardColors.error, fontSize: 12, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: DesignColors.red, fontSize: 12, fontWeight: FontWeight.w600),
                 ),
               ),
-            const SizedBox(height: 12),
-            Text(message, style: DashboardTextStyles.sensorMeta, textAlign: TextAlign.center),
-            const SizedBox(height: 24),
+            SizedBox(height: DesignSpacing.md),
+            Text(message, style: DesignTextStyles.bodyText, textAlign: TextAlign.center),
+            SizedBox(height: DesignSpacing.xl),
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Reintentar'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: DashboardColors.primary,
+                backgroundColor: DesignColors.cyan,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(DesignRadius.md)),
               ),
             ),
           ],

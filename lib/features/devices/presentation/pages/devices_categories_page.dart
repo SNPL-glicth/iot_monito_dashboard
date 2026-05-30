@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/auth/user_role.dart';
 import '../../../monitoring/data/models/device_with_sensor_view_model.dart';
 import '../../../monitoring/data/models/monitoring_view_models.dart';
 import '../../../monitoring/data/monitoring_repository.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import 'device_detail_page.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class DevicesCategoriesPage extends StatefulWidget {
   const DevicesCategoriesPage({
@@ -88,11 +90,11 @@ class _DevicesCategoriesPageState extends State<DevicesCategoriesPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.devices_other_rounded, size: 64, color: DashboardColors.white54),
-                  const SizedBox(height: 16),
-                  Text('No hay dispositivos registrados', style: DashboardTextStyles.deviceTitle),
-                  const SizedBox(height: 8),
-                  Text('Agrega tu primer dispositivo para comenzar', style: DashboardTextStyles.sensorMeta),
+                  Icon(Icons.devices_other_rounded, size: 64, color: DesignColors.textSecondary),
+                  SizedBox(height: DesignSpacing.lg),
+                  Text('No hay dispositivos registrados', style: DesignTextStyles.cardTitle),
+                  SizedBox(height: DesignSpacing.sm),
+                  Text('Agrega tu primer dispositivo para comenzar', style: DesignTextStyles.bodyText),
                 ],
               ),
             );
@@ -112,38 +114,38 @@ class _DevicesCategoriesPageState extends State<DevicesCategoriesPage> {
           };
 
           return ListView(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(DesignSpacing.lg),
             children: [
               // Header con contador
               Container(
-                padding: const EdgeInsets.all(16),
-                decoration: ModernCardDecoration.gradient(DashboardColors.gradientPrimary),
+                padding: EdgeInsets.all(DesignSpacing.lg),
+                decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [DesignColors.cyan, DesignColors.cyanDim]), borderRadius: BorderRadius.circular(DesignRadius.lg)),
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
+                        color: DesignColors.textPrimary.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(DesignRadius.md),
                       ),
                       child: const Icon(Icons.devices_rounded, color: Colors.white, size: 24),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Mis Dispositivos', style: DashboardTextStyles.deviceTitle),
-                        const SizedBox(height: 2),
+                        Text('Mis Dispositivos', style: DesignTextStyles.cardTitle),
+                        SizedBox(height: 2),
                         Text(
                           '${devices.length} dispositivo${devices.length != 1 ? 's' : ''} registrado${devices.length != 1 ? 's' : ''}',
-                          style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12),
+                          style: TextStyle(color: DesignColors.textPrimary.withValues(alpha: 0.8), fontSize: 12),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: DesignSpacing.lg),
               
               // Lista de dispositivos
               ...devices.map((entry) {
@@ -172,13 +174,13 @@ class _DevicesCategoriesPageState extends State<DevicesCategoriesPage> {
                 final lastTs = latestDevice?.latestTimestamp ?? '-';
 
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: EdgeInsets.only(bottom: 12),
                   child: Container(
-                    decoration: ModernCardDecoration.elevated(),
+                    decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(DesignRadius.lg),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -191,22 +193,22 @@ class _DevicesCategoriesPageState extends State<DevicesCategoriesPage> {
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(DesignSpacing.lg),
                           child: Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.all(DesignSpacing.md),
                                 decoration: BoxDecoration(
-                                  color: (isOnline ? DashboardColors.success : DashboardColors.error).withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: (isOnline ? DesignColors.green : DesignColors.red).withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(DesignRadius.md),
                                 ),
                                 child: Icon(
                                   Icons.memory_rounded,
-                                  color: isOnline ? DashboardColors.success : DashboardColors.error,
+                                  color: isOnline ? DesignColors.green : DesignColors.red,
                                   size: 24,
                                 ),
                               ),
-                              const SizedBox(width: 14),
+                              SizedBox(width: 14),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,21 +218,21 @@ class _DevicesCategoriesPageState extends State<DevicesCategoriesPage> {
                                         Flexible(
                                           child: Text(
                                             first.deviceName,
-                                            style: DashboardTextStyles.deviceTitle,
+                                            style: DesignTextStyles.cardTitle,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        const SizedBox(width: 8),
+                                        SizedBox(width: DesignSpacing.sm),
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                                           decoration: BoxDecoration(
-                                            color: (isOnline ? DashboardColors.success : DashboardColors.error).withValues(alpha: 0.15),
+                                            color: (isOnline ? DesignColors.green : DesignColors.red).withValues(alpha: 0.15),
                                             borderRadius: BorderRadius.circular(6),
                                           ),
                                           child: Text(
                                             isOnline ? 'Online' : 'Offline',
                                             style: TextStyle(
-                                              color: isOnline ? DashboardColors.success : DashboardColors.error,
+                                              color: isOnline ? DesignColors.green : DesignColors.red,
                                               fontSize: 10,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -238,21 +240,21 @@ class _DevicesCategoriesPageState extends State<DevicesCategoriesPage> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 4),
+                                    SizedBox(height: DesignSpacing.xs),
                                     Text(
                                       '${_deviceTypeLabel(first.deviceType)} · $sensorCount sensores',
-                                      style: DashboardTextStyles.sensorMeta,
+                                      style: DesignTextStyles.bodyText,
                                     ),
-                                    const SizedBox(height: 2),
+                                    SizedBox(height: 2),
                                     Text(
                                       'Último: $lastValue · $lastTs',
-                                      style: DashboardTextStyles.smallLabel,
+                                      style: DesignTextStyles.timestamp,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
                               ),
-                              Icon(Icons.chevron_right_rounded, color: DashboardColors.white54),
+                              Icon(Icons.chevron_right_rounded, color: DesignColors.textSecondary),
                             ],
                           ),
                         ),

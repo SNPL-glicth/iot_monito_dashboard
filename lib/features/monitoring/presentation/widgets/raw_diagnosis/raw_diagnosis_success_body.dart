@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../../../data/models/reading/raw_reading_models.dart';
-import '../../styles/dashboard_styles.dart';
 import 'raw_diagnosis_stats_header.dart';
 import 'raw_readings_list.dart';
 import 'raw_sensor_chart.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 class RawDiagnosisSuccessBody extends StatelessWidget {
   const RawDiagnosisSuccessBody({
@@ -34,10 +36,10 @@ class RawDiagnosisSuccessBody extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Card(
-            margin: const EdgeInsets.all(8),
-            color: DashboardColors.cardBackground,
+            margin: EdgeInsets.all(DesignSpacing.sm),
+            color: DesignColors.surface,
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(DesignSpacing.md),
               child: RawSensorChart(readings: readings, unit: unit),
             ),
           ),
@@ -45,14 +47,14 @@ class RawDiagnosisSuccessBody extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Card(
-            margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-            color: DashboardColors.cardBackground,
+            margin: EdgeInsets.fromLTRB(8, 0, 8, 8),
+            color: DesignColors.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text('Historial de lecturas', style: DashboardTextStyles.deviceTitle),
+                  padding: EdgeInsets.all(DesignSpacing.md),
+                  child: Text('Historial de lecturas', style: DesignTextStyles.cardTitle),
                 ),
                 Expanded(
                   child: RawReadingsList(

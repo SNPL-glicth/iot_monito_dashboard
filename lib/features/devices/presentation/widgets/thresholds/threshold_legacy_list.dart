@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../features/monitoring/data/models/monitoring_view_models.dart';
-import '../../../../../features/monitoring/presentation/styles/dashboard_styles.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+
 
 /// Lista expandible de umbrales legacy.
 class ThresholdLegacyList extends StatelessWidget {
@@ -23,39 +25,39 @@ class ThresholdLegacyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      tilePadding: const EdgeInsets.symmetric(horizontal: 12),
-      title: Text('Umbrales legacy (alert_thresholds)', style: DashboardTextStyles.deviceTitle),
+      tilePadding: EdgeInsets.symmetric(horizontal: 12),
+      title: Text('Umbrales legacy (alert_thresholds)', style: DesignTextStyles.cardTitle),
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(DesignSpacing.md),
           child: Column(
             children: [
               if (thresholds.isEmpty)
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Sin límites legacy configurados.',
-                    style: DashboardTextStyles.sensorMeta,
+                    style: DesignTextStyles.bodyText,
                   ),
                 )
               else ...[
                 if (thresholds.length > 1)
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: DesignSpacing.sm),
                     child: Text(
                       'Aviso: hay más de un límite legacy activo para este sensor (dato legado).',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 ...thresholds.map((t) {
                   final rule = formatRule(t);
                   return Card(
                     child: ListTile(
-                      leading: const Icon(Icons.rule, color: Colors.white70),
-                      title: Text(t.name, style: DashboardTextStyles.sensorTitle),
+                      leading: Icon(Icons.rule, color: DesignColors.textPrimary),
+                      title: Text(t.name, style: DesignTextStyles.bodyText),
                       subtitle: Text(
                         'Severidad: ${t.severity}\n$rule',
-                        style: DashboardTextStyles.sensorMeta,
+                        style: DesignTextStyles.bodyText,
                       ),
                       trailing: Wrap(
                         spacing: 6,

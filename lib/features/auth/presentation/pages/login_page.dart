@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/auth/auth_storage.dart';
 import '../../../../core/realtime/realtime_service.dart';
+import '../../../../core/theme/design_colors.dart';
+import '../../../../core/theme/design_spacing.dart';
+import '../../../../core/theme/design_text_styles.dart';
 import '../../../crm/presentation/pages/crm_home_page.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/auth_repository.dart';
-import '../widgets/login_form_widgets.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -48,14 +49,14 @@ class _LoginPageState extends State<LoginPage> {
               content: Row(
                 children: [
                   const Icon(Icons.info_outline, color: Colors.white),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(child: Text(widget.initialErrorMessage!)),
                 ],
               ),
-              backgroundColor: DashboardColors.warning,
+              backgroundColor: DesignColors.amber,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(DesignRadius.md),
               ),
               duration: const Duration(seconds: 5),
             ),
@@ -136,138 +137,168 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DashboardColors.background,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Logo/Icono superior
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: DashboardColors.gradientPrimary,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: DashboardColors.primary.withValues(alpha: 0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.sensors_rounded,
-                    color: Colors.white,
-                    size: 48,
-                  ),
-                ),
-                const SizedBox(height: 32),
-                
-                // Card principal de login
-                Container(
-                  decoration: ModernCardDecoration.elevated(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(28),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Bienvenido',
-                            style: DashboardTextStyles.sectionHeader,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Ingresa tus credenciales para continuar',
-                            style: DashboardTextStyles.sensorMeta,
-                          ),
-                          const SizedBox(height: 28),
-                          
-                          // Campo Usuario
-                          LoginFormWidgets.buildInputLabel('Usuario o email'),
-                          const SizedBox(height: 8),
-                          LoginFormWidgets.buildModernTextField(
-                            controller: _usernameController,
-                            hintText: 'nombre@ejemplo.com',
-                            prefixIcon: Icons.person_outline_rounded,
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Ingresa tu usuario';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          
-                          // Campo Contraseña
-                          LoginFormWidgets.buildInputLabel('Contraseña'),
-                          const SizedBox(height: 8),
-                          LoginFormWidgets.buildModernTextField(
-                            controller: _passwordController,
-                            hintText: '••••••••',
-                            prefixIcon: Icons.lock_outline_rounded,
-                            obscureText: _obscurePassword,
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword 
-                                    ? Icons.visibility_outlined 
-                                    : Icons.visibility_off_outlined,
-                                color: DashboardColors.white54,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                setState(() => _obscurePassword = !_obscurePassword);
-                              },
+      backgroundColor: DesignColors.background,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(DesignSpacing.xl),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('ZENIN',
+                      style: DesignTextStyles.screenTitle
+                          .copyWith(color: DesignColors.cyan, fontSize: 24)),
+                  SizedBox(height: DesignSpacing.xs),
+                  Text('IOT MONITORING SYSTEM',
+                      style: DesignTextStyles.sectionTitle),
+                  SizedBox(height: DesignSpacing.xxl),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: DesignColors.surface,
+                      border: Border.all(color: DesignColors.border, width: 0.5),
+                      borderRadius: BorderRadius.circular(DesignRadius.md),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(DesignSpacing.xl),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Usuario o email',
+                                style: DesignTextStyles.bodyText),
+                            SizedBox(height: DesignSpacing.xs),
+                            _InputField(
+                              controller: _usernameController,
+                              hint: 'nombre@ejemplo.com',
+                              icon: Icons.person_outline_rounded,
+                              validator: (v) =>
+                                  v?.trim().isEmpty ?? true ? 'Ingresa tu usuario' : null,
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Ingresa tu contraseña';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          
-                          // Checkbox recordar
-                          LoginFormWidgets.buildRememberMeCheckbox(
-                            value: _rememberMe,
-                            onChanged: (value) {
-                              setState(() => _rememberMe = value ?? false);
-                            },
-                          ),
-                          
-                          // Mensaje de error
-                          if (_errorMessage != null) ...[
-                            const SizedBox(height: 16),
-                            LoginFormWidgets.buildErrorMessage(_errorMessage!),
+                            SizedBox(height: DesignSpacing.lg),
+                            Text('Contraseña', style: DesignTextStyles.bodyText),
+                            SizedBox(height: DesignSpacing.xs),
+                            _InputField(
+                              controller: _passwordController,
+                              hint: '••••••••',
+                              icon: Icons.lock_outline_rounded,
+                              obscure: _obscurePassword,
+                              suffix: IconButton(
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  color: DesignColors.textSecondary,
+                                  size: 20,
+                                ),
+                                onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword),
+                              ),
+                              validator: (v) =>
+                                  v?.isEmpty ?? true ? 'Ingresa tu contraseña' : null,
+                            ),
+                            SizedBox(height: DesignSpacing.md),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _rememberMe,
+                                  onChanged: (v) =>
+                                      setState(() => _rememberMe = v ?? false),
+                                  activeColor: DesignColors.cyan,
+                                  side: BorderSide(color: DesignColors.border),
+                                ),
+                                Text('Recordar sesión',
+                                    style: DesignTextStyles.bodyText),
+                              ],
+                            ),
+                            if (_errorMessage != null) ...[
+                              SizedBox(height: DesignSpacing.md),
+                              Container(
+                                padding: EdgeInsets.all(DesignSpacing.md),
+                                decoration: BoxDecoration(
+                                  color: DesignColors.redDim,
+                                  borderRadius:
+                                      BorderRadius.circular(DesignRadius.md),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.error_outline,
+                                        color: DesignColors.red, size: 18),
+                                    SizedBox(width: DesignSpacing.sm),
+                                    Expanded(
+                                      child: Text(_errorMessage!,
+                                          style: DesignTextStyles.bodyText
+                                              .copyWith(color: DesignColors.red)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                            SizedBox(height: DesignSpacing.xl),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _isLoading ? null : _submit,
+                                child: _isLoading
+                                    ? SizedBox(
+                                        width: 18,
+                                        height: 18,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: DesignColors.background,
+                                        ),
+                                      )
+                                    : const Text('CONECTAR'),
+                              ),
+                            ),
                           ],
-                          const SizedBox(height: 24),
-                          
-                          // Botón de login
-                          LoginFormWidgets.buildLoginButton(
-                            isLoading: _isLoading,
-                            onPressed: _submit,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Sistema de Monitoreo IoT',
-                  style: DashboardTextStyles.sensorMeta,
-                ),
-              ],
+                  SizedBox(height: DesignSpacing.xl),
+                  Text('v1.0.0 · ZENIN', style: DesignTextStyles.timestamp),
+                ],
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _InputField extends StatelessWidget {
+  const _InputField({
+    required this.controller,
+    required this.hint,
+    required this.icon,
+    this.obscure = false,
+    this.suffix,
+    this.validator,
+  });
+
+  final TextEditingController controller;
+  final String hint;
+  final IconData icon;
+  final bool obscure;
+  final Widget? suffix;
+  final String? Function(String?)? validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscure,
+      validator: validator,
+      style: DesignTextStyles.bodyText.copyWith(color: DesignColors.textPrimary),
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, size: 18, color: DesignColors.textSecondary),
+        suffixIcon: suffix,
+        hintText: hint,
       ),
     );
   }

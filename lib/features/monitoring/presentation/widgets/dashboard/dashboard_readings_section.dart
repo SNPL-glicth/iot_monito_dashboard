@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/utils/date_utils.dart' as date_utils;
 import '../../../data/models/reading/latest_reading_models.dart';
-import '../../styles/dashboard_styles.dart';
 import 'dashboard_helpers.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
+import '../../../../../core/theme/design_colors.dart';
+
 
 /// Sección de últimas lecturas por sensor del dashboard.
 class DashboardReadingsSection extends StatelessWidget {
@@ -22,9 +24,9 @@ class DashboardReadingsSection extends StatelessWidget {
         DashboardHelpers.sectionHeader(
           icon: Icons.show_chart,
           title: 'Ultimas lecturas por sensor',
-          color: DashboardColors.sensorIcon,
+          color: DesignColors.cyan,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: DesignSpacing.sm),
         if (readings.isEmpty)
           const Text('No hay lecturas registradas.')
         else
@@ -37,21 +39,21 @@ class DashboardReadingsSection extends StatelessWidget {
 
               return Card(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.symmetric(vertical: DesignSpacing.xs),
                   child: ListTile(
-                    leading: const Icon(
+                    leading: Icon(
                       Icons.sensors,
-                      color: DashboardColors.sensorIcon,
+                      color: DesignColors.cyan,
                     ),
                     title: Text(
                       '${row.sensorName} (${row.unit})',
-                      style: DashboardTextStyles.sensorTitle,
+                      style: DesignTextStyles.bodyText,
                     ),
                     subtitle: Text(
                       'dispositivo: ${row.deviceName}\n'
                       'ultimo valor: ${row.latestValue ?? '-'}\n'
                       'fecha: ${date_utils.formatDateTimeShared(row.latestTimestamp)}',
-                      style: DashboardTextStyles.sensorMeta,
+                      style: DesignTextStyles.bodyText,
                     ),
                   ),
                 ),

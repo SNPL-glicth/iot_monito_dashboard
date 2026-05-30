@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/theme/design_colors.dart';
+import '../../../../../../core/theme/design_spacing.dart';
+import '../../../../../../core/theme/design_text_styles.dart';
 
-import '../../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Ignored data section widget showing data the model ignores by design
 class IgnoredDataSectionWidget extends StatelessWidget {
@@ -14,47 +16,47 @@ class IgnoredDataSectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(DesignSpacing.lg),
       decoration: BoxDecoration(
-        color: Colors.blueGrey.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.blueGrey.withValues(alpha: 0.3)),
+        color: DesignColors.textSecondary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(DesignRadius.lg),
+        border: Border.all(color: DesignColors.textSecondary.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.visibility_off_rounded, color: Colors.blueGrey, size: 20),
-              const SizedBox(width: 8),
+              Icon(Icons.visibility_off_rounded, color: DesignColors.textSecondary, size: 20),
+              SizedBox(width: DesignSpacing.sm),
               Text(
                 'Datos que el Modelo Ignora',
-                style: DashboardTextStyles.deviceTitle.copyWith(color: Colors.blueGrey),
+                style: DesignTextStyles.cardTitle.copyWith(color: DesignColors.textSecondary),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: DesignSpacing.xs),
           Text(
             'Estos datos no afectan las predicciones por diseño',
-            style: DashboardTextStyles.sensorMeta.copyWith(fontSize: 11),
+            style: DesignTextStyles.bodyText.copyWith(fontSize: 11),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: DesignSpacing.md),
           ...reasons.map(
             (r) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: DesignSpacing.sm),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 6,
                     height: 6,
-                    margin: const EdgeInsets.only(top: 6),
-                    decoration: const BoxDecoration(
-                      color: Colors.blueGrey,
+                    margin: EdgeInsets.only(top: 6),
+                    decoration: BoxDecoration(
+                      color: DesignColors.textSecondary,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: DesignSpacing.sm),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,17 +64,17 @@ class IgnoredDataSectionWidget extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: Text('${r.description}', style: DashboardTextStyles.sensorMeta),
+                              child: Text('${r.description}', style: DesignTextStyles.bodyText),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              padding: EdgeInsets.symmetric(horizontal: DesignSpacing.sm, vertical: DesignSpacing.xs),
                               decoration: BoxDecoration(
-                                color: Colors.blueGrey.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(10),
+                                color: DesignColors.textSecondary.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(DesignRadius.sm),
                               ),
                               child: Text(
                                 '${r.count}',
-                                style: DashboardTextStyles.sensorMeta.copyWith(
+                                style: DesignTextStyles.bodyText.copyWith(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
                                 ),

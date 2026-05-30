@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../core/auth/user_role.dart';
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 import '../../data/crm_repository.dart';
 import '../../data/models/crm_devices_models.dart';
 import '../widgets/devices/crm_devices_drawer.dart';
 import '../widgets/devices/add_device_dialog.dart';
 import '../widgets/devices/crm_device_list_tile.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
+
 
 class CrmDevicesPage extends StatefulWidget {
   const CrmDevicesPage({
@@ -74,30 +76,30 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
     final isAdmin = widget.role == UserRole.admin;
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(DesignSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               Icons.devices_other_outlined,
               size: 64,
-              color: DashboardColors.white54,
+              color: DesignColors.textSecondary,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: DesignSpacing.lg),
             Text(
               'No hay dispositivos registrados',
-              style: DashboardTextStyles.deviceTitle,
+              style: DesignTextStyles.cardTitle,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: DesignSpacing.sm),
             Text(
               isAdmin
                   ? 'Agrega tu primer dispositivo para comenzar a monitorear.'
                   : 'No tienes dispositivos asignados actualmente.',
-              style: DashboardTextStyles.sensorMeta,
+              style: DesignTextStyles.bodyText,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: DesignSpacing.xl),
             if (isAdmin)
               ElevatedButton.icon(
                 onPressed: () => showAddDeviceDialog(
@@ -107,10 +109,10 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
                 icon: const Icon(Icons.add),
                 label: const Text('Agregar dispositivo'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: DashboardColors.primary,
+                  backgroundColor: DesignColors.cyan,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(DesignRadius.md),
                   ),
                 ),
               )
@@ -120,10 +122,10 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Refrescar'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: DashboardColors.primaryLight,
-                  side: BorderSide(color: DashboardColors.primary.withValues(alpha: 0.5)),
+                  foregroundColor: DesignColors.cyan,
+                  side: BorderSide(color: DesignColors.cyan.withValues(alpha: 0.5)),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(DesignRadius.md),
                   ),
                 ),
               ),
@@ -148,7 +150,7 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
         titleSpacing: 0,
         title: _searchMode
             ? Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: EdgeInsets.only(right: DesignSpacing.sm),
                 child: TextField(
                   controller: _searchController,
                   autofocus: true,
@@ -159,9 +161,9 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
                   onSubmitted: (_) => _reload(),
                 ),
               )
-            : const Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Text('Dispositivos', style: DashboardTextStyles.appBarTitle),
+            : Padding(
+                padding: EdgeInsets.only(left: DesignSpacing.sm),
+                child: Text('Dispositivos', style: DesignTextStyles.screenTitle),
               ),
         actions: [
           IconButton(
@@ -200,9 +202,9 @@ class _CrmDevicesPageState extends State<CrmDevicesPage> {
           }
 
           return ListView(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(DesignSpacing.md),
             children: [
-              const SizedBox(height: 4),
+              SizedBox(height: DesignSpacing.xs),
               ...items.map((d) => CrmDeviceListTile(
                 device: d,
                 role: widget.role,

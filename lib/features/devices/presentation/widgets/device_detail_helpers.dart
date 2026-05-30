@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../../core/theme/design_colors.dart';
+import '../../../../../core/theme/design_spacing.dart';
+import '../../../../../core/theme/design_text_styles.dart';
 
-import '../../../monitoring/presentation/styles/dashboard_styles.dart';
 
 /// Helpers de formateo y widgets auxiliares para DeviceDetailPage
 class DeviceDetailHelpers {
@@ -26,13 +28,13 @@ class DeviceDetailHelpers {
   static Color finalStateColor(String finalState) {
     switch (finalState.toLowerCase()) {
       case 'alert':
-        return Colors.redAccent;
+        return DesignColors.red;
       case 'warning':
-        return Colors.orangeAccent;
+        return DesignColors.amber;
       case 'prediction':
         return Colors.purpleAccent;
       default:
-        return Colors.blueGrey;
+        return DesignColors.textSecondary;
     }
   }
 
@@ -72,7 +74,7 @@ class DeviceDetailHelpers {
     if (isPending) {
       switch (deviceStatus) {
         case 'draft':
-          return (Colors.blueGrey, Icons.edit_note, 'BORRADOR');
+          return (DesignColors.textSecondary, Icons.edit_note, 'BORRADOR');
         case 'pending_claim':
           return (Colors.amber, Icons.link, 'PENDIENTE CLAIM');
         case 'pending_confirmation':
@@ -80,7 +82,7 @@ class DeviceDetailHelpers {
         case 'pending_activation':
           return (Colors.orange, Icons.hourglass_top, 'PENDIENTE ACTIVACIÓN');
         default:
-          return (Colors.blueGrey, Icons.pending, 'PENDIENTE');
+          return (DesignColors.textSecondary, Icons.pending, 'PENDIENTE');
       }
     }
 
@@ -91,9 +93,9 @@ class DeviceDetailHelpers {
     // Estado normal basado en finalState
     switch (finalState.toLowerCase()) {
       case 'alert':
-        return (Colors.redAccent, Icons.sensors, 'ALERTA');
+        return (DesignColors.red, Icons.sensors, 'ALERTA');
       case 'warning':
-        return (Colors.orangeAccent, Icons.sensors, 'ADVERTENCIA');
+        return (DesignColors.amber, Icons.sensors, 'ADVERTENCIA');
       case 'prediction':
         return (Colors.purpleAccent, Icons.sensors, 'PREDICCIÓN');
       default:
@@ -119,8 +121,8 @@ class DeviceDetailHelpers {
   static Widget modernKpiCard(String label, int value, Color color, {bool fullWidth = false}) {
     return Container(
       width: fullWidth ? double.infinity : null,
-      padding: const EdgeInsets.all(14),
-      decoration: ModernCardDecoration.elevated(),
+      padding: EdgeInsets.all(14),
+      decoration: BoxDecoration(color: DesignColors.surface, border: Border.all(color: DesignColors.border, width: 0.5), borderRadius: BorderRadius.circular(DesignRadius.lg)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,8 +134,8 @@ class DeviceDetailHelpers {
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(label, style: DashboardTextStyles.sensorMeta),
+          SizedBox(height: DesignSpacing.xs),
+          Text(label, style: DesignTextStyles.bodyText),
         ],
       ),
     );
