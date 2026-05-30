@@ -152,7 +152,7 @@ class CrmMlPredictionsPanel extends StatelessWidget {
                 final predictedAt = CrmDashboardHelpers.formatDateTime(p.predictedAt);
 
                 final subtitle = <String>[
-                  p.deviceName,
+                  if (p.deviceName.isNotEmpty) p.deviceName,
                   'objetivo: $target',
                   'gen: $predictedAt',
                   'conf: ${p.confidence}',
@@ -170,7 +170,9 @@ class CrmMlPredictionsPanel extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${p.sensorName} → ${p.predictedValue} ${p.unit}',
+                              p.unit.isNotEmpty
+                                  ? '${p.sensorName} → ${p.predictedValue} ${p.unit}'
+                                  : '${p.sensorName} → ${p.predictedValue}',
                               style: DesignTextStyles.bodyText,
                             ),
                             SizedBox(height: 2),

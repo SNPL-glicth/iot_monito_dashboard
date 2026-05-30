@@ -26,6 +26,12 @@ class PredictionViewModel {
   final String modelVersion;
 
   factory PredictionViewModel.fromJson(Map<String, dynamic> json) {
+    String _sanitize(dynamic v) {
+      final s = v?.toString() ?? '';
+      if (s.isEmpty || s == 'undefined' || s == 'null') return '';
+      return s.trim();
+    }
+
     final sensor = json['sensor'] as Map<String, dynamic>?;
     final model = json['model'] as Map<String, dynamic>?;
     final device = sensor != null ? sensor['device'] as Map<String, dynamic>? : null;
@@ -33,25 +39,22 @@ class PredictionViewModel {
     final rawSensorId = json['sensorId'] ?? json['sensor_id'] ?? sensor?['id'] ?? sensor?['sensorId'] ?? sensor?['sensor_id'];
 
     return PredictionViewModel(
-      id: json['id']?.toString() ?? '',
-      sensorId: rawSensorId?.toString() ?? '',
+      id: _sanitize(json['id']),
+      sensorId: _sanitize(rawSensorId),
       predictedValue:
-          json['predictedValue']?.toString() ?? json['predicted_value']?.toString() ?? '',
-      confidence: json['confidence']?.toString() ?? '',
+          _sanitize(json['predictedValue'] ?? json['predicted_value']),
+      confidence: _sanitize(json['confidence']),
       predictedAt:
-          json['predictedAt']?.toString() ?? json['predicted_at']?.toString() ?? '',
+          _sanitize(json['predictedAt'] ?? json['predicted_at']),
       targetTimestamp:
-          json['targetTimestamp']?.toString() ?? json['target_timestamp']?.toString() ?? '',
-      sensorName: json['sensorName'] as String? ?? sensor?['name'] as String? ?? '',
-      unit: json['unit'] as String? ?? sensor?['unit'] as String? ?? '',
-      deviceName: json['deviceName'] as String? ??
-          device?['deviceName'] as String? ??
-          device?['name'] as String? ??
-          '',
+          _sanitize(json['targetTimestamp'] ?? json['target_timestamp']),
+      sensorName: _sanitize(json['sensorName'] ?? sensor?['name']),
+      unit: _sanitize(json['unit'] ?? sensor?['unit']),
+      deviceName: _sanitize(json['deviceName'] ?? device?['deviceName'] ?? device?['name']),
       modelName:
-          json['modelName'] as String? ?? model?['modelName'] as String? ?? '',
+          _sanitize(json['modelName'] ?? model?['modelName']),
       modelVersion:
-          json['modelVersion'] as String? ?? model?['version'] as String? ?? '',
+          _sanitize(json['modelVersion'] ?? model?['version']),
     );
   }
 }

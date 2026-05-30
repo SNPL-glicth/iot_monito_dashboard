@@ -45,6 +45,7 @@ class RealtimeService {
   final RealtimeReconnectPolicy _reconnectPolicy = const RealtimeReconnectPolicy();
 
   String? _pendingAuthToken;
+  String? _authToken;
   bool _authFailed = false;
   bool _isReconnecting = false;
 
@@ -73,6 +74,7 @@ class RealtimeService {
 
     if (authToken != null && authToken.isNotEmpty) {
       _pendingAuthToken = authToken;
+      _authToken = authToken;
       _authFailed = false;
     }
 
@@ -110,6 +112,7 @@ class RealtimeService {
   void reauthenticate(String token) {
     if (token.isEmpty) return;
     _pendingAuthToken = token;
+    _authToken = token;
     _authFailed = false;
 
     if (_state == RealtimeConnectionState.connected) {
@@ -126,6 +129,8 @@ class RealtimeService {
     await _channel?.sink.close();
     _channel = null;
     _subscription = null;
+    _authToken = null;
+    _pendingAuthToken = null;
     _authFailed = false;
     _isReconnecting = false;
     _setState(RealtimeConnectionState.disconnected);
@@ -283,7 +288,7 @@ class RealtimeService {
     _reconnectTimer = Timer(delay, () {
       _reconnectAttempts++;
       _isReconnecting = true;
-      connect();
+      connect(authToken: _authToken);
     });
   }
 

@@ -28,6 +28,24 @@ class ApiTimeoutException implements Exception {
   String toString() => 'Timeout al conectar con el servidor';
 }
 
+class UnauthorizedException implements Exception {
+  UnauthorizedException(this.path);
+  final String path;
+
+  @override
+  String toString() => 'Sesión expirada o no autorizada: $path';
+}
+
+class ServerException implements Exception {
+  ServerException(this.path, this.statusCode, this.body);
+  final String path;
+  final int statusCode;
+  final String body;
+
+  @override
+  String toString() => 'Error del servidor ($statusCode) en $path';
+}
+
 /// Lanza el error a través del interceptor global.
 Never throwIntercepted(dynamic error) {
   ApiErrorInterceptor().handle(error);

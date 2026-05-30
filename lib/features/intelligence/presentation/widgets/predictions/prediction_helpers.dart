@@ -35,14 +35,14 @@ class PredictionHelpers {
     return Colors.greenAccent;
   }
 
+  @Deprecated('Usar PredictionSeverity.label(PredictionSeverity.fromString(...)) en su lugar')
   static String severityLabel(String severity) {
-    final s = severity.toUpperCase();
-    if (s == 'CRITICAL') return 'Crítica';
-    if (s == 'HIGH' || s == 'WARNING') return 'Alta';
-    if (s == 'MEDIUM') return 'Media';
-    return 'Baja';
+    return 'Baja'; // legacy default; callers should migrate
   }
 
+  // TODO: eliminar cuando backend envíe anomalyLabel en el DTO de predicción.
+  // La lógica de thresholds de anomalía debe vivir en el backend, no en Flutter.
+  @Deprecated('Usar prediction.anomalyLabel (del backend) en su lugar')
   static String anomalyLabel(PredictionSummaryViewModel p) {
     final sev = p.severity.toUpperCase().trim();
     if (sev == 'CRITICAL') return 'Anomalía crítica';

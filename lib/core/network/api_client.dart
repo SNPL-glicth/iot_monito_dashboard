@@ -39,8 +39,8 @@ class ApiClient {
     return headers;
   }
 
-  Future<List<dynamic>> getList(String path) async {
-    final uri = Uri.parse('$_baseUrl$path');
+  Future<List<dynamic>> getList(String path, {String? baseUrl}) async {
+    final uri = Uri.parse('${baseUrl ?? _baseUrl}$path');
     try {
       final response = await _client
           .get(uri, headers: _defaultHeaders())
@@ -65,8 +65,8 @@ class ApiClient {
     }
   }
 
-  Future<Map<String, dynamic>> getJson(String path) async {
-    final uri = Uri.parse('$_baseUrl$path');
+  Future<Map<String, dynamic>> getJson(String path, {String? baseUrl}) async {
+    final uri = Uri.parse('${baseUrl ?? _baseUrl}$path');
     try {
       final response = await _client
           .get(uri, headers: _defaultHeaders())
@@ -135,9 +135,10 @@ class ApiClient {
 
   Future<Map<String, dynamic>> postJsonAndDecode(
     String path,
-    Map<String, dynamic> body,
-  ) async {
-    final uri = Uri.parse('$_baseUrl$path');
+    Map<String, dynamic> body, {
+    String? baseUrl,
+  }) async {
+    final uri = Uri.parse('${baseUrl ?? _baseUrl}$path');
     try {
       final response = await _client
           .post(uri, headers: _defaultHeaders(), body: jsonEncode(body))

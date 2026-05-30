@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
+import '../../../core/network/api_client.dart';
 import 'models/ml_features_model.dart';
 
 /// ML Features Service - Consumes ML features from telemetry API.
@@ -14,30 +13,26 @@ class MLFeaturesService {
   MLFeaturesService({
     required this.baseUrl,
     this.timeout = const Duration(seconds: 10),
-  });
+    ApiClient? apiClient,
+  }) : _apiClient = apiClient ?? ApiClient();
 
   final String baseUrl;
   final Duration timeout;
+  final ApiClient _apiClient;
 
   /// Get latest ML features for a sensor.
   /// 
   /// Returns null if no features are available.
   Future<MLFeaturesModel?> getLatestFeatures(int sensorId) async {
     try {
-      final uri = Uri.parse('$baseUrl/telemetry/ml-features/latest/$sensorId');
-      final response = await http.get(uri).timeout(timeout);
-      
-      if (response.statusCode != 200) {
-        return null;
-      }
-      
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final json = await _apiClient.getJson(
+        '/telemetry/ml-features/latest/$sensorId',
+        baseUrl: baseUrl,
+      );
       final featuresJson = json['features'];
-      
       if (featuresJson == null) {
         return null;
       }
-      
       return MLFeaturesModel.fromJson(featuresJson as Map<String, dynamic>);
     } catch (e) {
       // Log error but don't throw - ML features are optional
@@ -62,19 +57,17 @@ class MLFeaturesService {
       };
       if (from != null) queryParams['from'] = from;
       if (to != null) queryParams['to'] = to;
-      
-      final uri = Uri.parse('$baseUrl/telemetry/ml-features/history/$sensorId')
-          .replace(queryParameters: queryParams);
-      
-      final response = await http.get(uri).timeout(timeout);
-      
-      if (response.statusCode != 200) {
-        return [];
-      }
-      
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
+
+      final path = '/telemetry/ml-features/history/$sensorId';
+      final queryString = queryParams.entries.map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&');
+      final fullPath = '$path?$queryString';
+
+      final json = await _apiClient.getJson(
+        fullPath,
+        baseUrl: baseUrl,
+      );
       final featuresJson = json['features'] as List<dynamic>? ?? [];
-      
+
       return featuresJson
           .map((f) => MLFeaturesModel.fromJson(f as Map<String, dynamic>))
           .toList();
@@ -91,22 +84,15 @@ class MLFeaturesService {
     List<int> sensorIds,
   ) async {
     if (sensorIds.isEmpty) return {};
-    
+
     try {
-      final uri = Uri.parse('$baseUrl/telemetry/ml-features/latest/batch');
-      final response = await http.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'sensor_ids': sensorIds}),
-      ).timeout(timeout);
-      
-      if (response.statusCode != 200) {
-        return {};
-      }
-      
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final json = await _apiClient.postJsonAndDecode(
+        '/telemetry/ml-features/latest/batch',
+        {'sensor_ids': sensorIds},
+        baseUrl: baseUrl,
+      );
       final featuresJson = json['features'] as Map<String, dynamic>? ?? {};
-      
+
       final result = <int, MLFeaturesModel>{};
       featuresJson.forEach((key, value) {
         final sensorId = int.tryParse(key);
@@ -114,7 +100,7 @@ class MLFeaturesService {
           result[sensorId] = MLFeaturesModel.fromJson(value as Map<String, dynamic>);
         }
       });
-      
+
       return result;
     } catch (e) {
       debugPrint('[MLFeaturesService] Error fetching batch features: $e');

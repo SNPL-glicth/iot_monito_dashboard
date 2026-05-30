@@ -28,10 +28,10 @@ class MlHealthViewModel {
       status: '${json['status'] ?? 'ok'}',
       lastRunAt: '${json['lastRunAt'] ?? ''}',
       sensorsAnalyzed: json['sensorsAnalyzed'] is int
-          ? json['sensorsAnalyzed'] as int
+          ? (json['sensorsAnalyzed'] as num).toInt()
           : int.tryParse('${json['sensorsAnalyzed']}') ?? 0,
       sensorsOmitted: json['sensorsOmitted'] is int
-          ? json['sensorsOmitted'] as int
+          ? (json['sensorsOmitted'] as num).toInt()
           : int.tryParse('${json['sensorsOmitted']}') ?? 0,
       reasonsOmitted: reasons,
     );
@@ -51,7 +51,7 @@ class MlOmitReasonViewModel {
     return MlOmitReasonViewModel(
       reason: '${json['reason'] ?? ''}',
       count: json['count'] is int
-          ? json['count'] as int
+          ? (json['count'] as num).toInt()
           : int.tryParse('${json['count']}') ?? 0,
     );
   }

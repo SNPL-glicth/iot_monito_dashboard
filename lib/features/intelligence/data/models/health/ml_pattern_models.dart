@@ -46,7 +46,7 @@ class MlPatternAnalysisViewModel {
 
     return MlPatternAnalysisViewModel(
       patternsDetected: patterns,
-      dominantPattern: json['dominantPattern'] as String?,
+      dominantPattern: json['dominantPattern']?.toString(),
       patternDiversity: _parseDouble(json['patternDiversity']),
     );
   }

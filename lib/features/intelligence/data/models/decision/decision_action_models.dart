@@ -16,7 +16,7 @@ class RecommendedActionViewModel {
   factory RecommendedActionViewModel.fromJson(Map<String, dynamic> json) {
     return RecommendedActionViewModel(
       priority: json['priority'] is int
-          ? json['priority'] as int
+          ? (json['priority'] as num).toInt()
           : int.tryParse('${json['priority']}') ?? 3,
       action: '${json['action'] ?? ''}',
       timeframe: '${json['timeframe'] ?? ''}',
@@ -95,25 +95,25 @@ class DecisionActionViewModel {
       patternSignature: '${json['patternSignature'] ?? ''}',
       decisionType: '${json['decisionType'] ?? 'monitor'}',
       priority: json['priority'] is int
-          ? json['priority'] as int
+          ? (json['priority'] as num).toInt()
           : int.tryParse('${json['priority']}') ?? 3,
       severity: '${json['severity'] ?? 'info'}',
       title: '${json['title'] ?? ''}',
       summary: '${json['summary'] ?? ''}',
-      explanation: json['explanation'] as String?,
+      explanation: json['explanation']?.toString(),
       recommendedActions: actions,
       affectedSensorIds: sensorIds,
       eventCount: json['eventCount'] is int
-          ? json['eventCount'] as int
+          ? (json['eventCount'] as num).toInt()
           : int.tryParse('${json['eventCount']}') ?? 0,
       status: '${json['status'] ?? 'pending'}',
       shouldNotify: json['shouldNotify'] == true,
       createdAt: '${json['createdAt'] ?? ''}',
-      expiresAt: json['expiresAt'] as String?,
-      acknowledgedAt: json['acknowledgedAt'] as String?,
-      resolvedAt: json['resolvedAt'] as String?,
+      expiresAt: json['expiresAt']?.toString(),
+      acknowledgedAt: json['acknowledgedAt']?.toString(),
+      resolvedAt: json['resolvedAt']?.toString(),
       ageMinutes: json['ageMinutes'] is int
-          ? json['ageMinutes'] as int
+          ? (json['ageMinutes'] as num).toInt()
           : int.tryParse('${json['ageMinutes']}') ?? 0,
     );
   }

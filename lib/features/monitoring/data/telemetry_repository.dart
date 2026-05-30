@@ -1,8 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
+import 'dart:developer' as dev;
 
 import '../../../core/config/api_config.dart';
+import '../../../core/network/api_client.dart';
+import '../../../core/network/api_exceptions.dart';
 import '../../../core/resilience/circuit_breaker.dart';
 import '../../../core/resilience/circuit_breaker_config.dart';
 import 'local/sensor_reading_cache.dart';
@@ -16,22 +18,42 @@ abstract class IApiClient {
   Future<SensorDashboardViewModel> fetchSensorDashboard(String sensorId, {String range});
 }
 
-class _DefaultApiClient implements IApiClient {
-  final http.Client _client = http.Client();
-  String get _baseUrl => ApiConfig.telemetryUrl;
+class _TelemetryApiClient implements IApiClient {
+  final ApiClient _api = ApiClient();
 
   @override Future<List<SensorReading>> fetchLatestReadings(String deviceId) async => [];
 
   @override Future<RealtimePayloadViewModel> fetchRealtimeData(String sensorId, {int limit = 120}) async {
-    final uri = Uri.parse('$_baseUrl/telemetry/sensors/$sensorId/realtime?limit=$limit');
-    final res = await _client.get(uri).timeout(const Duration(seconds: 5));
-    return RealtimePayloadViewModel.fromJson(jsonDecode(res.body));
+    final path = '/telemetry/sensors/$sensorId/realtime?limit=$limit';
+    try {
+      final data = await _api.getJson(path, baseUrl: ApiConfig.telemetryUrl);
+      return RealtimePayloadViewModel.fromJson(data);
+    } on ApiException catch (e) {
+      _handleTelemetryError('GET', path, e);
+      rethrow;
+    }
   }
 
   @override Future<SensorDashboardViewModel> fetchSensorDashboard(String sensorId, {String range = '6h'}) async {
-    final uri = Uri.parse('$_baseUrl/telemetry/sensors/$sensorId/dashboard?range=$range');
-    final res = await _client.get(uri).timeout(const Duration(seconds: 5));
-    return SensorDashboardViewModel.fromTelemetryDashboard(jsonDecode(res.body));
+    final path = '/telemetry/sensors/$sensorId/dashboard?range=$range';
+    try {
+      final data = await _api.getJson(path, baseUrl: ApiConfig.telemetryUrl);
+      return SensorDashboardViewModel.fromTelemetryDashboard(data);
+    } on ApiException catch (e) {
+      _handleTelemetryError('GET', path, e);
+      rethrow;
+    }
+  }
+
+  void _handleTelemetryError(String method, String path, ApiException e) {
+    final bodyPreview = e.body.length > 200 ? '${e.body.substring(0, 200)}...' : e.body;
+    dev.log('[Telemetry] $method $path → ${e.statusCode}: $bodyPreview');
+    if (e.statusCode == 401) {
+      throw UnauthorizedException(path);
+    }
+    if (e.statusCode >= 500) {
+      throw ServerException(path, e.statusCode, e.body);
+    }
   }
 }
 
@@ -48,7 +70,7 @@ class TelemetryRepository {
   static TelemetryRepository? _instance;
   factory TelemetryRepository() {
     _instance ??= TelemetryRepository.withDependencies(
-      _DefaultApiClient(),
+      _TelemetryApiClient(),
       _NoOpCache(),
       CircuitBreaker<List<SensorReading>>(const CircuitBreakerConfig.telemetry()),
     );

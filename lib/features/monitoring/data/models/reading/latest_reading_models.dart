@@ -22,12 +22,12 @@ class LatestSensorReadingViewModel {
 
   factory LatestSensorReadingViewModel.fromJson(Map<String, dynamic> json) {
     return LatestSensorReadingViewModel(
-      sensorId: json['sensorId'].toString(),
-      sensorUuid: json['sensorUuid'] as String,
-      sensorName: json['sensorName'] as String,
-      sensorType: json['sensorType'] as String,
-      unit: json['unit'] as String,
-      deviceName: json['deviceName'] as String,
+      sensorId: json['sensorId']?.toString() ?? '',
+      sensorUuid: json['sensorUuid']?.toString() ?? '',
+      sensorName: json['sensorName']?.toString() ?? '',
+      sensorType: json['sensorType']?.toString() ?? '',
+      unit: json['unit']?.toString() ?? '',
+      deviceName: json['deviceName']?.toString() ?? '',
       latestValue: json['latestValue']?.toString(),
       latestTimestamp: json['latestTimestamp']?.toString(),
     );
